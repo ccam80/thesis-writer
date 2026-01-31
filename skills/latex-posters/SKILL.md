@@ -1,19 +1,23 @@
 ---
 name: latex-posters
-description: "Create professional research posters in LaTeX using beamerposter, tikzposter, or baposter. Support for conference presentations, academic posters, and scientific communication. Includes layout design, color schemes, multi-column formats, figure integration, and poster-specific best practices for visual communication."
+description: "Create professional research posters in LaTeX. ON-REQUEST ONLY - do not use alongside thesis chapter requests unless explicitly asked for a poster."
 allowed-tools: [Read, Write, Edit, Bash]
 ---
 
 # LaTeX Research Posters
 
+## Usage Note
+
+**ON-REQUEST ONLY**: This skill should only be invoked when the user explicitly requests a poster. Do NOT use this skill when writing thesis chapters or other documents unless the user specifically asks for a poster.
+
 ## Overview
 
-Research posters are a critical medium for scientific communication at conferences, symposia, and academic events. This skill provides comprehensive guidance for creating professional, visually appealing research posters using LaTeX packages. Generate publication-quality posters with proper layout, typography, color schemes, and visual hierarchy.
+Research posters are a critical medium for scientific communication at conferences, symposia, and academic events. This skill provides comprehensive guidance for creating professional, visually appealing research posters using LaTeX packages.
 
 ## When to Use This Skill
 
 This skill should be used when:
-- Creating research posters for conferences, symposia, or poster sessions
+- User explicitly requests a poster for conferences, symposia, or poster sessions
 - Designing academic posters for university events or thesis defenses
 - Preparing visual summaries of research for public engagement
 - Converting scientific papers into poster format

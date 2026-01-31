@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"C:\\\\local_working_projects\\\\scientific_writer\\\\skills\\\\zotero-research\\\\agents\"\" 2>/dev/null || echo \"No agents folder found \")",
+      "Bash(ls:*)",
+      "Bash(for skill in zotero-research thesis-planning document-planner writer figure-generator formatter reviewer peer-review markitdown latex-posters)",
+      "Bash(do if [ -f \"skills/$skill/SKILL.md\" ])",
+      "Bash(then echo \"OK: $skill\")",
+      "Bash(else echo \"MISSING: $skill\")",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(git add:*)"
+    ]
+  }
+}

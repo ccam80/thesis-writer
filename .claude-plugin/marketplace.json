@@ -1,8 +1,8 @@
 {
-  "name": "claude-scientific-writer",
+  "name": "claude-thesis-writer",
   "metadata": {
-    "description": "Skills and setup for scientific writing (papers, grants, posters, clinical reports) using the scientific-writer toolkit.",
-    "version": "0.1.0",
+    "description": "Skills and setup for doctoral thesis writing in biomedical engineering, using Zotero for research and citations.",
+    "version": "0.3.0",
     "homepage": "https://github.com/K-Dense-AI/claude-scientific-writer"
   },
   "owner": {
@@ -11,32 +11,22 @@
   },
   "plugins": [
     {
-      "name": "claude-scientific-writer",
-      "description": "Collection of scientific writer skills",
+      "name": "claude-thesis-writer",
+      "description": "Collection of thesis writing skills",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/citation-management",
-        "./skills/clinical-decision-support",
-        "./skills/clinical-reports",
-        "./skills/document-skills",
-        "./skills/hypothesis-generation",
-        "./skills/latex-posters",
-        "./skills/literature-review",
-        "./skills/markitdown",
-        "./skills/paper-2-web",
+        "./skills/zotero-research",
+        "./skills/thesis-planning",
+        "./skills/document-planner",
+        "./skills/writer",
+        "./skills/figure-generator",
+        "./skills/formatter",
+        "./skills/reviewer",
         "./skills/peer-review",
-        "./skills/research-grants",
-        "./skills/research-lookup",
-        "./skills/scholar-evaluation",
-        "./skills/scientific-critical-thinking",
-        "./skills/scientific-schematics",
-        "./skills/scientific-slides",
-        "./skills/scientific-writing",
-        "./skills/treatment-plans",
-        "./skills/venue-templates"
+        "./skills/markitdown",
+        "./skills/latex-posters"
       ]
     }
   ]
 }
-
