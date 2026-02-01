@@ -18,7 +18,7 @@ All citations come from your Zotero library. All writing follows collaboratively
 
 - **Claude Code** (or compatible IDE with Claude Code plugin support)
 - **Zotero** with a populated library for your research area
-- **Zotero MCP server** configured in Claude Code (provides `semantic_search`, `search_items`, `get_item`, `get_fulltext`, `get_annotations`)
+- **zotero-chunk-rag MCP server** configured in Claude Code (provides `search_topic`, `search_papers`, `get_passage_context`, `get_index_stats`)
 - **LaTeX distribution** (TeX Live, MiKTeX, or similar) for compilation
 - **Python 3.10+** with matplotlib (for figure generation)
 

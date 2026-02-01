@@ -81,7 +81,7 @@ Thesis Chapter Types:
 
 Getting Started:
 1. Your CLAUDE.md file is now configured
-2. Ensure Zotero MCP is enabled in Claude settings
+2. Ensure the zotero-chunk-rag MCP server is enabled in Claude settings
 3. Start with: "/thesis-planning" to begin planning a chapter
 
 Plan.md Workflow:
@@ -91,10 +91,10 @@ Plan.md Workflow:
 - Use thesis-planning skill to develop plans interactively
 ```
 
-## Step 5: Verify Zotero MCP
+## Step 5: Verify zotero-chunk-rag MCP
 
 Remind the user:
-- Zotero MCP must be enabled for research features
+- The zotero-chunk-rag MCP server must be enabled for research features
 - Run a test query to verify: "Search my Zotero library for [topic]"
 - If not working, see next_steps.md for setup instructions
 

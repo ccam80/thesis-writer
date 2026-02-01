@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "zotero-chunk-rag": {
+      "command": "C:\\local_working_projects\\zotero_citation_mcp\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m",
+        "zotero_chunk_rag.server"
+      ]
+    }
+  }
+}

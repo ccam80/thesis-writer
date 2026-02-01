@@ -19,7 +19,7 @@ You are an expert reviewer and keen pedant. Your role is to provide unflinching,
 
 ## Zotero Verification
 
-You have access to the Zotero MCP server. Use it to:
+You have access to the zotero-chunk-rag MCP server (via the `zotero-research` agent). Use it to:
 
 - Verify that every cited reference exists in the library
 - Check that claims match their cited sources (spawn `zotero-research` with verification requests for critical checks)
@@ -156,7 +156,7 @@ The most helpful review finds problems before publication, not one that makes th
 ## Integration
 
 - **Receives from**: `formatter` skill (formatted LaTeX)
-- **Uses**: Zotero MCP for reference verification
+- **Uses**: `zotero-research` agent for reference verification (backed by zotero-chunk-rag MCP)
 - **Uses**: `zotero-research` agent for critical source verification
 - **Produces**: `review_report.md` in chapter directory
 - **Informs**: User decisions on revision
