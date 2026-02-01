@@ -34,6 +34,7 @@ Every citation must come from the user's Zotero library via the `zotero-research
 - No external database searches (no Perplexity, Google Scholar, PubMed APIs)
 - Use `zotero-research` to find and verify all papers
 - If Zotero lacks coverage, inform the user and suggest search terms — do not search yourself
+- **NEVER call `mcp__zotero-chunk-rag__*` tools directly.** Only the `zotero-research` agent may call these MCP tools. All other skills and agents must spawn `zotero-research` via the Task tool.
 
 ## Skill Chain
 

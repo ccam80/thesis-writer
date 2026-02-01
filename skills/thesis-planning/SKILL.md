@@ -12,6 +12,8 @@ This skill facilitates interactive, research-informed planning sessions for doct
 
 **Core Philosophy**: Planning is a conversation. You research, propose, and ask questions. The user provides direction, narrative threads, and decisions. Together you build a plan that serves the thesis.
 
+**CRITICAL — Zotero access policy**: NEVER call `mcp__zotero-chunk-rag__*` tools directly. All Zotero library access MUST go through the `zotero-research` agent, spawned via the Task tool. Only the `zotero-research` agent is permitted to call the MCP tools.
+
 ## When to Use This Skill
 
 - Starting a new thesis (whole-thesis planning)

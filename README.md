@@ -26,7 +26,7 @@ All citations come from your Zotero library. All writing follows collaboratively
 
 1. Add the plugin marketplace in Claude Code:
    ```
-   /plugin marketplace add https://github.com/K-Dense-AI/claude-scientific-writer
+   /plugin marketplace add https://github.com/ccam80/thesis-writer
    ```
 
 2. Install the plugin:

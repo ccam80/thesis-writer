@@ -29,20 +29,35 @@ All tools are provided by the `zotero-chunk-rag` MCP server:
 > "Find top N papers on [topic]"
 
 Strategy: Call `search_topic` with the topic as query and `num_papers=N`.
-Return: Organised list of papers with BetterBibTeX citation keys, relevance scores, publication venues, and a one-sentence summary of the best-matching passage.
 
-Example output:
+Return: A markdown document with this **exact structure**:
 
 ```markdown
-## Topic: Autonomic innervation of the heart
+## Topic: [topic text]
 
-1. **Shaffer, F. et al.** (2014) "An Overview of Heart Rate Variability Metrics and Norms"
-   *Frontiers in Public Health* | `\cite{shafferOverviewHeartRate2014}`
-   Avg relevance: 0.742 | Best chunk: 0.831 (p. 3)
-   > "The sinoatrial node receives input from both sympathetic and parasympathetic branches..."
+### Search Strategy
+- Query: [query string passed to search_topic]
+- Papers requested: [N]
+- Papers returned: [actual number returned]
+- Papers above relevance threshold (avg > 0.5): [number]
 
-2. ...
+### Results
+
+**1. Author(s) (Year)** — *"Paper Title"*
+*[publication venue]* | `\cite{citationKey}`
+Avg relevance: [score] | Best chunk: [score] (p. [page])
+
+> "[verbatim best-matching passage]"
+
+[repeat for each paper, numbered sequentially]
+
+### Coverage Assessment
+- Papers returned: [number]
+- Papers above threshold: [number]
+- [If fewer than requested: "Only [N] of [requested] papers found above threshold. Zotero may have limited coverage of [topic]."]
 ```
+
+Every entry MUST include: author(s) and year, paper title, publication venue, BetterBibTeX citation key, both relevance scores, page number, and verbatim passage.
 
 ### 2. Claim Support (For and Against)
 > "Find N citations for and against [claim]"
@@ -53,40 +68,47 @@ Strategy:
 3. For each relevant result, extract the verbatim passage that contains the evidence.
 4. If a passage is relevant but needs more surrounding text, call `get_passage_context` with a larger window.
 
-Return: A markdown document with sections for supporting, contradicting, and qualifying references. Each entry must include:
-- A one-sentence summary of the finding in your own words.
-- The verbatim excerpt from the paper (unaltered text from the `passage` or `full_context` field).
-- The BetterBibTeX citation key.
-- The page number.
-
-Example output:
+Return: A markdown document with the **exact structure** below. Every section is mandatory — do not omit any.
 
 ```markdown
-## Claim: HRV frequency-domain metrics correlate with psychological stress
+## Claim: [exact claim text]
+
+### Search Strategy
+- Queries used: [list every query string passed to search_papers/search_topic]
+- Total results returned: [number]
+- Results after discarding below relevance threshold (0.5): [number]
+- Distinct papers represented: [number]
 
 ### Supporting
 
-**Shaffer and Ginsberg (2017)** found that frequency-domain metrics do correlate with psychological stress, but only under strict experimental conditions.
+**Author (Year)** — *Paper Title*
 
-> "LF/HF ratio has been shown to reflect sympathovagal balance during controlled laboratory stressors, with significant increases observed during mental arithmetic and Stroop tasks (p < 0.01)."
-> -- p. 12, `\cite{shafferOverviewHeartRate2017}`
+> "[verbatim passage — unaltered text from passage or full_context field]"
+> — p. [page number], `\cite{citationKey}`, *[publication venue]*
+
+Summary: [one sentence in your own words explaining what this finding means for the claim]
+
+[repeat for each supporting paper]
 
 ### Contradicting
 
-**Heathers (2014)** argued that the relationship is unreliable outside controlled settings.
-
-> "The assumption that LF power reflects sympathetic activity has been challenged by multiple studies showing..."
-> -- p. 7, `\cite{heathersEverythingHerzberg2014}`
+[same format as Supporting — if none found, write "No contradicting papers found in [N] results screened."]
 
 ### Qualifying
 
-...
+[same format as Supporting — if none found, write "No qualifying papers found in [N] results screened."]
 
 ### Coverage Assessment
-- 3 supporting references found
-- 2 contradicting references found
-- Zotero has limited coverage of field studies. Suggest the user search PubMed for: "HRV psychological stress ecological momentary assessment".
+- Total results screened: [number]
+- Distinct papers screened: [number]
+- Supporting: [count]
+- Contradicting: [count]
+- Qualifying: [count]
+- Discarded (irrelevant/below threshold): [count]
+- [If coverage is thin: "Zotero has limited coverage of [topic]. Suggest the user search [database] for: [query]"]
 ```
+
+Every entry MUST include: author(s) and year, paper title, publication venue, BetterBibTeX citation key, page number, verbatim quote, and one-sentence summary. Do not omit any of these fields.
 
 ### 3. Citation Verification
 > "Verify that [paper] supports [intended citation use]"
@@ -96,13 +118,65 @@ Strategy:
 2. If the paper appears in results, examine the `full_context` for the matching passages.
 3. Call `get_passage_context` with a wide window (4-5) around the best hit to read the full surrounding argument.
 
-Return: Verdict (supports / partially supports / does not support), the exact passage, page number, and any caveats.
+Return: A markdown document with this **exact structure**:
+
+```markdown
+## Verification: [paper citation key] for "[intended use]"
+
+### Search Strategy
+- Query: [query string used]
+- Paper found in results: yes/no
+- Relevance score of best matching chunk: [score]
+
+### Verdict: [supports / partially supports / does not support]
+
+**Author (Year)** — *Paper Title*
+*[publication venue]*
+
+> "[verbatim passage from the paper]"
+> — p. [page number], `\cite{citationKey}`
+
+Context: [2-3 sentences describing what the paper is arguing in the surrounding text]
+
+### Caveats
+- [any qualifications, e.g. "the paper discusses this in the context of X, not Y"]
+- [or "No caveats — the passage directly supports the intended use."]
+```
 
 ### 4. Combined Research
 > "Research [topic] for a background section, then find support for key claims"
 
 Strategy: Chain calls -- `search_topic` first for breadth, then `search_papers` for specific claims identified during the topic search.
-Return: Consolidated bibliography with verified citations.
+
+Return: A markdown document with this **exact structure**:
+
+```markdown
+## Combined Research: [topic]
+
+### Search Strategy
+- Topic query: [query string]
+- Papers returned from topic search: [number]
+- Follow-up claim queries: [list each query]
+- Total passages screened: [number]
+
+### Bibliography
+
+**1. Author (Year)** — *Paper Title*
+*[publication venue]* | `\cite{citationKey}`
+
+> "[best verbatim passage]"
+> — p. [page number]
+
+Relevance: [one sentence on how this paper relates to the topic]
+Verified claims: [list specific claims this paper can support, with page numbers]
+
+[repeat for each paper]
+
+### Coverage Assessment
+- Total papers found: [number]
+- Papers with verified claims: [number]
+- Gaps: [topics with insufficient coverage]
+```
 
 ## Output Format
 
@@ -116,12 +190,13 @@ Always use BetterBibTeX citation keys from the `citation_key` field:
 All excerpts must be unaltered text from the MCP server's `passage`, `full_context`, or `merged_text` fields. Do not paraphrase within quote blocks. If the passage contains PDF extraction artefacts (broken hyphens, odd whitespace), reproduce them as-is within the quote and note the artefact.
 
 ### Reference Metadata
-Always include per reference:
+Every reference in every response MUST include all of the following — no exceptions:
 - Author(s) and year
-- BetterBibTeX citation key
+- Paper title
+- BetterBibTeX citation key (from `citation_key` field)
 - Publication venue (from `publication` field)
 - Page number
-- Relevance score where appropriate
+- Relevance score (from search results)
 
 ## Context Management
 

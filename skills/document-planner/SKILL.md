@@ -14,6 +14,8 @@ The process is **fundamentally collaborative**. The author is a subject-matter e
 
 **Key difference from thesis-planning**: `thesis-planning` produces a chapter-level plan with section headings and key points derived from abstracts/metadata. `document-planner` takes that thin outline and builds it into paragraph-granularity plans with specific, verified references.
 
+**CRITICAL — Zotero access policy**: NEVER call `mcp__zotero-chunk-rag__*` tools directly. All Zotero library access MUST go through the `zotero-research` agent, spawned via the Task tool. Only the `zotero-research` agent is permitted to call the MCP tools.
+
 ## When to Use This Skill
 
 - After `thesis-planning` has produced an approved high-level plan

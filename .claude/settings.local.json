@@ -10,14 +10,14 @@
       "Bash(fi)",
       "Bash(done)",
       "Bash(git add:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nOverhaul plugin from scientific-writer to thesis-writer\n\nDelete all scientific-writer infrastructure \\(Python package, PyPI tooling,\ndocs, CLI\\). Delete 15 unused skills \\(clinical-*, citation-management,\nhypothesis-generation, literature-review, scientific-writing, scientific-\ncritical-thinking, venue-templates, scientific-slides, scholar-evaluation,\ndocument-skills, scientific-schematics\\). Dissolve thesis-chapters into\nwriter/references/thesis-style-guide.md and thesis-planning chapter types.\n\nRestructure zotero-research as a spawnable agent interface that accepts\nhigh-level research requests and internally dispatches to sub-agents.\nUpdate document-planner, thesis-planning, and reviewer to spawn\nzotero-research instead of sub-agents directly.\n\nCreate figure-generator skill \\(replaces scientific-schematics\\) with\nmatplotlib plot generation, plot_defaults.py management, and TikZ\nschematics. Add LaTeX packages section to formatter. Add author style\nreference section to writer.\n\nRewrite CLAUDE.md with collaborative-first principles, document hierarchy,\nand skill chain. Rewrite README.md for thesis-writer. Update marketplace\nto v0.3.0 with 10 skills. Clean stale references across all files.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Skill(zotero-research)",
       "mcp__zotero-chunk-rag__search_papers",
       "mcp__zotero-chunk-rag__search_topic",
       "mcp__zotero-chunk-rag__get_passage_context",
       "mcp__zotero-chunk-rag__get_index_stats",
       "Bash(git log:*)",
-      "Bash(git ls-tree:*)"
+      "Bash(git ls-tree:*)",
+      "Skill(claude-thesis-writer:document-planner)"
     ]
   },
   "enableAllProjectMcpServers": true,
