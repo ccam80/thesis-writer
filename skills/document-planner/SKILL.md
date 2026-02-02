@@ -1,6 +1,6 @@
 ---
 name: document-planner
-description: Interactive paragraph-level planning for chapters, papers, or subsections. Collaboratively builds detailed writing plans from thin high-level outlines through narrative structuring and Zotero research.
+description: Interactive planning at any scope — whole thesis, chapter, section, or subsection. Invoke with a prompt specifying the working level. Collaboratively builds writing plans from cold start through to claim-level outlines with verified Zotero citations.
 allowed-tools: [Read, Write, Edit, Bash, Task, AskUserQuestion]
 ---
 
@@ -8,25 +8,53 @@ allowed-tools: [Read, Write, Edit, Bash, Task, AskUserQuestion]
 
 ## Overview
 
-This skill takes a thin high-level plan (section headings, narrative bullet points, a few likely references) and collaboratively turns it into a detailed paragraph-level writing plan with concrete references and specific points. It works at any scope: full chapter, single section, or single subsection.
+This skill collaboratively builds writing plans at any scope — from whole-thesis chapter maps down to claim-level paragraph outlines with verified citations. It is the single planning skill for all document types and hierarchy levels.
 
 The process is **fundamentally collaborative**. The author is a subject-matter expert who knows what points are needed to communicate clearly. You are a writing expert who structures documents logically, divides responsibilities into sections, and maintains narrative coherence across the wider document. Neither party works autonomously — every structural decision is discussed.
-
-**Key difference from thesis-planning**: `thesis-planning` produces a chapter-level plan with section headings and key points derived from abstracts/metadata. `document-planner` takes that thin outline and builds it into paragraph-granularity plans with specific, verified references.
 
 **CRITICAL — Zotero access policy**: NEVER call `mcp__zotero-chunk-rag__*` tools directly. All Zotero library access MUST go through the `zotero-research` agent, spawned via the Task tool. Only the `zotero-research` agent is permitted to call the MCP tools.
 
 ## When to Use This Skill
 
-- After `thesis-planning` has produced an approved high-level plan
-- Before invoking the `writer` skill to produce LaTeX prose
-- When revising the structure of an already-planned section
-- When planning a standalone paper or report section
-- When starting a new document with no existing plan (see "Cold Start" below)
+- Planning a new thesis from scratch (whole-thesis scope)
+- Planning individual chapters from a thesis-level plan
+- Building paragraph-level or claim-level plans for sections
+- Revising the structure of an already-planned section
+- Planning a standalone paper or report
+
+## Chapter Types
+
+Each chapter type has a distinct structure and writing approach. Use these when proposing chapter plans.
+
+### Background Chapter
+Literature-review style treatment. Provides context and foundation.
+- **Structure**: Introduction → Major themes (organised thematically, NOT study-by-study) → Summary with gaps
+- **Writing approach**: Synthesize across sources. Every claim needs citation(s). Identify gaps and controversies. Connect to thesis objectives.
+- **Citation density**: High (1-3 citations per paragraph)
+- **Figures**: Conceptual diagrams, timelines, comparison tables
+
+### Meat Chapter (Research Chapter)
+Paper-like IMRaD structure presenting original research. Each should be publishable as standalone.
+- **Structure**: Introduction → Brief background (reference full background chapter) → Methods → Results → Discussion → Conclusion
+- **Writing approach**: Self-contained but connected to thesis narrative. Methods fully reproducible. Results before interpretation.
+- **Citation density**: Medium in intro/discussion, low in methods/results (own work)
+- **Figures**: Data plots, block diagrams, result visualizations
+
+### Conclusions Chapter
+Synthesis of thesis findings and contributions.
+- **Structure**: Summary of work → Key findings → Contributions → Limitations
+- **Writing approach**: No new material. Reference thesis chapters, not external sources. Specific about contributions. Honest about limitations.
+- **Citation density**: None (reference thesis chapters only)
+
+### Future Work Chapter
+Research directions and open questions.
+- **Structure**: Immediate extensions → Longer-term directions → Open questions
+- **Writing approach**: Concrete and actionable. Connect to thesis limitations.
+- **Citation density**: Low
 
 ## Inputs
 
-1. **Target scope**: Chapter number/section, or a specific subsection
+1. **Target scope**: Whole thesis, chapter, section, or subsection
 2. **Document directory**: The directory containing the `.tex` file and (optionally) a `plan.md`
 
 ## Document Hierarchy
@@ -34,18 +62,18 @@ The process is **fundamentally collaborative**. The author is a subject-matter e
 Three documents form an authority hierarchy for content. Higher-level documents set narrative and structure; lower-level documents add detail:
 
 1. **`.tex` file** (most detailed, authoritative for existing prose)
-2. **Directory-level `plan.md`** (paragraph-level plan, created/maintained by this skill)
+2. **Directory-level `plan.md`** (paragraph/claim-level plan, created/maintained by this skill)
 3. **Parent-level `plan.md`** (chapter-level or thesis-level plan, sets narrative goals)
 
 If there is a `plan.md` one directory above the document directory, treat it as the hierarchical master plan for this document.
 
-**Parent plan detail level:** The thesis-level plan should contain section purposes, high-level bullet points, and key reference tables — roughly the level of detail produced by the `thesis-planning` skill. The document-planner may update it to reflect structural changes (section reordering, new/removed sections, cross-chapter scope changes, corrected references) but must NOT inflate it with paragraph-level detail, figure descriptions, or expanded sub-points. Those belong in the directory-level plan only.
+**Parent plan detail level:** The thesis-level plan should contain section purposes, high-level bullet points, and key reference tables. The document-planner may update it to reflect structural changes (section reordering, new/removed sections, cross-chapter scope changes, corrected references) but must NOT inflate it with paragraph-level detail, figure descriptions, or expanded sub-points. Those belong in the directory-level plan only.
 
 ### Startup: Read and Reconcile
 
 1. **Read the `.tex` file first.** Existing content is authoritative — it must not be removed without explicit user discussion. The user edits this file between sessions.
 2. **Read the directory-level `plan.md`** if it exists. This is the detailed plan from previous sessions. The user may have modified it between sessions.
-3. **Read the parent-level `plan.md`** (e.g., `thesis/plan.md`). This contains the high-level narrative and key points, typically derived from abstracts and metadata alone — it will lack the specific detail found in lower-level documents.
+3. **Read the parent-level `plan.md`** (e.g., `thesis/plan.md`). This contains the high-level narrative and key points.
 
 **If the directory-level `plan.md` does not exist**, create one by copying in the parent plan's content for this document as a starting point.
 
@@ -64,7 +92,7 @@ When section headings, ordering, or structure differ between documents (e.g., `.
 
 ### Understanding the Parent Plan
 
-The parent-level plan is a **thin outline** — a best attempt at a high-level overview of points that will meet narrative goals. It was typically built from abstracts and metadata alone, so it **lacks specific detail**. The key references listed are "likely" references, not confirmed ones. The bullet points sketch what the section might contain, not what it will contain. Treat it as a structural starting point, not a content-complete source.
+The parent-level plan is a **thin outline** — a best attempt at a high-level overview of points that will meet narrative goals. It was typically built from abstracts and metadata alone, so it **lacks specific detail**. The key references listed are "likely" references, not confirmed ones. Treat it as a structural starting point, not a content-complete source.
 
 ### Cold Start (No Higher-Level Plan)
 
@@ -75,6 +103,8 @@ When there is no parent-level `plan.md`, build the thin starting plan collaborat
 3. Propose a section structure with narrative bullet points
 4. Iterate with the author until the high-level structure is agreed
 5. Write this as the directory-level `plan.md` and proceed to Phase 2
+
+For whole-thesis cold starts, first establish the overall narrative (what is the thesis about, what is the contribution, what story does it tell), then map chapters (background, meat, conclusions) with their connections before planning individual chapters.
 
 ## Workflow
 
@@ -88,19 +118,28 @@ Follow the Startup procedure above. Report what was found in each document and a
 
 #### Top-Down Planning Across Hierarchy Levels
 
-Documents have multiple levels of hierarchy (chapter → section → subsection → subsubsection). **Plan top-down**: complete the narrative arc and prerequisite check at the highest level before descending to plan individual children at the next level. Then work through children sequentially, planning each one at its own level before descending further.
+Documents have multiple levels of hierarchy (thesis → chapter → section → subsection → paragraph). **Plan top-down**: complete the narrative arc and prerequisite check at the highest level before descending to plan individual children at the next level. Then work through children sequentially, planning each one at its own level before descending further.
 
 **Procedure:**
 
-1. **Plan the highest level first.** For a chapter, this means proposing the section-level narrative arc before touching any individual section's paragraph flow.
+1. **Plan the highest level first.** For a thesis, this means chapter ordering. For a chapter, section-level narrative arc.
 2. **Get author agreement** on this level before proceeding.
-3. **Descend one level.** For each child (e.g., each section within the chapter), propose its narrative arc at the next level down (e.g., subsection flow within a section). Work through children **sequentially** — finish one section's plan before starting the next.
+3. **Descend one level.** Work through children **sequentially** — finish one child's plan before starting the next.
 4. **Repeat** at each level until you reach paragraph granularity.
 
-This means a chapter with sections and subsections gets three planning passes:
-- **Pass 1 (chapter):** Section-level arc and prerequisites → author agreement
-- **Pass 2 (per section):** Subsection-level arc and prerequisites → author agreement, sequentially through all sections
-- **Pass 3 (per subsection):** Paragraph-level flow → author agreement, sequentially through all subsections
+#### Structural Critique Pass
+
+Before descending to the next level, perform a **structural critique** of the current level's ordering. This is a distinct analytical step — not paragraph planning, not research, just examining whether the sequence forms coherent topic threads.
+
+**Thread analysis:** Label each child with the domain or topic thread it belongs to (e.g., "cells," "control systems," "anatomy," "clinical"). Then read the sequence of labels. If the sequence zigzags between domains, propose a reordering that groups related threads into contiguous runs. Two clean threads that converge at a defined point read better than interleaved fragments.
+
+**Monotonic knowledge test:** For each child, ask: "Does the reader's knowledge in this domain build monotonically, or do we introduce a concept, leave it, and return later?" If knowledge in a domain is interrupted, the reader must mentally context-switch. Reorder to minimise switches.
+
+**Cross-chapter thread analysis:** When working at thesis scope, apply thread and monotonic analysis across the full chapter sequence. Chapters should also avoid zigzagging between domains.
+
+**Present reorderings proactively.** If thread analysis reveals a zigzag, propose the alternative ordering and explain the narrative improvement. Don't wait for the author to spot it — this structural analysis is the planner's core value-add.
+
+**Merge-and-resplit pattern:** When adjacent sections feel coupled, misordered, or have unclear boundaries, flatten their content into a single ordered list. Label each item by topic domain. Look for natural clusters and transitions — the split point should fall where the domain or abstraction level changes cleanly. This often reveals that the original boundaries were drawn at the wrong point. The pattern is: join → reorder → see what clusters emerge → split (or don't) at the natural boundary.
 
 #### Narrative Arc and Prerequisite Check (at each level)
 
@@ -108,97 +147,132 @@ At every level of hierarchy, before drilling into children, propose:
 
 1. **What does the reader know** at the start of this unit?
 2. **What must they know** by the end, and why?
-3. **In what order do concepts build on each other?** Identify prerequisite knowledge chains — if child N assumes the reader understands concept X, verify that a prior child introduces it.
-4. **Present this as a visual summary** — a short, plain-language flow showing the narrative blocks and how they connect:
+3. **In what order do concepts build on each other?** Identify prerequisite knowledge chains.
+4. **Present this as a visual summary:**
 
 ```
 [General ANS] → [SNS & PNS branches] → [Neural anatomy] → [Tonic control & modulation]
 ```
 
-This bird's-eye view lets the author spot structural gaps (e.g., "we're discussing neurotransmitters but haven't explained action potentials") before time is spent on detail below.
+**Prerequisite check**: For each child, identify what the reader must already understand. If a prerequisite isn't covered by a prior child or chapter, flag it.
 
-**Prerequisite check**: For each child in the arc, explicitly identify what the reader must already understand to follow it. If a prerequisite isn't covered by a prior child or a prior chapter/section, flag it — this may require adding a new child or restructuring. Iterate this with the author until resolved.
+**Cross-document duplication check**: Check whether any planned content overlaps with topics in other chapters/sections of the parent plan. When overlap is found, present the conflict with concrete options for dividing responsibility. Upon agreement, **update the parent-level plan** to reflect the division.
 
-**Cross-document duplication check**: At each level, check whether any planned content overlaps with or pre-empts topics in other chapters/sections of the parent plan. Common cases:
-- A background chapter introducing a concept that a later chapter covers in depth (e.g., coupled-clock mechanism in physiology vs. detailed cell models in computational electrophysiology)
-- Two sections covering the same topic from different angles without clear delineation
+#### Section-Purpose Revalidation
 
-When overlap is found, present the conflict to the author with concrete options for how to divide responsibility between the sections. For example: "Section 2.4 covers the SAN coupled-clock, but Chapter 4 also covers cell models. Should §2.4 cover channel types and their functional roles (what they do and why), while Ch4 covers the modelling perspective (how many subtypes exist, experimental identification, model complexity over time)?"
+Before descending into paragraph planning for each section, explicitly answer three questions:
 
-Upon author approval, **update the parent-level plan** to reflect the agreed division of responsibility, so that future planning sessions for the other chapter start from the correct scope.
+1. **What does this section do for the chapter?** How does it advance the chapter's narrative arc?
+2. **What does this section do for the thesis?** What vocabulary, intuition, or evidence does it build for later chapters?
+3. **Where did the previous section end?** What state is the reader in? What do they expect next?
+
+If the section's planned content doesn't have a clean answer to (1), it may be a grab-bag. Look for a **unifying thread** — a single concept or framing that makes the diverse topics feel coherent. If no unifying thread exists, the content may belong in different sections or the section needs restructuring.
+
+#### Tone Consistency Check
+
+Background chapters describe established knowledge. Check each paragraph stub for statements that read as **thesis argument** rather than established fact. Common signs: forward references to "why this matters for our approach," evaluative claims about methodology limitations, or conclusions that presuppose the thesis contribution. Relocate these to the chapter where the argument is made. The background should build vocabulary and intuition; the reader will draw their own conclusions.
+
+#### Content Placement Test
+
+For each paragraph, ask: "Does this point fit the section's unifying thread?" If a point is important but doesn't fit, it belongs elsewhere — propose a specific alternative location rather than forcing it in.
 
 #### Paragraph-Level Flow (lowest level)
 
 At the lowest level of hierarchy (the level where children are paragraphs rather than sections), propose:
 
-1. **A summary narrative arc** — a few plain-language sentences describing the flow of ideas without specific detail:
-
-> "I propose we cover the autonomic system generally: it controls many unconscious systems, it has a complex job, it has to keep them balanced. Then the split into SNS and PNS: two halves, each branch alone, then how they interact. Then the actual neural anatomy. Finally tonic control, and how that control is modulated and in response to what."
+1. **A summary narrative arc** — a few plain-language sentences describing the flow of ideas without specific detail.
 
 2. **The detailed paragraph-flow outline** where each line represents 1–3 paragraphs, described as a topic stub with a brief note on what it achieves in the narrative:
-   - Use descriptive labels like `(Intro)`, `(Anatomy)`, `(Control)`, `(New topic intro)` to show the narrative role
+   - Use descriptive labels like `(Intro)`, `(Anatomy)`, `(Control)` to show narrative role
    - Note where figures or diagrams belong
    - Note where cross-references to other sections/chapters are needed
 
-3. **Present both levels to the author and ask for feedback** — specifically:
-   - Does this sequence tell the right story?
-   - Are there points that need adding for the audience to follow?
-   - Does any content belong in a different section?
-   - Is the level of detail right, or should we expand/compress areas?
+3. **Identify figure opportunities.** Look for high-concept-density paragraphs where spatial or structural complexity would require high word counts. Propose figures proactively. **Do NOT number figures** during planning — use descriptive labels. Numbering creates cascading changes.
 
-**The author will suggest changes.** They know what foundational knowledge the audience needs, what points require more setup, and where the narrative breaks down. Engage critically with their suggestions:
+4. **Before presenting, do your own prerequisite analysis silently.** Read ahead into later sections and chapters. Identify concepts that later content assumes the reader understands. Incorporate these directly — do NOT show the reasoning. If the author questions a paragraph's inclusion, *then* explain the forward dependency. Do NOT ask open-ended questions like "is anything missing?" — make specific proposals instead.
 
-- If a suggestion would improve the narrative, adopt it
-- If a suggestion creates structural problems (e.g., duplicating content covered elsewhere, breaking logical flow), explain the concern and propose alternatives
-- If content could live in multiple sections, discuss the trade-offs of each placement
-- When restructuring, consider the impact on other sections in the document — if moving content changes dependencies, flag this
+5. **Present the narrative arc and paragraph flow** as a clean proposal. Keep each paragraph stub to 2–3 sentences. No justification annotations, no forward-reference lists, no meta-commentary. Do NOT include "not covered here" or "deferred to §X" annotations — they clutter the plan without value.
+
+6. **After presenting the detailed stubs, provide a one-clause narrative summary table** — one row per paragraph, summarising its role in a single clause. This lets the author scan flow at a glance.
+
+**Paragraph numbering must be section-local** (¶1, ¶2, ... restarting each section), not chapter-global. Chapter-global numbering creates renumbering cascades.
+
+**The author will suggest changes.** Engage critically:
+
+- If a suggestion improves the narrative, adopt it
+- If it creates structural problems, explain the concern and propose alternatives
+- If content could live in multiple sections, discuss trade-offs
+- When restructuring, consider impact on other sections
 
 **Iterate until the paragraph-flow outline is agreed.** This may take several rounds. Do not rush to references.
 
-### Phase 3: Research Fill
+### Phase Transition: Structure → Research
 
-Once the narrative structure is agreed, populate it with concrete references and specific points. The parent plan's references are almost never sufficient — they were derived from abstracts and metadata. **Expect to add 2–3 references per paragraph.**
+The structural planning phase and the research fill phase are very different interaction modes. **Make the transition explicit**: "Structure is agreed. Moving to claim expansion and research."
 
-#### Step 1: Generate reference lists per paragraph
+### Phase 3: Claim Expansion and Research
 
-For each paragraph stub in the agreed outline:
+Once the narrative structure is agreed, expand paragraph stubs into claim-level outlines with verified citations. This phase operates at **chapter scope** — all sections are expanded and researched together to enable cross-section deduplication and consistency checking.
 
-1. **Spawn `zotero-research` agent**: "Find references supporting/opposing [specific claim from paragraph]". This finds papers that support or refute those points.
-2. Collect the returned references and assess coverage.
+#### Step 1: Expand paragraph stubs to candidate claims (chapter-wide)
 
-For sections where coverage is thin or the topic is broad, also spawn `zotero-research`: "Find top N papers on [broader topic]" to discover what exists in Zotero.
+For every paragraph stub in the chapter, propose candidate claims — the specific statements each paragraph will make. Each claim should be a single assertable sentence or fact that could carry a citation. Aim for ~4–6 claims per paragraph.
 
-#### Step 2: Extract specific points from key papers
+Mark each claim with its citation status:
+- `[restate]` — restating a point established in an earlier paragraph/section (no new citation needed)
+- `[known]` — an existing reference from the parent plan covers this
+- `[need]` — needs a citation from Zotero
 
-For each paragraph, identify the 2–4 most important papers from Step 1, then:
+Present the full chapter's expanded claims to the author for a **quick review pass** before researching. This catches obviously wrong directions and lets the author add claims from domain knowledge before research tokens are spent. The author is not expected to review every claim in detail — just scan for missing topics, wrong framings, or wasted effort.
 
-1. **Spawn `zotero-research` agent**: "Verify that [paper] supports [intended citation use]" for each key paper, asking for specific information relevant to the paragraph's topic.
-2. The agent returns specific claims, quotes, figures, and page references.
-3. Convert the paragraph's topic stub into a list of specific points, each with concrete citations.
+#### Step 2: Research (chapter-wide batch)
 
-For chapters with many paragraphs, spawn `zotero-research` with a combined request: "Research [section topic] and verify the key claims" — it will batch sub-agent calls internally and return consolidated results per paragraph.
+Spawn `zotero-research` agent with a structured request covering all `[need]` claims across the chapter. Structure the request as a numbered list of claims grouped by section, with clear instructions on what kind of evidence is needed for each.
 
-#### Step 3: Present extended paragraphs to author
+The agent returns passage-level results. One batch call per chapter is the target — only split into multiple calls if the claim count exceeds what the agent can handle in one request.
 
-Present the detailed paragraphs to the author **in groups** (e.g., one section at a time):
+#### Step 3: Triage (chapter-wide)
 
-1. For each group, explain:
-   - The narrative arc the paragraphs achieve together
-   - The ordering rationale
-   - Key references and what they contribute
-2. Ask for feedback on each group before moving to the next
-3. Make changes before proceeding
+Review all research results and categorise each claim:
 
-Do not present the entire document at once — work through it section by section.
+- **Supported**: Attach citation (Zotero key, brief note on what it supports)
+- **Refuted**: Flag with counter-evidence. Present the refutation to the author — do NOT silently drop or rewrite. Options: rephrase, remove, or present as contested.
+- **Unsupported**: No relevant passages found. Track as a gap — the author may have sources in mind, accept the gap for now, or decide to remove the claim.
+
+Also perform:
+- **Cross-paragraph deduplication**: Flag identical claims appearing in multiple paragraphs. Decide where the claim lives vs where it's a brief restatement.
+- **Claim density check**: If a paragraph has >8 claims, it probably needs splitting. If <3, it may be thin or should merge with an adjacent paragraph. Feed structural changes back to the author.
+
+#### Step 4: Present (section by section)
+
+Present the expanded, triaged claims to the author **section by section**. For each section show:
+
+- The claim-level outline with citations attached
+- Refuted claims with counter-evidence and options
+- Unsupported claims as gaps
+- Any structural changes suggested by claim density
+
+Get author feedback per section before moving to the next. The author may:
+- Overrule a refutation ("this claim is correct, I'll find a source")
+- Accept a gap and add to reference debt
+- Restructure claims based on what the research revealed
+- Add domain knowledge claims the agent missed
+
+#### Step 5: Commit
+
+Write the full chapter's claim-level plan to `plan.md` in the document directory. Update the parent plan if structural changes occurred.
 
 ### Phase 4: Finalise Plan
 
-Once all sections have been through research fill and author review:
+Once all sections have been through claim expansion and author review:
 
-1. Write the complete paragraph-level plan to `plan.md` in the document directory
+1. Write the complete claim-level plan to `plan.md` in the document directory
 2. Verify all parent-plan references are preserved (or removal was approved)
 3. Verify all new references are real (from Zotero)
-4. Present for final approval
+4. Track unsupported claims in the Open Questions or reference debt log
+5. Present for final approval
+
+The finalised plan should be **directly prosifiable** by the writer skill — every paragraph is a list of specific, cited claims that the writer converts to flowing prose without adding content.
 
 ## Output Format
 
@@ -214,56 +288,78 @@ Source: [parent plan reference]
 ## Narrative Thread
 [1-3 sentences: what story this chapter tells and how it fits the larger document]
 
+## Section-Level Narrative Arc
+[Visual flow diagram and prose description]
+
 ## Sections
 
 ### Section X.1: [Title]
 **Purpose**: What this section accomplishes in the narrative
 
 #### Paragraph 1 — (Topic Label)
-- Point: [specific claim or statement]
-  - Cite: \cite{zotero_key} — [what it supports, page/figure if known]
-- Point: [next claim]
+- Claim [supported/restate/gap]
+  - Cite: \cite{zotero_key} — [what it supports]
+- Claim [supported]
   - Cite: \cite{key1, key2}
-- Transition to: [next paragraph topic]
+- Claim [restate from §X.Y ¶Z]
+
+→ **Figure**: [Descriptive label — what it shows, type]
 
 #### Paragraph 2 — (Topic Label)
-- Point: [claim]
+- Claim [supported]
   - Cite: \cite{key}
-- Point: [claim]
-- Transition to: [next topic]
+- Claim [gap — needs source for X]
 
-#### Figure X.1
-- Type: [data plot / block diagram / schematic]
-- Shows: [what the reader sees]
-- Axes: [if applicable]
-- Placement: after Paragraph N
-
-### Section X.2: [Title]
-**Purpose**: ...
-
-[continue for all sections]
+[continue for all paragraphs and sections]
 
 ## References Summary
 | Key | Citation | Zotero Key | Usage |
 |-----|----------|------------|-------|
-| key1 | Author et al., Year | XXXXXXXX | Supports point about X in §X.1 ¶2 |
+| key1 | Author et al., Year | XXXXXXXX | Supports claim about X in §X.1 ¶2 |
 
 ## Open Questions
-- [Unresolved items for writing phase]
+- [Unsupported claims awaiting sources]
+- [Structural decisions deferred to writing phase]
 
 ## Notes for Writer
 - [Style guidance, emphasis, tone]
+- CRITICAL: Do not add claims, facts, or assertions not present in this plan.
+  If a transition requires stating something not in the plan, flag it.
 ```
+
+## Handling Insufficient Coverage
+
+When Zotero library lacks sufficient references:
+
+**Do NOT**:
+- Fabricate references
+- Proceed without adequate support
+- Silently skip topics
+
+**Do**:
+1. Document the gap explicitly in the plan's Open Questions
+2. Tell the user: "The Zotero library has limited coverage of [topic]. Found only [N] papers. Options: (a) suggest search terms for external databases, (b) de-emphasize this topic, (c) proceed with available material and note the gap."
+3. Wait for user decision
+4. If the user wants external search, suggest specific queries and databases
 
 ## Scope Flexibility
 
 This skill works at any granularity:
 
-- **Full chapter**: Plan all sections to paragraph level
-- **Single section**: Plan paragraphs within one section
-- **Single subsection**: Detailed paragraph planning for a focused topic
+- **Whole thesis**: Chapter map, narrative thread, cross-chapter analysis
+- **Full chapter**: All sections to claim level
+- **Single section**: Claim-level planning within one section
+- **Single subsection**: Detailed claim planning for a focused topic
 
-When working on a subsection, still reference the broader chapter narrative to maintain coherence.
+When working at a lower scope, still reference the broader document narrative to maintain coherence. When working at thesis scope, use the cold start procedure and focus on chapter ordering, narrative threads, and cross-chapter dependencies before descending.
+
+## Cross-Reference Formatting
+
+When referencing a later chapter or section in conversation with the author, **always include the section titles** from the parent plan so the author doesn't have to remember the document structure.
+
+**Good:** "This fits in Ch3 §3.2 (Measuring Heart Rate), which covers R-wave detection, ECG vs PPG, artifact sources, and ectopic beat handling."
+
+**Bad:** "This fits in Ch3 §3.2."
 
 ## Narrative Coherence Checks
 
@@ -273,7 +369,30 @@ Throughout the process, regularly verify:
 2. **Do transitions connect logically?** Each paragraph should flow from the previous one.
 3. **Is the level of detail consistent?** Don't spend 5 paragraphs on a minor point and 1 on a major one.
 4. **Are we serving the larger document's narrative?** Background chapters should build toward the thesis contribution. Research chapters should be self-contained but connected.
-5. **Does content belong here or elsewhere?** If a topic is covered in another section/chapter, cross-reference rather than duplicate. Discuss placement trade-offs with the author.
+5. **Does content belong here or elsewhere?** If a topic is covered in another section/chapter, cross-reference rather than duplicate.
+
+## Interaction Guidelines
+
+### Be Collaborative
+- Present findings and proposals, don't dictate
+- Ask for the author's view on controversies
+- Respect their expertise in their field
+
+### Be Transparent
+- Show your reasoning for structural decisions
+- Admit when coverage is thin
+- Distinguish between well-supported and tentative points
+
+### Be Efficient
+- Group related questions
+- Don't ask about every minor point
+- Focus questions on things that affect structure/narrative
+- Provide options, not open-ended queries
+
+### Be Research-Grounded
+- Every claim backed by Zotero reference (or explicitly flagged as gap)
+- Distinguish author's view from paper's conclusion
+- Flag potential citation issues early
 
 ## Autonomy Level
 
@@ -281,14 +400,14 @@ Throughout the process, regularly verify:
 
 - **Phase 1** (Read/Reconcile): Report findings, ask about discrepancies
 - **Phase 2** (Narrative Structure): Propose, discuss, iterate — do not finalise without author agreement
-- **Phase 3** (Research Fill): Inform the author before spawning agents; present results in groups for review
+- **Phase 3** (Claim Expansion): Expand claims autonomously, research autonomously, but present all results for author review and haggling
 - **Phase 4** (Finalise): Present complete plan for approval
 
-The only autonomous actions are: reading files, spawning research agents (after informing the user), and writing the plan.md once approved.
+The only autonomous actions are: reading files, expanding candidate claims (pre-review), spawning research agents, and writing the plan.md once approved.
 
 ## Integration
 
 - **Reads**: `.tex` file (authoritative existing content), directory-level `plan.md`, parent-level `plan.md`
-- **Uses**: `zotero-research` agent (topic discovery, claim-specific references, citation verification, batch coordination)
-- **Produces**: directory-level `plan.md` files
-- **Hands off to**: `writer` skill for LaTeX prose generation
+- **Uses**: `zotero-research` agent (passage-level semantic search, claim verification, batch coordination)
+- **Produces**: directory-level `plan.md` files (claim-level, directly prosifiable)
+- **Hands off to**: `writer` skill for LaTeX prose generation (writer must not add content beyond the plan)

@@ -38,23 +38,22 @@ Every citation must come from the user's Zotero library via the `zotero-research
 ## Skill Chain
 
 ```
-thesis-planning → document-planner → writer → figure-generator → formatter → reviewer
-                        ↕                                                       ↕
-                  zotero-research                                         zotero-research
+document-planner → writer → figure-generator → formatter → reviewer
+       ↕                                                       ↕
+ zotero-research                                         zotero-research
 ```
 
 | Step | Skill | Autonomy | Role |
 |------|-------|----------|------|
-| 1 | `thesis-planning` | **Low** — propose and iterate | Chapter-level planning with Zotero research. Creates parent plan.md. |
-| 2 | `document-planner` | **Low** — every structural decision discussed | Paragraph-level planning. Creates directory plan.md with verified references and figure stubs. |
-| 3 | `writer` | **Low** — asks about ambiguous wording, checks per section | Converts plan to LaTeX prose. References `references/thesis-style-guide.md` for conventions. |
-| 4 | `figure-generator` | **Medium** — generates from plan specs, flags ambiguity | Reads .tex, finds figure placeholders, generates Python plot scripts or schematics. Replaces placeholders with `\includegraphics`. Flags complex figures for user. |
-| 5 | `formatter` | **High** — runs autonomously | LaTeX formatting compliance. Does not change content. |
-| 6 | `reviewer` | **High** — runs autonomously | Plan compliance, reference verification, quality report. Does not make changes. |
+| 1 | `document-planner` | **Low** — every structural decision discussed | Multi-scope planning (thesis, chapter, section, subsection). Invoked with a prompt specifying the working level. Creates plan.md with verified references and figure stubs. |
+| 2 | `writer` | **Low** — asks about ambiguous wording, checks per section | Converts plan to LaTeX prose. References `references/thesis-style-guide.md` for conventions. |
+| 3 | `figure-generator` | **Medium** — generates from plan specs, flags ambiguity | Reads .tex, finds figure placeholders, generates Python plot scripts or schematics. Replaces placeholders with `\includegraphics`. Flags complex figures for user. |
+| 4 | `formatter` | **High** — runs autonomously | LaTeX formatting compliance. Does not change content. |
+| 5 | `reviewer` | **High** — runs autonomously | Plan compliance, reference verification, quality report. Does not make changes. |
 
 Research at every stage goes through `zotero-research` — the single interface to the Zotero library.
 
-### Content-creating skills (thesis-planning, document-planner, writer)
+### Content-creating skills (document-planner, writer)
 
 These skills are fundamentally collaborative:
 - Propose structure and content, then wait for author feedback
@@ -90,8 +89,7 @@ Run to completion autonomously:
 | Skill | Role |
 |-------|------|
 | `zotero-research` | Spawnable research agent — topic search, claim support, citation verification |
-| `thesis-planning` | Chapter-level interactive planning (includes chapter type definitions) |
-| `document-planner` | Paragraph-level planning with verified references and figure stubs |
+| `document-planner` | Multi-scope interactive planning (thesis, chapter, section, subsection) with verified references and figure stubs |
 | `writer` | LaTeX prose from plans (conversational) |
 | `figure-generator` | Generates data plots and schematics from figure placeholders |
 | `formatter` | LaTeX formatting checker (packages, placement, units, cross-refs) |

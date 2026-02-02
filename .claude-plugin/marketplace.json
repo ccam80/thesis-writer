@@ -3,10 +3,10 @@
   "metadata": {
     "description": "Skills and setup for doctoral thesis writing in biomedical engineering, using Zotero for research and citations. Adapted from K-Dense AI's Claude Scientific Writer.",
     "version": "0.1.0",
-    "homepage": "https://github.com/ccam80/thesis-writer",
+    "homepage": "https://github.com/ccam80/thesis-writer"
   },
   "owner": {
-    "name": "Chris Cameron",
+    "name": "Chris Cameron"
   },
   "plugins": [
     {
@@ -16,7 +16,6 @@
       "strict": false,
       "skills": [
         "./skills/zotero-research",
-        "./skills/thesis-planning",
         "./skills/document-planner",
         "./skills/writer",
         "./skills/figure-generator",

@@ -7,9 +7,9 @@ A Claude Code plugin for plan-driven doctoral thesis writing with Zotero-sourced
 Provides a structured skill chain for thesis writing:
 
 ```
-thesis-planning → document-planner → writer → figure-generator → formatter → reviewer
-                        ↕                                                       ↕
-                  zotero-research                                         zotero-research
+document-planner → writer → figure-generator → formatter → reviewer
+       ↕                                                       ↕
+ zotero-research                                         zotero-research
 ```
 
 All citations come from your Zotero library. All writing follows collaboratively approved plans. Output is publication-ready LaTeX.
@@ -49,8 +49,7 @@ All citations come from your Zotero library. All writing follows collaboratively
 | Skill | Role |
 |-------|------|
 | `zotero-research` | Spawnable research agent — topic search, claim support, citation verification |
-| `thesis-planning` | Chapter-level interactive planning (includes chapter type definitions) |
-| `document-planner` | Paragraph-level planning with verified references and figure stubs |
+| `document-planner` | Multi-scope interactive planning (thesis, chapter, section, subsection) with verified references and figure stubs |
 | `writer` | LaTeX prose from plans (conversational, checks wording with user) |
 | `figure-generator` | Generates matplotlib plots and schematics from figure placeholders |
 | `formatter` | LaTeX formatting checker (packages, placement, units, cross-refs) |
@@ -69,7 +68,7 @@ All citations come from your Zotero library. All writing follows collaboratively
 ```
 > I need to plan my background chapter on HRV physiology
 
-[thesis-planning runs: searches Zotero, proposes structure, iterates with you]
+[document-planner runs: searches Zotero, proposes structure, iterates with you]
 
 > Approved. Now let's do detailed planning for section 2.
 

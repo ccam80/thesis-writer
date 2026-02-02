@@ -60,8 +60,7 @@ What's Included:
 - IEEE-style formatting default
 
 Core Workflow:
-  - thesis-planning: Chapter-level interactive planning
-  - document-planner: Paragraph-level planning with verified references
+  - document-planner: Multi-scope interactive planning (thesis, chapter, section, subsection)
   - writer: LaTeX prose from plans (conversational)
   - figure-generator: Matplotlib plots and schematics from placeholders
   - formatter: LaTeX formatting checker
@@ -82,13 +81,13 @@ Thesis Chapter Types:
 Getting Started:
 1. Your CLAUDE.md file is now configured
 2. Ensure the zotero-chunk-rag MCP server is enabled in Claude settings
-3. Start with: "/thesis-planning" to begin planning a chapter
+3. Start with: "/document-planner" to begin planning a chapter
 
 Plan.md Workflow:
 - All writing starts from a plan.md file
 - Points in the plan MUST appear in the document
 - References in the plan MUST be cited in the document
-- Use thesis-planning skill to develop plans interactively
+- Use document-planner skill to develop plans interactively
 ```
 
 ## Step 5: Verify zotero-chunk-rag MCP
