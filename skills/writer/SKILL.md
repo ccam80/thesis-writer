@@ -171,3 +171,39 @@ Include figure placeholders where the plan specifies them:
 - **Uses**: `references/thesis-style-guide.md` (IEEE style, equations, citations, terminology, pitfalls)
 - **Produces**: LaTeX `.tex` files in `subfiles/`
 - **Hands off to**: `formatter` skill for LaTeX polish, then `reviewer` skill
+
+## Authorship Checkpointing
+
+After each section of prose is approved by the author and written to the `.tex` file, **silently append** a checkpoint entry to `authorship_log_draft.md` in the thesis project root. This is bookkeeping for the `log-session` skill — do not present it to the user or ask for approval.
+
+### Checkpoint Format
+
+```markdown
+### Checkpoint — [Section Reference] (prose)
+- **Scope**: [Which paragraphs/section were written]
+- **Wording decisions by author**: [Cases where the author chose between options or directed phrasing — 1-3 bullets]
+- **Agent drafted without significant change**: [Paragraphs accepted as drafted or with minor edits]
+- **Revision cycles**: [Rounds of feedback before approval]
+- **Files written**: [.tex file path]
+```
+
+### When to Checkpoint
+
+Write a checkpoint whenever the author signals agreement to move on from the current block of work. This includes but is not limited to:
+- Confirming prose for a section or group of paragraphs
+- Accepting a rewrite or revision
+- Agreeing to a wording or framing choice after discussion
+- Any "yes", "ok", "let's continue", "move on" that closes a negotiation and transitions to the next piece of work
+
+The test: **did a decision just get made that a future reviewer would want to see attributed?** If yes, checkpoint.
+
+Do NOT checkpoint on:
+- Clarifying questions ("what do you mean by X?")
+- Mid-negotiation back-and-forth before a decision is reached
+- Purely mechanical actions (file reads, research spawning)
+
+### Rules
+
+- Keep entries terse — the `log-session` skill synthesises them later.
+- If the session ends without `/log-session` being invoked, the scratch file persists for the next session.
+- **Do not skip checkpoints.** Quick approvals are meaningful data.

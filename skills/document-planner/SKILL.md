@@ -214,16 +214,25 @@ The structural planning phase and the research fill phase are very different int
 
 Once the narrative structure is agreed, expand paragraph stubs into claim-level outlines with verified citations. This phase operates at **chapter scope** — all sections are expanded and researched together to enable cross-section deduplication and consistency checking.
 
-#### Step 1: Expand paragraph stubs to candidate claims (chapter-wide)
+#### Step 1: Extend paragraph stubs to full statement sequences (chapter-wide)
 
-For every paragraph stub in the chapter, propose candidate claims — the specific statements each paragraph will make. Each claim should be a single assertable sentence or fact that could carry a citation. Aim for ~4–6 claims per paragraph.
+This step builds the complete skeleton of every paragraph in the chapter. The goal is a sequence of statements for each paragraph that a writer agent can convert to flowing prose by adding only wording, transitions, and joins — no new content.
 
-Mark each claim with its citation status:
-- `[restate]` — restating a point established in an earlier paragraph/section (no new citation needed)
-- `[known]` — an existing reference from the parent plan covers this
-- `[need]` — needs a citation from Zotero
+For each paragraph stub, write out every statement needed to tell that stub's story. Statements include:
+- Factual points (the core content)
+- Framing or setup sentences
+- Logical steps that connect one fact to the next
+- Links to other paragraphs or sections where the narrative requires them
 
-Present the full chapter's expanded claims to the author for a **quick review pass** before researching. This catches obviously wrong directions and lets the author add claims from domain knowledge before research tokens are spent. The author is not expected to review every claim in detail — just scan for missing topics, wrong framings, or wasted effort.
+Do not constrain length. A stub that covers a lot of ground should produce a long list. The purpose is completeness — capture everything the paragraph needs to say.
+
+Annotate statements that make factual claims requiring external support with `(citable)`. Not every statement needs this — framing, logical connectives, and restatements of earlier content do not. When an entire paragraph's content would naturally cite from one or two sources, annotate at paragraph level: `(cite whole para from [topic area])`.
+
+Do not pre-assign specific references. The parent plan's reference tables are starting hints for the research step, not confirmed sources.
+
+**Splitting:** If a paragraph exceeds 6 statements, propose one or more splitting points where it can be sensibly divided into multiple paragraphs. Present proposed splits to the author for approval. Number resulting paragraphs sequentially — do not use sub-labels or attempt to preserve traceability to original stub numbers.
+
+After expanding all stubs (with proposed splits), present the full chapter to the author for review before researching. This catches wrong directions, missing content, and unnecessary inclusions before research tokens are spent.
 
 #### Step 2: Research (chapter-wide batch)
 
@@ -411,3 +420,40 @@ The only autonomous actions are: reading files, expanding candidate claims (pre-
 - **Uses**: `zotero-research` agent (passage-level semantic search, claim verification, batch coordination)
 - **Produces**: directory-level `plan.md` files (claim-level, directly prosifiable)
 - **Hands off to**: `writer` skill for LaTeX prose generation (writer must not add content beyond the plan)
+
+## Authorship Checkpointing
+
+After each plan block is approved by the author and written to `plan.md`, **silently append** a checkpoint entry to `authorship_log_draft.md` in the thesis project root. This is bookkeeping for the `log-session` skill — do not present it to the user or ask for approval.
+
+### Checkpoint Format
+
+```markdown
+### Checkpoint — [Section/Subsection Reference] ([Phase])
+- **Scope**: [What was planned in this block]
+- **Author-directed**: [Key points the author introduced, insisted on, or redirected — 2-5 bullets]
+- **Agent-suggested, accepted**: [Points the agent proposed that were accepted with minor or no changes]
+- **Agent-suggested, rejected/modified**: [Points the agent proposed that were rejected or significantly changed]
+- **Revision cycles**: [How many rounds before approval — e.g., "3 structural revisions before agreement"]
+- **Files written**: [plan.md path]
+```
+
+### When to Checkpoint
+
+Write a checkpoint whenever the author signals agreement to move on from the current block of work. This includes but is not limited to:
+- Approving a proposed structure or plan block
+- Accepting a rearrangement or restructuring
+- Agreeing to a scope change or content removal
+- Any "yes", "ok", "let's continue", "move on" that closes a negotiation and transitions to the next piece of work
+
+The test: **did a decision just get made that a future reviewer would want to see attributed?** If yes, checkpoint.
+
+Do NOT checkpoint on:
+- Clarifying questions ("what do you mean by X?")
+- Mid-negotiation back-and-forth before a decision is reached
+- Purely mechanical actions (file reads, research spawning)
+
+### Rules
+
+- Keep entries terse — the `log-session` skill synthesises them later.
+- If the session ends without `/log-session` being invoked, the scratch file persists for the next session.
+- **Do not skip checkpoints.** Even if a block was approved quickly, record it — quick approval is meaningful data (author agreed with the agent's proposal).
