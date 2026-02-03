@@ -89,7 +89,7 @@ Run to completion autonomously:
 ### Core Workflow
 | Skill | Role |
 |-------|------|
-| `zotero-research` | Spawnable research agent — topic search, claim support, citation verification |
+| `zotero-research` | Spawnable research agent — claim research, citation verification |
 | `document-planner` | Multi-scope interactive planning (thesis, chapter, section, subsection) with verified references and figure stubs |
 | `writer` | LaTeX prose from plans (conversational) |
 | `figure-generator` | Generates data plots and schematics from figure placeholders |

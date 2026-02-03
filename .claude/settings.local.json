@@ -17,7 +17,10 @@
       "mcp__zotero-chunk-rag__get_index_stats",
       "Bash(git log:*)",
       "Bash(git ls-tree:*)",
-      "Skill(claude-thesis-writer:document-planner)"
+      "Skill(claude-thesis-writer:document-planner)",
+      "Bash(find:*)",
+      "WebSearch",
+      "Bash(git commit:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

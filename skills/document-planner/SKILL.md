@@ -1,6 +1,6 @@
 ---
 name: document-planner
-description: Interactive planning at any scope — whole thesis, chapter, section, or subsection. Invoke with a prompt specifying the working level. Collaboratively builds writing plans from cold start through to claim-level outlines with verified Zotero citations.
+description: Interactive planning at any scope — whole thesis, chapter, section, or subsection. Invoke with a prompt specifying the working level. Collaboratively builds writing plans from cold start through to statement-level outlines with verified Zotero citations.
 allowed-tools: [Read, Write, Edit, Bash, Task, AskUserQuestion]
 ---
 
@@ -8,7 +8,7 @@ allowed-tools: [Read, Write, Edit, Bash, Task, AskUserQuestion]
 
 ## Overview
 
-This skill collaboratively builds writing plans at any scope — from whole-thesis chapter maps down to claim-level paragraph outlines with verified citations. It is the single planning skill for all document types and hierarchy levels.
+This skill collaboratively builds writing plans at any scope — from whole-thesis chapter maps down to statement-level paragraph outlines with verified citations. It is the single planning skill for all document types and hierarchy levels.
 
 The process is **fundamentally collaborative**. The author is a subject-matter expert who knows what points are needed to communicate clearly. You are a writing expert who structures documents logically, divides responsibilities into sections, and maintains narrative coherence across the wider document. Neither party works autonomously — every structural decision is discussed.
 
@@ -18,7 +18,7 @@ The process is **fundamentally collaborative**. The author is a subject-matter e
 
 - Planning a new thesis from scratch (whole-thesis scope)
 - Planning individual chapters from a thesis-level plan
-- Building paragraph-level or claim-level plans for sections
+- Building paragraph-level or statement-level plans for sections
 - Revising the structure of an already-planned section
 - Planning a standalone paper or report
 
@@ -62,12 +62,12 @@ Research directions and open questions.
 Three documents form an authority hierarchy for content. Higher-level documents set narrative and structure; lower-level documents add detail:
 
 1. **`.tex` file** (most detailed, authoritative for existing prose)
-2. **Directory-level `plan.md`** (paragraph/claim-level plan, created/maintained by this skill)
+2. **Directory-level `plan.md`** (paragraph/statement-level plan, created/maintained by this skill)
 3. **Parent-level `plan.md`** (chapter-level or thesis-level plan, sets narrative goals)
 
 If there is a `plan.md` one directory above the document directory, treat it as the hierarchical master plan for this document.
 
-**Parent plan detail level:** The thesis-level plan should contain section purposes, high-level bullet points, and key reference tables. The document-planner may update it to reflect structural changes (section reordering, new/removed sections, cross-chapter scope changes, corrected references) but must NOT inflate it with paragraph-level detail, figure descriptions, or expanded sub-points. Those belong in the directory-level plan only.
+**Parent plan detail level:** The thesis-level plan should contain section purposes, high-level bullet points, and narrative goals. It does not contain references — those are resolved at the directory-level plan during Phase 3. The document-planner may update the parent plan to reflect structural changes (section reordering, new/removed sections, cross-chapter scope changes) but must NOT inflate it with paragraph-level detail, figure descriptions, or expanded sub-points. Those belong in the directory-level plan only.
 
 ### Startup: Read and Reconcile
 
@@ -92,17 +92,16 @@ When section headings, ordering, or structure differ between documents (e.g., `.
 
 ### Understanding the Parent Plan
 
-The parent-level plan is a **thin outline** — a best attempt at a high-level overview of points that will meet narrative goals. It was typically built from abstracts and metadata alone, so it **lacks specific detail**. The key references listed are "likely" references, not confirmed ones. Treat it as a structural starting point, not a content-complete source.
+The parent-level plan is a **thin outline** — a best attempt at a high-level overview of points that will meet narrative goals. It was typically built collaboratively with the author, so it **lacks specific detail**. Treat it as a structural starting point, not a content-complete source.
 
 ### Cold Start (No Higher-Level Plan)
 
 When there is no parent-level `plan.md`, build the thin starting plan collaboratively:
 
 1. Ask the author what this document needs to achieve and who the audience is
-2. Spawn `zotero-research` agent: "Find top 20 papers on [topic]" to survey Zotero coverage
-3. Propose a section structure with narrative bullet points
-4. Iterate with the author until the high-level structure is agreed
-5. Write this as the directory-level `plan.md` and proceed to Phase 2
+2. Propose a section structure with narrative bullet points based on the author's input
+3. Iterate with the author until the high-level structure is agreed
+4. Write this as the directory-level `plan.md` and proceed to Phase 2
 
 For whole-thesis cold starts, first establish the overall narrative (what is the thesis about, what is the contribution, what story does it tell), then map chapters (background, meat, conclusions) with their connections before planning individual chapters.
 
@@ -208,11 +207,11 @@ At the lowest level of hierarchy (the level where children are paragraphs rather
 
 ### Phase Transition: Structure → Research
 
-The structural planning phase and the research fill phase are very different interaction modes. **Make the transition explicit**: "Structure is agreed. Moving to claim expansion and research."
+The structural planning phase and the research fill phase are very different interaction modes. **Make the transition explicit**: "Structure is agreed. Moving to statement expansion and research."
 
-### Phase 3: Claim Expansion and Research
+### Phase 3: Statement Expansion and Research
 
-Once the narrative structure is agreed, expand paragraph stubs into claim-level outlines with verified citations. This phase operates at **chapter scope** — all sections are expanded and researched together to enable cross-section deduplication and consistency checking.
+Once the narrative structure is agreed, expand paragraph stubs into statement-level outlines with verified citations. This phase operates at **chapter scope** — all sections are expanded and researched together to enable cross-section deduplication and consistency checking.
 
 #### Step 1: Extend paragraph stubs to full statement sequences (chapter-wide)
 
@@ -228,7 +227,7 @@ Do not constrain length. A stub that covers a lot of ground should produce a lon
 
 Annotate statements that make factual claims requiring external support with `(citable)`. Not every statement needs this — framing, logical connectives, and restatements of earlier content do not. When an entire paragraph's content would naturally cite from one or two sources, annotate at paragraph level: `(cite whole para from [topic area])`.
 
-Do not pre-assign specific references. The parent plan's reference tables are starting hints for the research step, not confirmed sources.
+Do not pre-assign specific references. If the author has indicated that a section's content should mostly come from a specific source, note this for the research step — but the research agent may find better or additional sources.
 
 **Splitting:** If a paragraph exceeds 6 statements, propose one or more splitting points where it can be sensibly divided into multiple paragraphs. Present proposed splits to the author for approval. Number resulting paragraphs sequentially — do not use sub-labels or attempt to preserve traceability to original stub numbers.
 
@@ -236,52 +235,72 @@ After expanding all stubs (with proposed splits), present the full chapter to th
 
 #### Step 2: Research (chapter-wide batch)
 
-Spawn `zotero-research` agent with a structured request covering all `[need]` claims across the chapter. Structure the request as a numbered list of claims grouped by section, with clear instructions on what kind of evidence is needed for each.
+Collect all statements marked `(citable)` or `(cite whole para)` from the expanded chapter. Compile them into a single numbered list grouped by section, in the following format:
 
-The agent returns passage-level results. One batch call per chapter is the target — only split into multiple calls if the claim count exceeds what the agent can handle in one request.
+    ## Section 2.1: [Title]
+    1. [statement text]
+    2. [statement text]
+    ...
+    ## Section 2.2: [Title]
+    12. [statement text]
+    ...
 
-#### Step 3: Triage (chapter-wide)
+Numbering is continuous across sections.
 
-Review all research results and categorise each claim:
+Spawn the `zotero-research` agent with this list as a Claim Research request (see zotero-research skill §1). The agent processes statements sequentially and returns supporting, contradicting, and qualifying citations for each. If the agent does not complete the full list, it reports where it stopped — spawn a follow-up agent for the remaining statements. You can triage the first batch's results while the next agent searches.
 
-- **Supported**: Attach citation (Zotero key, brief note on what it supports)
-- **Refuted**: Flag with counter-evidence. Present the refutation to the author — do NOT silently drop or rewrite. Options: rephrase, remove, or present as contested.
-- **Unsupported**: No relevant passages found. Track as a gap — the author may have sources in mind, accept the gap for now, or decide to remove the claim.
+#### Step 3: Triage and present (section by section)
 
-Also perform:
-- **Cross-paragraph deduplication**: Flag identical claims appearing in multiple paragraphs. Decide where the claim lives vs where it's a brief restatement.
-- **Claim density check**: If a paragraph has >8 claims, it probably needs splitting. If <3, it may be thin or should merge with an adjacent paragraph. Feed structural changes back to the author.
+Triage each section's research results and present them to the author immediately, one section at a time. For each section, show every paragraph with its statements and research outcomes in the following format:
 
-#### Step 4: Present (section by section)
+    ### §X.Y Paragraph N — (Topic Label)
 
-Present the expanded, triaged claims to the author **section by section**. For each section show:
+    * Statement text (citable)
+        Supporting:
+        - \cite{key} p. [page] — [one sentence]
+        - \cite{key2} p. [page] — [one sentence]
 
-- The claim-level outline with citations attached
-- Refuted claims with counter-evidence and options
-- Unsupported claims as gaps
-- Any structural changes suggested by claim density
+    * Statement text (citable)
+        Supporting:
+        - \cite{key} p. [page] — [one sentence]
+        Qualifying:
+        - \cite{key3} p. [page] — [one sentence]
+        ⚠ Qualification: [brief description of how the source narrows the claim]
+
+    * Statement text (citable)
+        Supporting: None
+        ⚠ Gap — no source found
+
+    * Statement text
+        [no citation needed — framing/setup]
+
+    → **Figure**: [Descriptive label — what it shows, type]
+
+**Categorisation rules:**
+
+- **Supported**: Attach all citations found.
+- **Contradicted**: Present the counter-evidence to the author — do NOT silently drop or rewrite. This is mandatory even if the statement also has supporting citations. A statement with both supporting and contradicting evidence must be flagged. Options: rephrase the statement, remove it, or present the point as contested with both sides cited.
+- **Qualified**: Present the qualification to the author. This is mandatory even if the statement also has supporting citations. A statement with both supporting and qualifying evidence may need narrowing or additional context.
+- **Gap**: No relevant results found. Track as a gap — the author may have sources in mind, accept the gap for now, or decide to remove the statement.
 
 Get author feedback per section before moving to the next. The author may:
-- Overrule a refutation ("this claim is correct, I'll find a source")
+- Overrule a contradiction ("this statement is correct, I'll find a source")
 - Accept a gap and add to reference debt
-- Restructure claims based on what the research revealed
-- Add domain knowledge claims the agent missed
+- Restructure statements based on what the research revealed
+- Add statements from domain knowledge
 
-#### Step 5: Commit
+#### Step 4: Deduplicate and commit
 
-Write the full chapter's claim-level plan to `plan.md` in the document directory. Update the parent plan if structural changes occurred.
+After all sections have been reviewed with the author:
 
-### Phase 4: Finalise Plan
+1. **Cross-paragraph deduplication**: Scan the full chapter for identical or near-identical statements appearing in multiple paragraphs. For each duplicate, decide where the statement lives as the primary instance vs where it becomes a brief restatement. Present duplicates to the author for confirmation.
+2. **Write the complete statement-level plan** to `plan.md` in the document directory.
+3. **Verify all citations are from Zotero** (they came from the research agent, so this is a sanity check).
+4. **Track gaps** in the Open Questions section of the plan.
+5. **Update the parent plan** if structural changes occurred during review.
+6. **Present for final approval.**
 
-Once all sections have been through claim expansion and author review:
-
-1. Write the complete claim-level plan to `plan.md` in the document directory
-2. Verify all parent-plan references are preserved (or removal was approved)
-3. Verify all new references are real (from Zotero)
-4. Track unsupported claims in the Open Questions or reference debt log
-5. Present for final approval
-
-The finalised plan should be **directly prosifiable** by the writer skill — every paragraph is a list of specific, cited claims that the writer converts to flowing prose without adding content.
+The finalised plan should be **directly prosifiable** by the writer skill — every paragraph is a list of specific, cited statements that the writer converts to flowing prose without adding content.
 
 ## Output Format
 
@@ -306,33 +325,31 @@ Source: [parent plan reference]
 **Purpose**: What this section accomplishes in the narrative
 
 #### Paragraph 1 — (Topic Label)
-- Claim [supported/restate/gap]
-  - Cite: \cite{zotero_key} — [what it supports]
-- Claim [supported]
-  - Cite: \cite{key1, key2}
-- Claim [restate from §X.Y ¶Z]
+- Statement text (citable)
+  - \cite{key} p. [page] — [what it supports]
+  - \cite{key2} p. [page] — [what it supports]
+- Statement text (citable)
+  - \cite{key3} p. [page] — [what it supports]
+- Statement text
+  [no citation needed — framing/setup]
 
 → **Figure**: [Descriptive label — what it shows, type]
 
 #### Paragraph 2 — (Topic Label)
-- Claim [supported]
-  - Cite: \cite{key}
-- Claim [gap — needs source for X]
+- Statement text (citable)
+  - \cite{key} p. [page] — [what it supports]
+- Statement text (citable)
+  - ⚠ Gap — no source found
 
 [continue for all paragraphs and sections]
 
-## References Summary
-| Key | Citation | Zotero Key | Usage |
-|-----|----------|------------|-------|
-| key1 | Author et al., Year | XXXXXXXX | Supports claim about X in §X.1 ¶2 |
-
 ## Open Questions
-- [Unsupported claims awaiting sources]
+- [Gaps awaiting sources]
 - [Structural decisions deferred to writing phase]
 
 ## Notes for Writer
 - [Style guidance, emphasis, tone]
-- CRITICAL: Do not add claims, facts, or assertions not present in this plan.
+- CRITICAL: Do not add statements, facts, or assertions not present in this plan.
   If a transition requires stating something not in the plan, flag it.
 ```
 
@@ -342,23 +359,21 @@ When Zotero library lacks sufficient references:
 
 **Do NOT**:
 - Fabricate references
-- Proceed without adequate support
 - Silently skip topics
 
 **Do**:
 1. Document the gap explicitly in the plan's Open Questions
-2. Tell the user: "The Zotero library has limited coverage of [topic]. Found only [N] papers. Options: (a) suggest search terms for external databases, (b) de-emphasize this topic, (c) proceed with available material and note the gap."
+2. Tell the user: "The Zotero library has limited coverage of [topic]. Options: (a) de-emphasize this topic, (b) proceed with available material and note the gap."
 3. Wait for user decision
-4. If the user wants external search, suggest specific queries and databases
 
 ## Scope Flexibility
 
 This skill works at any granularity:
 
 - **Whole thesis**: Chapter map, narrative thread, cross-chapter analysis
-- **Full chapter**: All sections to claim level
-- **Single section**: Claim-level planning within one section
-- **Single subsection**: Detailed claim planning for a focused topic
+- **Full chapter**: All sections to statement level
+- **Single section**: Statement-level planning within one section
+- **Single subsection**: Detailed statement planning for a focused topic
 
 When working at a lower scope, still reference the broader document narrative to maintain coherence. When working at thesis scope, use the cold start procedure and focus on chapter ordering, narrative threads, and cross-chapter dependencies before descending.
 
@@ -399,7 +414,7 @@ Throughout the process, regularly verify:
 - Provide options, not open-ended queries
 
 ### Be Research-Grounded
-- Every claim backed by Zotero reference (or explicitly flagged as gap)
+- Every citable statement backed by Zotero reference (or explicitly flagged as gap)
 - Distinguish author's view from paper's conclusion
 - Flag potential citation issues early
 
@@ -409,16 +424,16 @@ Throughout the process, regularly verify:
 
 - **Phase 1** (Read/Reconcile): Report findings, ask about discrepancies
 - **Phase 2** (Narrative Structure): Propose, discuss, iterate — do not finalise without author agreement
-- **Phase 3** (Claim Expansion): Expand claims autonomously, research autonomously, but present all results for author review and haggling
-- **Phase 4** (Finalise): Present complete plan for approval
+- **Phase 3** (Statement Expansion): Expand statements autonomously, research autonomously, but present all results for author review and haggling
+- **Phase 3, Step 4** (Deduplicate and commit): Present complete plan for approval
 
-The only autonomous actions are: reading files, expanding candidate claims (pre-review), spawning research agents, and writing the plan.md once approved.
+The only autonomous actions are: reading files, expanding paragraph stubs (pre-review), spawning research agents, and writing the plan.md once approved.
 
 ## Integration
 
 - **Reads**: `.tex` file (authoritative existing content), directory-level `plan.md`, parent-level `plan.md`
-- **Uses**: `zotero-research` agent (passage-level semantic search, claim verification, batch coordination)
-- **Produces**: directory-level `plan.md` files (claim-level, directly prosifiable)
+- **Uses**: `zotero-research` agent (claim research, citation verification)
+- **Produces**: directory-level `plan.md` files (statement-level, directly prosifiable)
 - **Hands off to**: `writer` skill for LaTeX prose generation (writer must not add content beyond the plan)
 
 ## Authorship Checkpointing

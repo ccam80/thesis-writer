@@ -160,3 +160,14 @@ The most helpful review finds problems before publication, not one that makes th
 - **Uses**: `zotero-research` agent for critical source verification
 - **Produces**: `review_report.md` in chapter directory
 - **Informs**: User decisions on revision
+
+## TODO: Citation Verification Enhancement
+
+Enhance §4 Reference Verification with a rephrase-and-recheck workflow:
+
+1. For each citation in the chapter, rephrase the cited claim in your own words without changing the core facts.
+2. Construct a citation-verification list with both the original claim wording and your rephrased version.
+3. Spawn `zotero-research` with citation verification requests for both versions.
+4. If your rephrasing is NOT supported by the source but the original wording IS, flag this to the author — the citation has probably been forced or over-extrapolated (the author found phrasing that technically matches the source but the natural reading of the claim goes beyond what the source says).
+5. If neither version is supported, flag as unsupported.
+6. If both are supported, the citation is sound.
