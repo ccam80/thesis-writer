@@ -211,47 +211,193 @@ The structural planning phase and the research fill phase are very different int
 
 ### Phase 3: Statement Expansion and Research
 
-Once the narrative structure is agreed, expand paragraph stubs into statement-level outlines with verified citations. This phase operates at **chapter scope** — all sections are expanded and researched together to enable cross-section deduplication and consistency checking.
+Once the narrative structure is agreed, expand paragraph stubs into statement-level outlines with verified citations. This phase operates at **section scope** — complete one section fully (expansion, author review, research, triage) before moving to the next.
 
-#### Step 1: Extend paragraph stubs to full statement sequences (chapter-wide)
+#### Step 1: Iterative statement expansion (per section)
 
-This step builds the complete skeleton of every paragraph in the chapter. The goal is a sequence of statements for each paragraph that a writer agent can convert to flowing prose by adding only wording, transitions, and joins — no new content.
+This step builds the complete skeleton of every paragraph in a section. The goal is a sequence of statements that a writer agent can convert to flowing prose by adding only wording, transitions, and joins — no new content.
 
-For each paragraph stub, write out every statement needed to tell that stub's story. Statements include:
-- Factual points (the core content)
-- Framing or setup sentences
-- Logical steps that connect one fact to the next
-- Links to other paragraphs or sections where the narrative requires them
+**Statement style — terse, not prose.** Write statements as compressed note-form: noun phrases, arrows for causation, semicolons for related points. The writer skill converts these to prose — full sentences in the plan over-constrain wording and are harder to review.
 
-Do not constrain length. A stub that covers a lot of ground should produce a long list. The purpose is completeness — capture everything the paragraph needs to say.
+Good: `Concentration gradient → electrochemical driving force → membrane voltage`
+Bad: `The concentration gradient creates an electrochemical driving force which produces a voltage across the membrane.`
 
-Annotate statements that make factual claims requiring external support with `(citable)`. Not every statement needs this — framing, logical connectives, and restatements of earlier content do not. When an entire paragraph's content would naturally cite from one or two sources, annotate at paragraph level: `(cite whole para from [topic area])`.
+Good: `Neuron anatomy: soma (nucleus), dendrites (receive), axon (transmit), synaptic terminals (output)`
+Bad: `A neuron consists of a cell body (soma) containing the nucleus, branching dendrites that receive input from other neurons, a long axon that carries signals away from the soma, and synaptic terminals that transmit signals to the next cell.`
 
-Do not pre-assign specific references. If the author has indicated that a section's content should mostly come from a specific source, note this for the research step — but the research agent may find better or additional sources.
+The test: if a statement reads as a finished sentence that could appear verbatim in the thesis, it is too detailed. Compress it.
 
-**Splitting:** If a paragraph exceeds 6 statements, propose one or more splitting points where it can be sensibly divided into multiple paragraphs. Present proposed splits to the author for approval. Number resulting paragraphs sequentially — do not use sub-labels or attempt to preserve traceability to original stub numbers.
+##### Expansion mode choice
 
-After expanding all stubs (with proposed splits), present the full chapter to the author for review before researching. This catches wrong directions, missing content, and unnecessary inclusions before research tokens are spent.
+Before generating any content, present the section's paragraph stubs and ask the author how they want to proceed:
 
-#### Step 2: Research (chapter-wide batch)
+**Presentation format:**
 
-Collect all statements marked `(citable)` or `(cite whole para)` from the expanded chapter. Compile them into a single numbered list grouped by section, in the following format:
+```
+## Section X.Y: [Title]
 
-    ## Section 2.1: [Title]
+This section has [N] paragraphs:
+
+1. **[Topic Label]** — [1-sentence stub from Phase 2]
+2. **[Topic Label]** — [1-sentence stub from Phase 2]
+...
+
+**Expansion mode:** For each paragraph, would you like to:
+(a) **Provide the initial points yourself** — you dictate the key facts and logical steps; I refine and structure
+(b) **Have me generate from whole cloth** — I propose the initial expansion; you review and modify
+(c) **Mixed** — specify which paragraphs you'll seed vs which I should generate
+
+If you choose (a) or (c), provide your points in any format — bullet lists, prose notes, keywords. I'll convert to terse statement form and run the refinement cycles. Points you provide are tagged as "user-dictated" in provenance tracking.
+```
+
+**Author-seeded expansion:** When the author provides initial points:
+1. Convert their input to terse statement form (noun phrases, arrows, semicolons)
+2. Number and tag by topic domain
+3. Note which points came directly from author input in the scratch file
+4. Proceed to refinement cycles — prerequisite check, topic coherence, etc.
+
+**Agent-generated expansion:** When the author requests generation from whole cloth, proceed directly to the initial expansion procedure below.
+
+**Mixed mode:** Track each paragraph's provenance mode separately in the scratch file.
+
+##### Iterative refinement process
+
+Expansion is not a single pass. Perform multiple refinement cycles, writing working state to a scratch file at `<document_directory>/scratch_<section_number>.md`. This file is deleted after the section is approved.
+
+**Initial expansion:** For each paragraph stub, list every point needed to tell that stub's story:
+- Factual claims (the core content)
+- Framing or setup notes
+- Logical steps connecting one fact to the next
+- Links to other paragraphs/sections where narrative requires
+
+Number all points. Tag each point by topic domain (e.g., `[anatomy]`, `[math]`, `[mechanism]`).
+
+**Provenance baseline:** After initial expansion and before presenting to the author, record the baseline state in the scratch file:
+
+```markdown
+## Provenance Baseline
+**Paragraphs**: [N]
+**Points**: [N]
+**Figures proposed**: [N]
+**Point IDs**: 1.1, 1.2, 1.3, 2.1, 2.2, ... [full list]
+```
+
+This baseline is compared against the final approved state to compute provenance statistics.
+
+**Paragraph numbering:** Use sequential integers (1, 2, 3...), not sublabels (5a, 5b). When splitting a paragraph, the resulting paragraphs become new sequential numbers — renumber all subsequent paragraphs and update cross-references accordingly.
+
+**Refinement cycles:** After initial expansion, run the following passes. Record each cycle in the scratch file:
+
+```markdown
+## Cycle N
+
+### Current point list
+[numbered, tagged points for each paragraph]
+
+### Pass results
+**Prerequisite check:** [reorders made, or "none"]
+**Topic coherence:** [merge/split decisions, or "none"]
+**Gap check:** [bridges added or gaps flagged, or "none"]
+**Framing check:** [framing added, or "none"]
+**Quantitative check:** [quantities flagged for "derivation needed?" question, or "none"]
+
+### Questions for author
+[list of domain-specific questions identified this cycle]
+```
+
+**Pass descriptions:**
+
+1. **Prerequisite check:** For each point, verify the reader has the necessary background from earlier points. If not, reorder. If prerequisite is missing entirely, add a bridge point or flag for author.
+
+2. **Topic coherence:** Read the topic tags in sequence. If a paragraph interleaves topics (e.g., `[anatomy]` → `[math]` → `[anatomy]`), consider reordering. If adjacent paragraphs share significant topic overlap, merge their points into one list, reorder by topic, then re-split at natural boundaries.
+
+3. **Gap check:** Look for logical jumps — places where the reader must infer a step. Either insert an explicit bridge point or flag as "needs author input: [what's missing]."
+
+4. **Framing check:** Each paragraph should begin with context before detail. If a paragraph launches into specifics without setup, add a framing point at the start.
+
+5. **Quantitative check:** Flag any point that asserts a specific value, describes a quantity, or implies a mathematical relationship. Add to questions: "Should [X] include a derivation?"
+
+**Stopping condition:** Continue cycles until a full cycle produces "none" for all five passes. Minimum 2 cycles required.
+
+##### Post-author-feedback cycles
+
+After presenting to the author and receiving feedback (answers to questions, corrections, additions, removals), incorporate the changes and run **at least 2 more refinement cycles**. Author input often changes structure — reordering, new points, removed points — which may introduce new prerequisite issues or gaps.
+
+Record these as continuing cycle numbers (e.g., if initial refinement ended at Cycle 2, post-feedback cycles are Cycle 3, Cycle 4, etc.).
+
+##### Provenance tracking during feedback
+
+After each round of author feedback, update the provenance tracking in the scratch file:
+
+```markdown
+## Feedback Round [N]
+
+### Changes from author feedback
+**Points kept verbatim**: [list of point IDs unchanged from baseline]
+**Points modified**: [list of point IDs that were changed, with brief note]
+**Points deleted**: [list of point IDs removed]
+**Points added by user**: [new point IDs with brief description]
+**Points added by agent (user-directed)**: [points agent extracted from user's narrative direction]
+**Points added by agent (independent)**: [points agent suggested without user prompting]
+**Figures added**: [figure descriptions with attribution: "user-suggested" or "agent-suggested"]
+**Structural changes**: [paragraph splits, merges, reorders — who initiated]
+```
+
+**Attribution rules:**
+- **User-dictated**: The user stated the point, the agent transcribed it (possibly rephrasing)
+- **User-directed**: The user described a narrative goal or gap; the agent generated specific points to fill it
+- **Agent-suggested**: The agent proposed the point without user prompting; user accepted/modified
+- **Agent-suggested, rejected**: The agent proposed; user rejected (track for honesty)
+
+The test for "user-dictated" vs "user-directed": Could a diligent transcriptionist have produced this point from the user's words alone? If yes, it's user-dictated. If the agent had to infer, synthesize, or generate substantive content, it's user-directed or agent-suggested.
+
+##### Questions for author
+
+During refinement, compile questions in these categories:
+
+- **Relevance:** "Does [specific detail] get used later in the thesis?"
+- **Correctness:** "Is [factual claim] accurate?"
+- **Scope:** "What level of detail is needed for [topic]?"
+- **Gaps:** "What connects [X] to [Y]? I see a logical jump."
+- **Derivations:** "Should [quantity/equation] be presented as a derivation?"
+
+Do not ask questions with obvious answers. Do ask when uncertain — the author may say "don't know," which flags a point for reference checking.
+
+##### Presentation to author
+
+After refinement stabilizes, present to the author:
+
+1. **Final point list** — clean, numbered, without topic tags or working annotations
+2. **Compiled questions** — grouped by category
+3. **Proposed paragraph splits** — if any paragraph exceeds 6 points, propose split locations
+
+Do NOT show the scratch file contents. The author reviews the clean output.
+
+**CHECKPOINT REMINDER:** When the author approves the point list (signals like "ok", "approved", "let's continue"), write a checkpoint entry before proceeding to citation marking.
+
+##### Citation marking (after author approval)
+
+Only after the author approves the point list, add citation annotations:
+
+- **Paragraph-level** `(cite whole para: [topic area])` when all points draw from standard textbook material
+- **Point-level** `(citable)` only for: specific measured values, contested claims, specific study findings, non-obvious facts
+
+Do not pre-assign specific references — the research agent finds appropriate sources.
+
+#### Step 2: Research (per section)
+
+After the author approves a section's point list with citation annotations, collect all statements marked `(citable)` or paragraphs marked `(cite whole para)`. Compile into a numbered list:
+
+    ## Section X.Y: [Title]
     1. [statement text]
     2. [statement text]
     ...
-    ## Section 2.2: [Title]
-    12. [statement text]
-    ...
 
-Numbering is continuous across sections.
+Spawn the `zotero-research` agent with this list as a Claim Research request (see zotero-research skill §1). The agent processes statements sequentially and returns supporting, contradicting, and qualifying citations for each. If the agent does not complete the full list, it reports where it stopped — spawn a follow-up agent for the remaining statements.
 
-Spawn the `zotero-research` agent with this list as a Claim Research request (see zotero-research skill §1). The agent processes statements sequentially and returns supporting, contradicting, and qualifying citations for each. If the agent does not complete the full list, it reports where it stopped — spawn a follow-up agent for the remaining statements. You can triage the first batch's results while the next agent searches.
+#### Step 3: Triage and present
 
-#### Step 3: Triage and present (section by section)
-
-Triage each section's research results and present them to the author immediately, one section at a time. For each section, show every paragraph with its statements and research outcomes in the following format:
+Triage the section's research results and present to the author. Show every paragraph with its statements and research outcomes:
 
     ### §X.Y Paragraph N — (Topic Label)
 
@@ -289,16 +435,27 @@ Get author feedback per section before moving to the next. The author may:
 - Restructure statements based on what the research revealed
 - Add statements from domain knowledge
 
-#### Step 4: Deduplicate and commit
+**CHECKPOINT REMINDER:** When the author approves the triaged results, write a checkpoint entry before committing the section.
 
-After all sections have been reviewed with the author:
+#### Step 4: Commit section and continue
 
-1. **Cross-paragraph deduplication**: Scan the full chapter for identical or near-identical statements appearing in multiple paragraphs. For each duplicate, decide where the statement lives as the primary instance vs where it becomes a brief restatement. Present duplicates to the author for confirmation.
-2. **Write the complete statement-level plan** to `plan.md` in the document directory.
-3. **Verify all citations are from Zotero** (they came from the research agent, so this is a sanity check).
-4. **Track gaps** in the Open Questions section of the plan.
-5. **Update the parent plan** if structural changes occurred during review.
-6. **Present for final approval.**
+After the author approves a section's triaged results:
+
+1. **Delete the scratch file** (`scratch_<section_number>.md`)
+2. **Write the section** to `plan.md` in the document directory (append if other sections already written)
+3. **Track gaps** in the Open Questions section
+4. **Proceed to next section** — return to Step 1
+
+#### Step 5: Chapter-level finalization
+
+After all sections are complete:
+
+1. **Cross-section deduplication**: Scan the full chapter for identical or near-identical statements appearing in multiple sections. For each duplicate, decide where the statement lives as the primary instance vs where it becomes a brief cross-reference. Present duplicates to the author for confirmation.
+2. **Verify all citations are from Zotero** (sanity check — they came from the research agent).
+3. **Update the parent plan** if structural changes occurred during any section's review.
+4. **Present chapter for final approval.**
+
+**CHECKPOINT REMINDER:** When the author gives final chapter approval, write a comprehensive checkpoint entry covering the full chapter before proceeding.
 
 The finalised plan should be **directly prosifiable** by the writer skill — every paragraph is a list of specific, cited statements that the writer converts to flowing prose without adding content.
 
@@ -325,20 +482,19 @@ Source: [parent plan reference]
 **Purpose**: What this section accomplishes in the narrative
 
 #### Paragraph 1 — (Topic Label)
-- Statement text (citable)
+- Neuron anatomy: soma (nucleus), dendrites (receive), axon (transmit), synaptic terminals (output) `(citable)`
   - \cite{key} p. [page] — [what it supports]
   - \cite{key2} p. [page] — [what it supports]
-- Statement text (citable)
+- Myelin sheaths with nodes of Ranvier → saltatory conduction → increased velocity `(citable)`
   - \cite{key3} p. [page] — [what it supports]
-- Statement text
-  [no citation needed — framing/setup]
+- Signal flow unidirectional: dendrites → soma → axon → terminals `(citable)`
 
 → **Figure**: [Descriptive label — what it shows, type]
 
 #### Paragraph 2 — (Topic Label)
-- Statement text (citable)
+- Resting membrane potential ~−70 mV; arises from ion gradients + selective permeability `(citable)`
   - \cite{key} p. [page] — [what it supports]
-- Statement text (citable)
+- Na⁺/K⁺-ATPase maintains gradients: 3 Na⁺ out, 2 K⁺ in per cycle `(citable)`
   - ⚠ Gap — no source found
 
 [continue for all paragraphs and sections]
@@ -445,12 +601,31 @@ After each plan block is approved by the author and written to `plan.md`, **sile
 ```markdown
 ### Checkpoint — [Section/Subsection Reference] ([Phase])
 - **Scope**: [What was planned in this block]
-- **Author-directed**: [Key points the author introduced, insisted on, or redirected — 2-5 bullets]
-- **Agent-suggested, accepted**: [Points the agent proposed that were accepted with minor or no changes]
-- **Agent-suggested, rejected/modified**: [Points the agent proposed that were rejected or significantly changed]
-- **Revision cycles**: [How many rounds before approval — e.g., "3 structural revisions before agreement"]
+
+#### Provenance Summary
+| Metric | Count |
+|--------|-------|
+| Initial AI proposal | [N] points in [M] paragraphs |
+| Final approved | [N] points in [M] paragraphs |
+| Surviving verbatim from initial | [N] |
+| AI points modified by user | [N] |
+| AI points deleted | [N] |
+| User-dictated points | [N] |
+| User-directed points (agent extracted) | [N] |
+| Agent-suggested, accepted | [N] |
+| Agent-suggested, rejected | [N] |
+| Figures — user-suggested | [N] |
+| Figures — agent-suggested | [N] |
+
+#### Qualitative Notes
+- **Key author decisions**: [2-5 bullets — structural choices, emphasis, scope decisions]
+- **Key rejections**: [What the author rejected and why, if apparent]
+- **Revision cycles**: [How many rounds before approval]
+
 - **Files written**: [plan.md path]
 ```
+
+**Computing the summary:** At checkpoint time, read the provenance baseline and all feedback rounds from the scratch file. Sum across rounds to produce the final counts. Delete the scratch file after writing the checkpoint.
 
 ### When to Checkpoint
 
