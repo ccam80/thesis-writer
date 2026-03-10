@@ -1,0 +1,115 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1772874151129,
+  "projectRoot": "C:\\local_working_projects\\thesis_writer",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "commands": {
+      "path": "commands",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1772874151085,
+      "keyFiles": [
+        "thesis-writer-init.md"
+      ]
+    },
+    "skills": {
+      "path": "skills",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1772874151086,
+      "keyFiles": []
+    },
+    "templates": {
+      "path": "templates",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1772874151087,
+      "keyFiles": [
+        "CLAUDE.thesis-writer.md"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "",
+      "accessCount": 6,
+      "lastAccessed": 1772875631121,
+      "type": "directory"
+    },
+    {
+      "path": ".claude\\settings.local.json",
+      "accessCount": 4,
+      "lastAccessed": 1772875630691,
+      "type": "file"
+    },
+    {
+      "path": "commands\\thesis-writer-init.md",
+      "accessCount": 3,
+      "lastAccessed": 1772875600827,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 3,
+      "lastAccessed": 1772875624483,
+      "type": "file"
+    },
+    {
+      "path": "skills\\zotero-research\\SKILL.md",
+      "accessCount": 2,
+      "lastAccessed": 1772874798154,
+      "type": "file"
+    },
+    {
+      "path": "skills\\reviewer\\SKILL.md",
+      "accessCount": 2,
+      "lastAccessed": 1772875618033,
+      "type": "file"
+    },
+    {
+      "path": "skills\\document-planner\\SKILL.md",
+      "accessCount": 2,
+      "lastAccessed": 1772875619069,
+      "type": "file"
+    },
+    {
+      "path": "templates\\CLAUDE.thesis-writer.md",
+      "accessCount": 1,
+      "lastAccessed": 1772874369670,
+      "type": "file"
+    },
+    {
+      "path": "CLAUDE.md",
+      "accessCount": 1,
+      "lastAccessed": 1772875596408,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

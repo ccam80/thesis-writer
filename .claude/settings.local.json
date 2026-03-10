@@ -1,36 +1,35 @@
 {
   "permissions": {
     "allow": [
-      "Bash(ls -la \"C:\\\\local_working_projects\\\\scientific_writer\\\\skills\\\\zotero-research\\\\agents\"\" 2>/dev/null || echo \"No agents folder found \")",
       "Bash(ls:*)",
-      "Bash(for skill in zotero-research document-planner writer figure-generator formatter reviewer peer-review markitdown latex-posters)",
-      "Bash(do if [ -f \"skills/$skill/SKILL.md\" ])",
-      "Bash(then echo \"OK: $skill\")",
-      "Bash(else echo \"MISSING: $skill\")",
-      "Bash(fi)",
-      "Bash(done)",
       "Bash(git add:*)",
-      "Skill(zotero-research)",
-      "mcp__zotero-chunk-rag__search_papers",
-      "mcp__zotero-chunk-rag__search_topic",
-      "mcp__zotero-chunk-rag__get_passage_context",
-      "mcp__zotero-chunk-rag__get_index_stats",
       "Bash(git log:*)",
       "Bash(git ls-tree:*)",
-      "Skill(claude-thesis-writer:document-planner)",
+      "Bash(git commit:*)",
       "Bash(find:*)",
+      "Bash(test:*)",
+      "Skill(zotero-research)",
+      "Skill(claude-thesis-writer:document-planner)",
       "WebSearch",
-      "Bash(git commit:*)"
+      "mcp__deep-zotero__search_papers",
+      "mcp__deep-zotero__search_topic",
+      "mcp__deep-zotero__search_tables",
+      "mcp__deep-zotero__search_figures",
+      "mcp__deep-zotero__search_boolean",
+      "mcp__deep-zotero__get_passage_context",
+      "mcp__deep-zotero__get_index_stats",
+      "mcp__deep-zotero__get_reranking_config",
+      "mcp__deep-zotero__find_citing_papers",
+      "mcp__deep-zotero__find_references",
+      "mcp__deep-zotero__get_citation_count",
+      "mcp__deep-zotero__get_vision_costs",
+      "mcp__deep-zotero__index_library"
     ]
   },
-  "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "zotero-chunk-rag"
-  ],
   "mcpServers": {
-    "zotero-chunk-rag": {
+    "deep-zotero": {
       "command": "C:\\local_working_projects\\zotero_citation_mcp\\.venv\\Scripts\\python.exe",
-      "args": ["-m", "zotero_chunk_rag.server"]
+      "args": ["-m", "deep_zotero.server"]
     }
   }
 }
