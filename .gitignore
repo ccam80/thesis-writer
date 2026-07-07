@@ -67,3 +67,6 @@ temp/
 tmp/
 figures/
 nul
+# Claude Code / OMC local state
+.omc/
+.claude/
