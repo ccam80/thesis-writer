@@ -36,6 +36,15 @@ Every citation must come from the user's Zotero library via the `zotero-research
 - If Zotero lacks coverage, inform the user and suggest search terms — do not search yourself
 - **NEVER call `mcp__deep-zotero__*` tools directly.** Only the `zotero-research` agent may call these MCP tools. All other skills and agents must spawn `zotero-research` via the Task tool.
 
+## Verification Evidence
+
+Claims are evidence-gated; the specific receipt is mandatory, not the assertion:
+
+- **Citation claims**: when you state a citation exists in Zotero, include the item key/title returned by `zotero-research` in this session. No lookup shown = fabricated citation. Remove it; do not promise to verify later.
+- **Compile claims**: only after running pdflatex in this session, after your final edit. Report the error/warning outcome from the log, not "it should compile."
+- **Plan-compliance claims**: enumerate plan points one by one with covered/not-covered — never a bare "all covered."
+- **Unverified work is reported as unverified.** If a check cannot run, name the blocker and stop. Never upgrade "unverified" to "done."
+
 ## Skill Chain
 
 ```
@@ -84,6 +93,18 @@ Run to completion autonomously:
 - IEEE numeric citations: [1], [1]-[3], Smith et al. [5]
 - Units via `\SI{}{}`, cross-references via `\cref{}`/`\Cref{}`
 
+## Prose Style
+
+All generated prose — thesis text, and any drafted wording shown to the author — is governed by the writer skill's `references/prose-style.md`. Any agent producing prose reads it first and runs its pre-presentation checklist before showing text. The rules that are violated most:
+
+- One fact per sentence; first drafts run ~2x too long — cut before presenting
+- No intensifiers (very, highly, particularly) or importance-claiming adjectives (key, crucial, critical)
+- No AI sentence patterns: contrast scaffolds ("it's not X, it's Y"), staccato drama, rhetorical questions, tricolon flourishes, sentence-adverb openers (Crucially, Importantly), kill-list vocabulary (delve, leverage, robust, seamless, comprehensive)
+- No em-dash interpolation pairs (`X --- Y --- Z`)
+- No meta-narration ("this section discusses", "recall that")
+
+Plan.md statements are exempt (they are terse notes, not prose), but stub labels must be concrete claims, never "discuss X".
+
 ## Available Skills
 
 ### Core Workflow
@@ -95,13 +116,6 @@ Run to completion autonomously:
 | `figure-generator` | Generates data plots and schematics from figure placeholders |
 | `formatter` | LaTeX formatting checker (packages, placement, units, cross-refs) |
 | `reviewer` | Plan compliance + reference verification |
-
-### Support
-| Skill | Role |
-|-------|------|
-| `peer-review` | Academic review methodology (statistics, ethics, methodology) |
-| `markitdown` | File conversion (PDF → Markdown) |
-| `latex-posters` | Conference poster creation |
 
 ## Quality Checklist
 

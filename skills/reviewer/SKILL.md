@@ -59,13 +59,18 @@ Check against the `chapter_plan.md`:
 
 For critical claims, spawn `zotero-research`: "Verify that [paper] supports [claimed use]" to confirm the source actually says what is claimed.
 
-### 5. Language Quality
+### 5. Prose Style Audit
 
-- Is the writing clear and concise?
-- Are there grammatical errors?
-- Is terminology used consistently?
-- Is jargon appropriately used or avoided?
-- Are unnecessary modifiers present?
+Audit against `../writer/references/prose-style.md` (the binding prose voice rules). This is an active per-sentence pass, not a glance:
+
+- **Sentence-level information test** (prose-style.md §8): for each sentence, name the new information it carries. Sentences that frame, restate, narrate the document, or exist for rhythm are CUT findings — quote them with location.
+- **Banned modifiers** (§2): scan for intensifiers (very, highly, particularly...), importance-claiming adjectives (key, crucial, critical...), vague plurals (various, several, numerous), stative padding, hedging stacks. Report each instance.
+- **Banned AI patterns** (§3): contrast scaffolds ("not just X, it's Y"), staccato fragments, rhetorical questions, tricolon flourishes, sentence-adverb openers (Crucially, Importantly, Notably...), filler moves ("it is important to note"), kill-list vocabulary (delve, leverage, robust-as-praise, comprehensive, seamless...), anthropomorphism, meta-narration ("this section discusses", "recall that").
+- **Em-dashes** (§4): every `---` gets an entry; paired interpolations are always findings.
+- **Density**: paragraphs that read ~2x their information content get a "compress" finding with the target sentences named.
+- Grammar, tense consistency (§5), and terminology consistency as before.
+
+A section cannot score above 3/5 with unresolved prose-style findings.
 
 ### 6. Formatting Issues
 
@@ -134,6 +139,17 @@ Plan: [chapter_plan.md used for compliance check]
 ### Misrepresented Sources
 - \cite{key} in §X.Y: [what the paper actually says vs what is claimed]
 
+## Prose Style Findings
+
+### Cut (sentence carries no new information)
+- §X.Y ¶N: "[sentence]" — [restates ¶N-1 / framing only / meta-narration]
+
+### Banned modifiers and patterns
+- §X.Y ¶N: "[phrase]" — [rule violated, e.g. intensifier / contrast scaffold / em-dash pair] → [suggested rewrite]
+
+### Compress
+- §X.Y ¶N: [target sentences and what to merge or drop]
+
 ## Required Corrections
 1. [Specific, actionable correction]
 2. [Next correction]
@@ -156,6 +172,7 @@ The most helpful review finds problems before publication, not one that makes th
 ## Integration
 
 - **Receives from**: `formatter` skill (formatted LaTeX)
+- **Uses**: `../writer/references/prose-style.md` (prose audit rules)
 - **Uses**: `zotero-research` agent for reference verification (backed by deep-zotero MCP)
 - **Uses**: `zotero-research` agent for critical source verification
 - **Produces**: `review_report.md` in chapter directory

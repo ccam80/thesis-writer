@@ -30,7 +30,7 @@ This skill checks and corrects LaTeX formatting in thesis documents. It applies 
     \includegraphics[width=\columnwidth]{graphics/example}
     \caption{Descriptive caption.}
     \label{fig:example}
-\end{figure>
+\end{figure}
 ```
 
 ### Equation Alignment
@@ -68,7 +68,7 @@ All cross-references must use cleveref:
 ```latex
 \cref{fig:example}      % figure 1
 \Cref{fig:example}      % Figure 1 (sentence start)
-\cref{eq:rmssd}          % equation (1)
+\cref{eq:rms}            % equation (1)
 \cref{tab:results}       % table 1
 \cref{sec:methods}       % section 2.3
 ```

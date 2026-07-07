@@ -67,11 +67,6 @@ Core Workflow:
   - reviewer: Plan compliance and reference verification
   - zotero-research: Spawnable research agent (Zotero library)
 
-Support Skills:
-  - peer-review: Academic review methodology
-  - markitdown: File conversion (PDF → Markdown)
-  - latex-posters: Conference poster creation
-
 Thesis Chapter Types:
 - Background chapters: Literature-review style treatment
 - Meat chapters: Paper-like IMRaD structure

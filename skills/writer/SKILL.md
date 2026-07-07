@@ -1,6 +1,6 @@
 ---
 name: writer
-description: Conversational LaTeX prose writer. Converts paragraph-level plans into flowing technical prose, asking about wording choices where ambiguous. Does not add content beyond the plan.
+description: Conversational LaTeX prose writer. Converts paragraph-level plans into flowing technical prose, asking about wording choices where ambiguous. Enforces references/prose-style.md on every chunk before presenting. Does not add content beyond the plan.
 allowed-tools: [Read, Write, Edit, Bash, Task, AskUserQuestion]
 ---
 
@@ -24,45 +24,28 @@ This skill converts a paragraph-level plan (from `document-planner`) into public
 2. **Target scope**: Which paragraphs/sections to write
 3. **Style reference**: Author reference documents if available (see below)
 
-## Author Style Reference
+## Style Authorities
 
-Before writing, read these sources to calibrate tone, sentence structure, and technical vocabulary:
+Read both before drafting anything:
 
-1. **Existing chapter .tex files** in the thesis subdirectories — these are the author's own writing and the primary style reference
-2. **PDFs in `author_reference/`** — published papers or drafts by the author demonstrating their preferred prose style
-
-Match the author's:
-- Sentence length and complexity patterns
-- Level of formality and hedging
-- How they introduce and contextualise citations
-- Paragraph structure and transition style
-- Technical vocabulary choices
+1. **`references/prose-style.md`** — the binding prose voice rules: density, banned modifiers, banned AI sentence patterns, em-dash policy, register, paragraph flow. Every prose chunk is checked against its pre-presentation checklist before the author sees it.
+2. **The author's own writing** — existing chapter `.tex` files and PDFs in `author_reference/`. This is the ultimate voice reference; where it and prose-style.md differ, the author's demonstrated style wins (flag the difference rather than silently choosing). Match sentence length, hedging level, how citations are introduced, and transition style.
 
 ## Writing Principles
 
-### Conciseness
-- Every word must serve a purpose
-- Remove filler phrases and redundant expressions
-- Use active voice when possible
-- Keep sentences focused on a single idea
+- **Precision**: Never add meaning not present in the plan. No claims beyond what is planned. Exact technical terminology, defined on first use, used consistently.
+- **Density**: One fact per sentence, fewest words that carry the claim (prose-style.md §1). First drafts run about twice as long as needed.
+- **No AI prose tics**: The banned-pattern and banned-modifier lists in prose-style.md §2–§4 are hard rules, not preferences. A draft containing a contrast scaffold, staccato drama, an intensifier, or an em-dash interpolation is not ready to present.
 
-### Clarity
-- Avoid jargon unless essential for precision
-- Define technical terms on first use
-- Use consistent terminology throughout
-- Structure complex ideas in digestible segments
+## Drafting Protocol (per paragraph or section)
 
-### Precision
-- Never add meaning not present in the plan
-- Do not make claims beyond what is planned
-- Use exact technical terminology
-- Maintain scientific accuracy
+Three passes, always, before the author sees anything:
 
-### Modifiers
-- Avoid adjectives unless strictly necessary to convey a concept
-- Avoid adverbs unless they add essential meaning
-- Let data and evidence speak for themselves
-- Replace vague modifiers with specific measurements
+1. **Draft** from the plan's statements — wording, transitions, and joins only; no new content.
+2. **Cut pass**: run the sentence-level information test (prose-style.md §8). For each sentence, name the new information it carries; cut sentences that frame, restate, or exist for rhythm. Expect to cut substantially.
+3. **Style scan**: run the prose-style.md pre-presentation checklist. Scan for `---`, banned modifiers, banned patterns. Fix per instance.
+
+Present only the post-scan version. Do not present a draft and offer to tighten it later — the tightening is part of drafting.
 
 ## Conversational Behaviour
 
@@ -85,15 +68,15 @@ Do not ask about:
 ### Question Format
 
 ```
-Writing §X.2 ¶3 (respiratory sinus arrhythmia mechanisms):
+Writing §X.2 ¶3 (feedback loop stability):
 
 The plan lists two points:
-1. RSA is primarily vagally mediated
-2. Respiratory frequency modulates HRV spectral peaks
+1. Loop gain determines the settling time
+2. Sampling rate limits the achievable closed-loop bandwidth
 
 Options for framing:
-a) Lead with the vagal mechanism, then show how respiration modulates it
-b) Lead with the spectral observation, then explain the vagal mechanism behind it
+a) Lead with the loop-gain mechanism, then show how sampling rate constrains it
+b) Lead with the bandwidth observation, then explain the loop-gain mechanism behind it
 
 Which better serves your argument in this chapter?
 ```
@@ -105,10 +88,10 @@ Include equations where the plan indicates them. Number all equations, define al
 
 ```latex
 \begin{equation}
-    HRV_{RMSSD} = \sqrt{\frac{1}{N-1}\sum_{i=1}^{N-1}(RR_{i+1} - RR_i)^2}
-    \label{eq:rmssd}
+    x_{RMS} = \sqrt{\frac{1}{N}\sum_{i=1}^{N} x_i^2}
+    \label{eq:rms}
 \end{equation}
-where $RR_i$ is the $i$th RR interval and $N$ is the total number of intervals.
+where $x_i$ is the $i$th sample of the signal and $N$ is the total number of samples.
 ```
 
 ### Figures
@@ -126,7 +109,7 @@ Include figure placeholders where the plan specifies them:
     }}
     \caption{[Caption text]}
     \label{fig:label}
-\end{figure>
+\end{figure}
 ```
 
 ### Cross-References
@@ -150,10 +133,10 @@ Include figure placeholders where the plan specifies them:
 ## Workflow
 
 1. Read the `chapter_plan.md` for the target scope
-2. Read any `author_reference/` documents for style guidance
+2. Read `references/prose-style.md`, then existing `.tex` prose and any `author_reference/` documents for voice calibration
 3. For each paragraph in order:
    a. Review planned points and citations
-   b. Draft the paragraph
+   b. Run the three-pass drafting protocol (draft → cut pass → style scan)
    c. If ambiguous, ask the user (batch questions where possible)
 4. Write output to the chapter's `subfiles/` directory
 5. After each section, briefly confirm with the user before continuing
@@ -161,14 +144,14 @@ Include figure placeholders where the plan specifies them:
 ## Tense Conventions
 
 - **Methods and results**: Past tense ("The signal was filtered...")
-- **Established facts**: Present tense ("The heart rate is modulated by...")
+- **Established facts**: Present tense ("The output voltage is determined by...")
 - **Conclusions and implications**: Present tense ("These results suggest...")
 - **Literature references**: Past tense ("Smith et al. demonstrated...")
 
 ## Integration
 
 - **Receives from**: `document-planner` (paragraph-level chapter_plan.md)
-- **Uses**: `references/thesis-style-guide.md` (IEEE style, equations, citations, terminology, pitfalls)
+- **Uses**: `references/prose-style.md` (binding prose voice rules), `references/thesis-style-guide.md` (IEEE style, equations, citations, terminology, pitfalls)
 - **Produces**: LaTeX `.tex` files in `subfiles/`
 - **Hands off to**: `formatter` skill for LaTeX polish, then `reviewer` skill
 

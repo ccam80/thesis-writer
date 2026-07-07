@@ -49,7 +49,7 @@ All semantic search tools support reranking by section and journal quality:
 
 - **`section_weights`**: Boost results from specific paper sections. Valid sections available via `get_reranking_config`. Example: `{"methods": 1.5, "results": 1.3}` to prefer methodology content.
 - **`journal_weights`**: Boost results from higher-impact journals. Example: `{"Q1": 1.5, "Q2": 1.2}`.
-- **`required_terms`**: (search_papers only) Require exact word matches. Useful for acronyms, identifiers, or specific terminology that semantic search might miss. Example: `["HRV", "RMSSD"]`.
+- **`required_terms`**: (search_papers only) Require exact word matches. Useful for acronyms, identifiers, or specific terminology that semantic search might miss. Example: `["FIR", "LMS"]`.
 - **`chunk_types`**: Filter by content type: `["text"]`, `["table"]`, `["figure"]`, or combinations.
 - **Metadata filters**: `year_min`, `year_max`, `author`, `tag`, `collection` on all search tools.
 

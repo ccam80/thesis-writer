@@ -50,23 +50,15 @@ All citations come from your Zotero library. All writing follows collaboratively
 |-------|------|
 | `zotero-research` | Spawnable research agent — topic search, claim support, citation verification |
 | `document-planner` | Multi-scope interactive planning (thesis, chapter, section, subsection) with verified references and figure stubs |
-| `writer` | LaTeX prose from plans (conversational, checks wording with user) |
+| `writer` | LaTeX prose from plans (conversational, checks wording with user, enforces `prose-style.md` anti-slop rules) |
 | `figure-generator` | Generates matplotlib plots and schematics from figure placeholders |
 | `formatter` | LaTeX formatting checker (packages, placement, units, cross-refs) |
-| `reviewer` | Plan compliance and reference verification |
-
-### Support
-
-| Skill | Role |
-|-------|------|
-| `peer-review` | Academic review methodology |
-| `markitdown` | File conversion (PDF → Markdown) |
-| `latex-posters` | Conference poster creation |
+| `reviewer` | Plan compliance, reference verification, and per-sentence prose style audit |
 
 ## Quick Start
 
 ```
-> I need to plan my background chapter on HRV physiology
+> I need to plan my background chapter on adaptive filtering
 
 [document-planner runs: searches Zotero, proposes structure, iterates with you]
 

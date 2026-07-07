@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1772874151129,
+  "lastScanned": 1783393907165,
   "projectRoot": "C:\\local_working_projects\\thesis_writer",
   "techStack": {
     "languages": [],
@@ -25,7 +25,10 @@
     "isMonorepo": false,
     "workspaces": [],
     "mainDirectories": [],
-    "gitBranches": null
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
   },
   "customNotes": [],
   "directoryMap": {
@@ -33,7 +36,7 @@
       "path": "commands",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1772874151085,
+      "lastAccessed": 1783393907145,
       "keyFiles": [
         "thesis-writer-init.md"
       ]
@@ -42,14 +45,14 @@
       "path": "skills",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1772874151086,
+      "lastAccessed": 1783393907145,
       "keyFiles": []
     },
     "templates": {
       "path": "templates",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1772874151087,
+      "lastAccessed": 1783393907146,
       "keyFiles": [
         "CLAUDE.thesis-writer.md"
       ]
@@ -57,10 +60,58 @@
   },
   "hotPaths": [
     {
+      "path": "skills\\document-planner\\SKILL.md",
+      "accessCount": 24,
+      "lastAccessed": 1783396831327,
+      "type": "file"
+    },
+    {
+      "path": "skills\\writer\\SKILL.md",
+      "accessCount": 14,
+      "lastAccessed": 1783396892370,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 9,
+      "lastAccessed": 1783396903325,
+      "type": "file"
+    },
+    {
+      "path": "skills\\writer\\references\\thesis-style-guide.md",
+      "accessCount": 7,
+      "lastAccessed": 1783396840711,
+      "type": "file"
+    },
+    {
+      "path": "templates\\CLAUDE.thesis-writer.md",
+      "accessCount": 7,
+      "lastAccessed": 1783396875275,
+      "type": "file"
+    },
+    {
       "path": "",
       "accessCount": 6,
       "lastAccessed": 1772875631121,
       "type": "directory"
+    },
+    {
+      "path": "commands\\thesis-writer-init.md",
+      "accessCount": 6,
+      "lastAccessed": 1783396580987,
+      "type": "file"
+    },
+    {
+      "path": "skills\\reviewer\\SKILL.md",
+      "accessCount": 6,
+      "lastAccessed": 1783396786598,
+      "type": "file"
+    },
+    {
+      "path": ".claude-plugin\\marketplace.json",
+      "accessCount": 5,
+      "lastAccessed": 1783397005177,
+      "type": "file"
     },
     {
       "path": ".claude\\settings.local.json",
@@ -69,45 +120,39 @@
       "type": "file"
     },
     {
-      "path": "commands\\thesis-writer-init.md",
-      "accessCount": 3,
-      "lastAccessed": 1772875600827,
-      "type": "file"
-    },
-    {
-      "path": "README.md",
-      "accessCount": 3,
-      "lastAccessed": 1772875624483,
-      "type": "file"
-    },
-    {
       "path": "skills\\zotero-research\\SKILL.md",
-      "accessCount": 2,
-      "lastAccessed": 1772874798154,
-      "type": "file"
-    },
-    {
-      "path": "skills\\reviewer\\SKILL.md",
-      "accessCount": 2,
-      "lastAccessed": 1772875618033,
-      "type": "file"
-    },
-    {
-      "path": "skills\\document-planner\\SKILL.md",
-      "accessCount": 2,
-      "lastAccessed": 1772875619069,
-      "type": "file"
-    },
-    {
-      "path": "templates\\CLAUDE.thesis-writer.md",
-      "accessCount": 1,
-      "lastAccessed": 1772874369670,
+      "accessCount": 4,
+      "lastAccessed": 1783396579784,
       "type": "file"
     },
     {
       "path": "CLAUDE.md",
+      "accessCount": 4,
+      "lastAccessed": 1783396857517,
+      "type": "file"
+    },
+    {
+      "path": "skills\\formatter\\SKILL.md",
+      "accessCount": 4,
+      "lastAccessed": 1783396891318,
+      "type": "file"
+    },
+    {
+      "path": "skills\\writer\\references\\prose-style.md",
+      "accessCount": 2,
+      "lastAccessed": 1783396975103,
+      "type": "file"
+    },
+    {
+      "path": ".claude-plugin\\plugin.json",
+      "accessCount": 2,
+      "lastAccessed": 1783397006244,
+      "type": "file"
+    },
+    {
+      "path": "skills\\figure-generator\\SKILL.md",
       "accessCount": 1,
-      "lastAccessed": 1772875596408,
+      "lastAccessed": 1783396568664,
       "type": "file"
     }
   ],

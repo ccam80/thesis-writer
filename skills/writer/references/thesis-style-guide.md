@@ -69,16 +69,20 @@ The `writer` creates figure placeholders in LaTeX. The `figure-generator` skill 
 - Bland-Altman plots
 - Block diagrams of systems
 - Signal processing pipelines
-- Electrode placement diagrams
+- Sensor placement diagrams
 - Circuit schematics
 
 ## IEEE Style Guidelines
 
 ### Language
-- Concise, direct prose
+
+Prose voice is governed by `prose-style.md` in this directory — density rules, banned modifiers, banned AI sentence patterns, em-dash policy, and register. It is binding; read it before drafting. Headlines:
+
+- One fact per sentence; fewest words that carry the claim
 - Technical terms fully defined on first use
-- Avoid flowery language and hedging
-- Active voice preferred
+- No intensifiers, importance-claiming adjectives, or hedging stacks
+- No contrast scaffolds, staccato drama, or em-dash interpolation pairs
+- Active voice preferred; plain verbs over verb-jargon
 
 ### Equations
 - Number all equations
@@ -87,10 +91,10 @@ The `writer` creates figure placeholders in LaTeX. The `figure-generator` skill 
 
 ```latex
 \begin{equation}
-HRV_{RMSSD} = \sqrt{\frac{1}{N-1}\sum_{i=1}^{N-1}(RR_{i+1} - RR_i)^2}
-\label{eq:rmssd}
+x_{RMS} = \sqrt{\frac{1}{N}\sum_{i=1}^{N} x_i^2}
+\label{eq:rms}
 \end{equation}
-where $RR_i$ is the $i$th RR interval and $N$ is the total number of intervals.
+where $x_i$ is the $i$th sample of the signal and $N$ is the total number of samples.
 ```
 
 ### Citations
@@ -138,55 +142,23 @@ SD & 0.05 & 0.07 \\
 
 ## Field-Specific Language and Terminology
 
-Adapt language, terminology, and conventions to match the specific scientific discipline. Each field has established vocabulary, preferred phrasings, and domain-specific conventions that signal expertise and ensure clarity for the target audience.
+Adapt language, terminology, and conventions to match the target discipline. Every field has established vocabulary, preferred phrasings, and notation conventions that signal expertise and ensure clarity for the intended audience. Rather than prescribing conventions for any one field, calibrate to the author's field by observing how its literature is written.
 
-**Identify Field-Specific Linguistic Conventions:**
+**Identify the field's conventions from its literature:**
 - Review terminology used in recent high-impact papers in the target journal
 - Note field-specific abbreviations, units, and notation systems
-- Identify preferred terms (e.g., "participants" vs. "subjects," "compound" vs. "drug," "specimens" vs. "samples")
-- Observe how methods, organisms, or techniques are typically described
-
-**Biomedical and Clinical Sciences:**
-- Use precise anatomical and clinical terminology (e.g., "myocardial infarction" not "heart attack" in formal writing)
-- Follow standardized disease nomenclature (ICD, DSM, SNOMED-CT)
-- Specify drug names using generic names first, brand names in parentheses if needed
-- Use "patients" for clinical studies, "participants" for community-based research
-- Follow Human Genome Variation Society (HGVS) nomenclature for genetic variants
-- Report lab values with standard units (SI units in most international journals)
-
-**Molecular Biology and Genetics:**
-- Use italics for gene symbols (e.g., *TP53*), regular font for proteins (e.g., p53)
-- Follow species-specific gene nomenclature (uppercase for human: *BRCA1*; sentence case for mouse: *Brca1*)
-- Specify organism names in full at first mention, then use accepted abbreviations (e.g., *Escherichia coli*, then *E. coli*)
-- Use standard genetic notation (e.g., +/+, +/-, -/- for genotypes)
-- Employ established terminology for molecular techniques (e.g., "quantitative PCR" or "qPCR," not "real-time PCR")
-
-**Chemistry and Pharmaceutical Sciences:**
-- Follow IUPAC nomenclature for chemical compounds
-- Use systematic names for novel compounds, common names for well-known substances
-- Report concentrations with appropriate units (mM, μM, nM, or % w/v, v/v)
-- Use terms like "bioavailability," "pharmacokinetics," "IC50" consistently with field definitions
-
-**Physics and Engineering:**
-- Follow SI units consistently unless field conventions dictate otherwise
-- Use standard notation for physical quantities (scalars vs. vectors, tensors)
-- Employ established terminology for phenomena (e.g., "quantum entanglement," "laminar flow")
-- Specify equipment with model numbers and manufacturers when relevant
-- Use mathematical notation consistent with field standards
-
-**Neuroscience:**
-- Use standardized brain region nomenclature (e.g., refer to atlases like Allen Brain Atlas)
-- Follow conventions for neural terminology (e.g., "action potential" not "spike" in formal writing)
-- Use "neural activity," "neuronal firing," "brain activation" appropriately based on measurement method
-- Describe recording techniques with proper specificity (e.g., "whole-cell patch clamp," "extracellular recording")
+- Identify preferred terms where the field distinguishes near-synonyms (e.g., "participants" vs. "subjects," "specimens" vs. "samples")
+- Observe how methods, apparatus, and techniques are conventionally described
+- Follow the field's authoritative nomenclature and standardized naming schemes where they exist
 
 **General Principles:**
 
-- **Match audience expertise**: Define terms appropriate to audience level
-- **Define abbreviations at first use**: "messenger RNA (mRNA)"
+- **Match audience expertise**: Define terms appropriate to the audience's level
+- **Define abbreviations at first use**: introduce the full term, then the abbreviation in parentheses
 - **Maintain consistency**: Use the same term for the same concept throughout
-- **Avoid field mixing**: Don't use clinical terminology for basic science
-- **Verify terminology**: Consult field-specific style guides and recent papers from target journal
+- **Use precise, formal terminology**: prefer the exact technical term over an informal paraphrase
+- **Report quantities with standard units and notation**: follow SI conventions unless the field dictates otherwise
+- **Verify terminology**: Consult field-specific style guides and recent papers from the target journal
 
 ## Common Writing Pitfalls
 

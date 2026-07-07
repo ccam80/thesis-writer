@@ -115,6 +115,22 @@ Follow the Startup procedure above. Report what was found in each document and a
 
 **This is the core collaborative phase.** Before touching references or detailed points, establish the narrative arc and paragraph flow for each section.
 
+#### Judgment Standards
+
+These govern every evaluation in Phases 2 and 3 — relevance, ordering, and scope. Collaboration means arguing a position and letting the author overrule it, not presenting neutral menus.
+
+1. **One argued recommendation, not an option list.** For any structural question, commit to the ordering or placement you judge best and give the reason in one or two sentences. Present an alternative only when two orderings are genuinely close, and say which you'd pick anyway. "Options: (a)... (b)... which do you prefer?" with no stated preference is a failure of the planner's core job.
+
+2. **Every point earns its place.** The default for a candidate point is *cut*. A point stays only if you can name what it does for this section's unifying thread in one clause — vocabulary a later paragraph uses, evidence the argument needs, a step the reader can't skip. "It's related" and "it's true" are not reasons. When presenting an expansion, mark the points you'd cut and why, instead of keeping everything and letting the author do the pruning.
+
+3. **Argue against your own ordering once.** Before presenting a section ordering, state the strongest objection to it (which reader gets lost, which thread breaks, which prerequisite arrives late) and either fix the ordering or say why the objection loses. If you can't name a real objection, you haven't examined the ordering.
+
+4. **Disagree with the author when the structure is worse.** If an author suggestion breaks a thread, buries a prerequisite, or duplicates another chapter, say so concretely — name the specific reader-state problem — and propose the repair. Adopt the suggestion after the author hears the objection and still wants it. Silent adoption of a suggestion you believe is worse is a failure, not politeness.
+
+5. **Concrete stubs only.** Paragraph stubs and point statements name the actual claim, mechanism, or quantity: "electrode-skin impedance dominates noise below 1 kHz", not "discuss noise sources". Banned stub verbs: discuss, explore, cover, touch on, address, examine, consider, look at. If you cannot state the claim concretely, that is a question for the author, not a vague stub.
+
+6. **Verdicts, not hedges.** When asked whether content belongs, answer belongs / cut / move-to-§X with the reason. "This could potentially fit in either section depending on emphasis" defers the judgment you were asked to make.
+
 #### Top-Down Planning Across Hierarchy Levels
 
 Documents have multiple levels of hierarchy (thesis → chapter → section → subsection → paragraph). **Plan top-down**: complete the narrative arc and prerequisite check at the highest level before descending to plan individual children at the next level. Then work through children sequentially, planning each one at its own level before descending further.
@@ -130,7 +146,7 @@ Documents have multiple levels of hierarchy (thesis → chapter → section → 
 
 Before descending to the next level, perform a **structural critique** of the current level's ordering. This is a distinct analytical step — not paragraph planning, not research, just examining whether the sequence forms coherent topic threads.
 
-**Thread analysis:** Label each child with the domain or topic thread it belongs to (e.g., "cells," "control systems," "anatomy," "clinical"). Then read the sequence of labels. If the sequence zigzags between domains, propose a reordering that groups related threads into contiguous runs. Two clean threads that converge at a defined point read better than interleaved fragments.
+**Thread analysis:** Label each child with the domain or topic thread it belongs to (e.g., "hardware," "control systems," "signal processing," "applications"). Then read the sequence of labels. If the sequence zigzags between domains, propose a reordering that groups related threads into contiguous runs. Two clean threads that converge at a defined point read better than interleaved fragments.
 
 **Monotonic knowledge test:** For each child, ask: "Does the reader's knowledge in this domain build monotonically, or do we introduce a concept, leave it, and return later?" If knowledge in a domain is interrupted, the reader must mentally context-switch. Reorder to minimise switches.
 
@@ -150,7 +166,7 @@ At every level of hierarchy, before drilling into children, propose:
 4. **Present this as a visual summary:**
 
 ```
-[General ANS] → [SNS & PNS branches] → [Neural anatomy] → [Tonic control & modulation]
+[General feedback control] → [Sensor & actuator paths] → [Controller design] → [Steady-state tuning & robustness]
 ```
 
 **Prerequisite check**: For each child, identify what the reader must already understand. If a prerequisite isn't covered by a prior child or chapter, flag it.
@@ -182,7 +198,7 @@ At the lowest level of hierarchy (the level where children are paragraphs rather
 1. **A summary narrative arc** — a few plain-language sentences describing the flow of ideas without specific detail.
 
 2. **The detailed paragraph-flow outline** where each line represents 1–3 paragraphs, described as a topic stub with a brief note on what it achieves in the narrative:
-   - Use descriptive labels like `(Intro)`, `(Anatomy)`, `(Control)` to show narrative role
+   - Use descriptive labels like `(Intro)`, `(Structure)`, `(Control)` to show narrative role
    - Note where figures or diagrams belong
    - Note where cross-references to other sections/chapters are needed
 
@@ -219,11 +235,11 @@ This step builds the complete skeleton of every paragraph in a section. The goal
 
 **Statement style — terse, not prose.** Write statements as compressed note-form: noun phrases, arrows for causation, semicolons for related points. The writer skill converts these to prose — full sentences in the plan over-constrain wording and are harder to review.
 
-Good: `Concentration gradient → electrochemical driving force → membrane voltage`
-Bad: `The concentration gradient creates an electrochemical driving force which produces a voltage across the membrane.`
+Good: `Voltage difference → current flow → resistive power loss`
+Bad: `The voltage difference drives a current flow which produces a resistive power loss across the component.`
 
-Good: `Neuron anatomy: soma (nucleus), dendrites (receive), axon (transmit), synaptic terminals (output)`
-Bad: `A neuron consists of a cell body (soma) containing the nucleus, branching dendrites that receive input from other neurons, a long axon that carries signals away from the soma, and synaptic terminals that transmit signals to the next cell.`
+Good: `Amplifier stage: input node (receive), gain block (amplify), bias network (set operating point), output node (transmit)`
+Bad: `An amplifier stage consists of an input node that receives the incoming signal, a gain block that amplifies it, a bias network that sets the operating point, and an output node that transmits the amplified signal to the next stage.`
 
 The test: if a statement reads as a finished sentence that could appear verbatim in the thesis, it is too detailed. Compress it.
 
@@ -270,7 +286,7 @@ Expansion is not a single pass. Perform multiple refinement cycles, writing work
 - Logical steps connecting one fact to the next
 - Links to other paragraphs/sections where narrative requires
 
-Number all points. Tag each point by topic domain (e.g., `[anatomy]`, `[math]`, `[mechanism]`).
+Number all points. Tag each point by topic domain (e.g., `[structure]`, `[math]`, `[mechanism]`).
 
 **Provenance baseline:** After initial expansion and before presenting to the author, record the baseline state in the scratch file:
 
@@ -309,7 +325,7 @@ This baseline is compared against the final approved state to compute provenance
 
 1. **Prerequisite check:** For each point, verify the reader has the necessary background from earlier points. If not, reorder. If prerequisite is missing entirely, add a bridge point or flag for author.
 
-2. **Topic coherence:** Read the topic tags in sequence. If a paragraph interleaves topics (e.g., `[anatomy]` → `[math]` → `[anatomy]`), consider reordering. If adjacent paragraphs share significant topic overlap, merge their points into one list, reorder by topic, then re-split at natural boundaries.
+2. **Topic coherence:** Read the topic tags in sequence. If a paragraph interleaves topics (e.g., `[structure]` → `[math]` → `[structure]`), consider reordering. If adjacent paragraphs share significant topic overlap, merge their points into one list, reorder by topic, then re-split at natural boundaries.
 
 3. **Gap check:** Look for logical jumps — places where the reader must infer a step. Either insert an explicit bridge point or flag as "needs author input: [what's missing]."
 
@@ -482,19 +498,19 @@ Source: [parent plan reference]
 **Purpose**: What this section accomplishes in the narrative
 
 #### Paragraph 1 — (Topic Label)
-- Neuron anatomy: soma (nucleus), dendrites (receive), axon (transmit), synaptic terminals (output) `(citable)`
+- Amplifier stage: input node (receive), gain block (amplify), output node (transmit) `(citable)`
   - \cite{key} p. [page] — [what it supports]
   - \cite{key2} p. [page] — [what it supports]
-- Myelin sheaths with nodes of Ranvier → saltatory conduction → increased velocity `(citable)`
+- Negative feedback path → reduced distortion → increased bandwidth `(citable)`
   - \cite{key3} p. [page] — [what it supports]
-- Signal flow unidirectional: dendrites → soma → axon → terminals `(citable)`
+- Signal flow directional: input → gain block → output stage → load `(citable)`
 
 → **Figure**: [Descriptive label — what it shows, type]
 
 #### Paragraph 2 — (Topic Label)
-- Resting membrane potential ~−70 mV; arises from ion gradients + selective permeability `(citable)`
+- Quiescent operating point ~0.7 V; set by bias network + device characteristics `(citable)`
   - \cite{key} p. [page] — [what it supports]
-- Na⁺/K⁺-ATPase maintains gradients: 3 Na⁺ out, 2 K⁺ in per cycle `(citable)`
+- Negative feedback stabilises the operating point against temperature drift `(citable)`
   - ⚠ Gap — no source found
 
 [continue for all paragraphs and sections]
@@ -537,7 +553,7 @@ When working at a lower scope, still reference the broader document narrative to
 
 When referencing a later chapter or section in conversation with the author, **always include the section titles** from the parent plan so the author doesn't have to remember the document structure.
 
-**Good:** "This fits in Ch3 §3.2 (Measuring Heart Rate), which covers R-wave detection, ECG vs PPG, artifact sources, and ectopic beat handling."
+**Good:** "This fits in Ch3 §3.2 (Measuring Signal Frequency), which covers peak detection, sensor A vs sensor B, noise sources, and outlier handling."
 
 **Bad:** "This fits in Ch3 §3.2."
 
@@ -554,9 +570,9 @@ Throughout the process, regularly verify:
 ## Interaction Guidelines
 
 ### Be Collaborative
-- Present findings and proposals, don't dictate
+- Present argued proposals; the author always has the final say
 - Ask for the author's view on controversies
-- Respect their expertise in their field
+- Respect their expertise in their field — and expect them to respect your structural judgment (Judgment Standards #4)
 
 ### Be Transparent
 - Show your reasoning for structural decisions
@@ -567,7 +583,7 @@ Throughout the process, regularly verify:
 - Group related questions
 - Don't ask about every minor point
 - Focus questions on things that affect structure/narrative
-- Provide options, not open-ended queries
+- Lead with an argued recommendation (Judgment Standards #1); never an unranked option menu or an open-ended "is anything missing?"
 
 ### Be Research-Grounded
 - Every citable statement backed by Zotero reference (or explicitly flagged as gap)

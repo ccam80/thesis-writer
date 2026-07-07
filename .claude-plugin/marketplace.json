@@ -1,8 +1,8 @@
 {
   "name": "thesis-writer-marketplace",
   "metadata": {
-    "description": "Skills and setup for doctoral thesis writing in biomedical engineering, using Zotero for research and citations. Adapted from K-Dense AI's Claude Scientific Writer.",
-    "version": "0.1.2",
+    "description": "Skills and setup for doctoral thesis writing, using Zotero for research and citations. Adapted from K-Dense AI's Claude Scientific Writer.",
+    "version": "0.2.0",
     "homepage": "https://github.com/ccam80/thesis-writer"
   },
   "owner": {
@@ -13,6 +13,19 @@
       "name": "claude-thesis-writer",
       "description": "Collection of thesis writing skills",
       "source": "./",
+      "version": "0.2.0",
+      "author": {
+        "name": "Chris Cameron"
+      },
+      "homepage": "https://github.com/ccam80/thesis-writer",
+      "category": "authoring",
+      "keywords": [
+        "thesis",
+        "latex",
+        "zotero",
+        "academic-writing",
+        "citations"
+      ],
       "strict": false,
       "skills": [
         "./skills/zotero-research",
@@ -21,9 +34,6 @@
         "./skills/figure-generator",
         "./skills/formatter",
         "./skills/reviewer",
-        "./skills/peer-review",
-        "./skills/markitdown",
-        "./skills/latex-posters",
         "./skills/log-session"
       ]
     }
