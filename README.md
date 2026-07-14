@@ -61,6 +61,8 @@ If project instructions already exist, the initializer asks before backing up/re
 
 ## Source and build architecture
 
+Repository-root `AGENTS.md` contains plugin-maintainer instructions, and root `CLAUDE.md` is a relative symlink to it. These files govern work on this repository; they are not thesis-project templates and are not consumed by the builder. End-user instructions come only from `src/templates/thesis-instructions.md`.
+
 ```text
 metadata.json                         shared plugin identity and release version
 src/
