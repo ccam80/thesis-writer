@@ -5,9 +5,9 @@ Thesis Writer is a dual-vendor plugin for plan-driven doctoral thesis authoring 
 ## What it provides
 
 ```text
-document-planner → writer → figure-generator → formatter → reviewer
-       ↕                                                       ↕
- zotero-research                                         zotero-research
+document-planner ⇄ zotero-research → writer → figure-generator → formatter → reviewer
+       │                                                              ⇄ zotero-research
+       └─ corpus gap → zotero-source-acquisition → user-approved import ┘
 ```
 
 The plugin also includes authorship-session logging and a vendor-specific project initializer. Claude Code initializes `CLAUDE.md`; Codex initializes `AGENTS.md`. Both use the same canonical thesis-instruction template.
@@ -19,6 +19,7 @@ The plugin also includes authorship-session logging and a vendor-specific projec
 - Claude Code and/or Codex
 - A LaTeX distribution for compilation
 - Python 3.10 or newer; matplotlib for figure generation
+- For corpus-gap acquisition: installed Google Chrome, a dedicated persistent SSO profile, and a Zotero API key with library write and file access
 
 The local scripts default to `C:\local_working_projects\zotero_citation_mcp`. Pass `--mcp-root` on another machine. The generated MCP configuration contains only the resolved virtual-environment interpreter and `-m deep_zotero.server`; it never copies or prints API keys.
 
@@ -120,6 +121,9 @@ git push --follow-tags
 
 - All substantive writing is collaborative and follows an approved plan.
 - All citations come from the user's Zotero library through the isolated `zotero-research` worker.
+- External discovery is isolated in `zotero-source-acquisition`; candidate tabs remain open for review and exact candidate IDs require approval before Zotero metadata/PDF import.
+- Every literature claim card carries the supporting, qualifying, and contradicting passages found within its declared search boundary.
+- Technical prose maps every sentence to stable grounded point IDs; narrative `LINK` and `PURPOSE` points cannot hide factual premises.
 - No placeholder or invented citations are permitted.
 - The generated distributions retain the complete planning, writing, figure, formatting, review, and logging behavior from the original Claude plugin.
 

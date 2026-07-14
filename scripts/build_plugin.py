@@ -69,7 +69,12 @@ def skill_text(metadata: dict[str, str], body: str, allowed_tools: list[str] | N
 def copy_companions(source: Path, target: Path, vendor: str) -> None:
     cache_dir = ".claude" if vendor == "claude" else ".codex"
     for path in sorted(source.rglob("*")):
-        if not path.is_file() or path.name in {"skill.yaml", "body.md"}:
+        if (
+            not path.is_file()
+            or path.name in {"skill.yaml", "body.md"}
+            or "__pycache__" in path.parts
+            or path.suffix == ".pyc"
+        ):
             continue
         destination = target / path.relative_to(source)
         destination.parent.mkdir(parents=True, exist_ok=True)

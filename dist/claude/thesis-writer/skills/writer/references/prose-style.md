@@ -16,6 +16,11 @@ still produce prose that reads as machine-generated. The failure is always
 the same: writing *about* the content (framing, emphasising, dramatising)
 instead of *stating* the content. When in doubt, state the fact and stop.
 
+Groundedness precedes style. Every technical sentence maps to stable point
+IDs in the approved `plan.md`. No improvement in rhythm, flow, or elegance
+permits a new premise, stronger causal relation, broader population, removed
+qualification, or unapproved citation.
+
 ---
 
 ## 1. Density and concision
@@ -175,6 +180,21 @@ Apply the cuts, then present.
 This pass cannot be skipped on the grounds that the rules above were
 followed during drafting — density failures survive rule-following.
 
+## 9. Claim fidelity and source voice
+
+- Preserve negation, modality, quantities, conditions, comparison classes,
+  populations, and causal status from the mapped plan point.
+- Do not turn correlation into causation, a study result into field-wide
+  consensus, a bounded observation into a general law, or an inference into
+  an established fact.
+- Citation placement defines scope. Put a citation beside the clause it
+  supports; an end-of-paragraph citation does not retroactively support the
+  paragraph.
+- Do not imitate wording or cadence from quoted source passages. Use sources
+  for evidence and field terminology; use the author's `.tex` for voice.
+- A smooth transition cannot hide an ungrounded proposition. If the prose
+  needs a new relationship, return it to planning.
+
 ---
 
 ## Pre-presentation checklist
@@ -194,4 +214,8 @@ explanation; this is the fast pass.
 - [ ] Paragraphs open on problem/requirement, not anatomy or announcement.
 - [ ] Captions identify, they do not teach.
 - [ ] Sentence-level information test run; cuts applied.
+- [ ] Every sentence maps to plan point IDs; every technical clause is covered.
+- [ ] Negation, modality, conditions, quantities, comparison, population,
+      and causal status match the mapped points and evidence cards.
+- [ ] Citations are adjacent to supported clauses and use only approved keys.
 - [ ] Voice matches the author's existing .tex prose, not this file's.

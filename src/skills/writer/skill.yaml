@@ -1,2 +1,2 @@
 name: "writer"
-description: "Conversational LaTeX prose writer. Converts paragraph-level plans into flowing technical prose, asking about wording choices where ambiguous. Enforces references/prose-style.md on every chunk before presenting. Does not add content beyond the plan."
+description: "Conversational technical LaTeX writer. Use after an approved grounded plan.md exists to map each prose sentence to write-ready claim IDs, preserve evidential scope, and match the author's voice under the binding prose-style rules."

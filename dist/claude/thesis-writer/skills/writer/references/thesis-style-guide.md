@@ -11,11 +11,13 @@ Every chapter MUST be written from an approved plan.md file.
 3. Do not add content beyond the plan without explicit approval
 4. Do not omit planned content without explicit approval
 
-### Plan Structure
+### Grounded Plan Structure
 
 ```markdown
-# Chapter: [Title]
-Type: [background|meat|conclusions|future-work]
+# Plan: [Title]
+Type: [background|research|conclusions|future-work]
+Structural status: approved
+Grounding status: write-ready
 
 ## Narrative Thread
 [1-2 sentences describing the story this chapter tells]
@@ -23,23 +25,30 @@ Type: [background|meat|conclusions|future-work]
 ## Sections
 
 ### Section 1: [Title]
-Points:
-- Point A \cite{ref1, ref2}
-- Point B \cite{ref3}
+**Purpose:** C01-S01-PU01 — PURPOSE — [narrative function]
+
+#### Paragraph 1
+- C01-S01-P01-CL01 — CLAIM — [bounded proposition] \cite{ref1,ref2}
+  - Evidence card with immediate passages, qualifications, and contradictions
+- C01-S01-P01-PF01 — PROJECT_FACT — [project-specific proposition]
+  - Evidence: [exact project locator]
+- C01-S01-P01-LK01 — LINK — [ordering instruction; no thesis sentence]
 
 ### Section 2: [Title]
-Points:
-- Point C \cite{ref4}
-...
+[continue with stable typed point IDs]
 
 ## Figures
 - Figure 1: [Description of what it shows]
 - Figure 2: [Description]
 
-## Key References
-- ref1: [Brief note on how it's used]
-- ref2: [Brief note]
+## Unresolved points
+[must be empty for writer input]
 ```
+
+The point types are `CLAIM`, `PROJECT_FACT`, `DERIVATION`,
+`AUTHOR_ASSERTION`, `INFERENCE`, `LINK`, `PURPOSE`, and `OPEN`. The writer
+uses only write-ready technical points. `LINK` and `PURPOSE` guide structure;
+`OPEN` blocks drafting.
 
 ## Figure Placeholders
 
@@ -119,26 +128,32 @@ SD & 0.05 & 0.07 \\
 \end{table}
 ```
 
-## Citation Requirements
+## Evidence and Citation Requirements
 
 **STRICT**: All citations must come from Zotero library.
 
 ### Before Writing
-1. Verify all plan references exist in Zotero
-2. Use zotero-research agent to validate citations
-3. Flag any missing references to user
+1. Confirm the target plan block is marked write-ready.
+2. Confirm every literature `CLAIM` has an approved Zotero evidence card.
+3. Confirm project facts, derivations, author assertions, and inferences have
+   their type-specific receipts.
+4. Stop on any `OPEN` point or missing receipt and return its ID to planning.
 
 ### During Writing
-1. Every factual claim needs citation
-2. Use Zotero item keys for \cite{}
-3. Do not fabricate or placeholder citations
+1. Map every technical sentence to stable plan point IDs.
+2. Cite `CLAIM` sentences with only the card's approved Zotero item keys.
+3. Keep citations adjacent to the supported sentence or clause.
+4. Do not add, fabricate, or substitute citations.
+5. Do not force citations onto `LINK` or `PURPOSE` metadata.
+6. Preserve the approved provenance for `PROJECT_FACT`, `DERIVATION`,
+   `AUTHOR_ASSERTION`, and `INFERENCE` points.
 
-### Citation Density Guidelines
-- Background chapters: High (1-3 citations per paragraph)
-- Meat chapter intro: Medium
-- Meat chapter methods: Low (cite established methods)
-- Meat chapter results: Low (own work)
-- Meat chapter discussion: Medium (comparison to literature)
+### Citation scope
+
+Citation need follows point type, not a density target. Background prose often
+contains more literature `CLAIM` points; methods and results often contain more
+`PROJECT_FACT` and `DERIVATION` points. Never use a paragraph-level citation to
+cover several propositions with different evidence.
 
 ## Field-Specific Language and Terminology
 
@@ -158,7 +173,9 @@ Adapt language, terminology, and conventions to match the target discipline. Eve
 - **Maintain consistency**: Use the same term for the same concept throughout
 - **Use precise, formal terminology**: prefer the exact technical term over an informal paraphrase
 - **Report quantities with standard units and notation**: follow SI conventions unless the field dictates otherwise
-- **Verify terminology**: Consult field-specific style guides and recent papers from the target journal
+- **Verify terminology**: Use approved Zotero evidence and the author's existing
+  writing. If the corpus lacks the needed authority, return the gap to planning;
+  do not search externally from the writer.
 
 ## Common Writing Pitfalls
 

@@ -1,2 +1,2 @@
 name: "zotero-research"
-description: "Isolated research worker. Accepts research requests and uses the deep-zotero MCP server to search indexed PDFs. Invoke only through the host's delegation mechanism."
+description: "Isolated Zotero-corpus research worker. Use through the host delegation mechanism to discover or verify bounded claims and return multi-source evidence cards with immediate verbatim passages, qualifications, contradictions, and search receipts. Never searches for, fetches, or imports external sources."
