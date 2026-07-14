@@ -6,7 +6,6 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -67,6 +66,9 @@ temp/
 tmp/
 figures/
 nul
+
+# Generated vendor distributions are committed so remote marketplaces can install them.
+# Rebuild them with scripts/build_plugin.py; never edit them directly.
 # Claude Code / OMC local state
 .omc/
 .claude/

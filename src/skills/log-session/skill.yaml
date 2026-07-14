@@ -1,0 +1,2 @@
+name: "log-session"
+description: "Synthesises an authorship log entry from session checkpoints and conversation context. Presents draft for author approval before appending to the project's authorship_log.md."

@@ -1,0 +1,2 @@
+name: "figure-generator"
+description: "Generates figures from placeholders in .tex files. Creates Python matplotlib scripts for data figures, TikZ/Python schematics for diagrams. Maintains a shared plot_defaults.py for consistent styling. Flags complex figures for the user. Runs after the writer skill."

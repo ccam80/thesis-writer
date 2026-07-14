@@ -1,0 +1,1 @@
+**CRITICAL — Zotero access policy**: NEVER call `mcp__deep-zotero__*` tools directly. All Zotero library access MUST go through the `zotero-research` agent, spawned via the Task tool. Only the `zotero-research` agent is permitted to call the MCP tools.

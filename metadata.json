@@ -1,0 +1,20 @@
+{
+  "name": "thesis-writer",
+  "version": "0.2.0",
+  "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
+  "longDescription": "A dual-vendor thesis writing plugin with collaborative planning, Zotero-grounded research, LaTeX authoring, figures, formatting, review, and authorship logging.",
+  "author": {
+    "name": "Chris Cameron"
+  },
+  "homepage": "https://github.com/ccam80/thesis-writer",
+  "repository": "https://github.com/ccam80/thesis-writer",
+  "license": "MIT",
+  "category": "Productivity",
+  "keywords": [
+    "thesis",
+    "latex",
+    "zotero",
+    "academic-writing",
+    "citations"
+  ]
+}

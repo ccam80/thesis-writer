@@ -1,0 +1,2 @@
+name: "thesis-writer-init"
+description: "Initialize a project with the Thesis Writer AGENTS.md instructions, preserving or merging any existing project instructions with explicit approval."

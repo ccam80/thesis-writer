@@ -1,0 +1,1 @@
+**CRITICAL — Zotero access policy**: NEVER call `mcp__deep-zotero__*` tools directly. All Zotero library access MUST go through an isolated sub-agent using the `zotero-research` skill. Only that delegated research agent is permitted to call the MCP tools.

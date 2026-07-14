@@ -1,9 +1,0 @@
-{
-  "name": "claude-thesis-writer",
-  "version": "0.2.0",
-  "description": "Collection of thesis writing skills for doctoral thesis authoring, using Zotero for research and citations. Adapted from K-Dense AI's Claude Scientific Writer.",
-  "author": {
-    "name": "Chris Cameron"
-  },
-  "homepage": "https://github.com/ccam80/thesis-writer"
-}

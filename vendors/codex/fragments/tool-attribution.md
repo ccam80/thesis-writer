@@ -1,0 +1,1 @@
+- **Tool**: Codex [model/version], thesis-writer plugin v[version]

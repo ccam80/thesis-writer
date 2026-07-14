@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "deep-zotero": {
+      "command": "<generated-at-install-time>",
+      "args": [
+        "-m",
+        "deep_zotero.server"
+      ]
+    }
+  }
+}

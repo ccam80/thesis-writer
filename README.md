@@ -1,85 +1,127 @@
-# Claude Thesis Writer
+# Thesis Writer
 
-A Claude Code plugin for plan-driven doctoral thesis writing with Zotero-sourced citations and IEEE-style LaTeX output.
+Thesis Writer is a dual-vendor plugin for plan-driven doctoral thesis authoring with Zotero-grounded citations and IEEE-style LaTeX output. One shared source produces complete Claude Code and Codex plugins; vendor mechanics are kept in small, explicit overlays.
 
-## What It Does
+## What it provides
 
-Provides a structured skill chain for thesis writing:
-
-```
+```text
 document-planner → writer → figure-generator → formatter → reviewer
        ↕                                                       ↕
  zotero-research                                         zotero-research
 ```
 
-All citations come from your Zotero library. All writing follows collaboratively approved plans. Output is publication-ready LaTeX.
+The plugin also includes authorship-session logging and a vendor-specific project initializer. Claude Code initializes `CLAUDE.md`; Codex initializes `AGENTS.md`. Both use the same canonical thesis-instruction template.
 
 ## Prerequisites
 
-- **Claude Code** (or compatible IDE with Claude Code plugin support)
-- **Zotero** with a populated library for your research area
-- **deep-zotero MCP server** configured in Claude Code (provides `search_papers`, `search_topic`, `search_tables`, `search_figures`, `search_boolean`, `get_passage_context`, `get_index_stats`, and more)
-- **LaTeX distribution** (TeX Live, MiKTeX, or similar) for compilation
-- **Python 3.10+** with matplotlib (for figure generation)
+- Zotero with a populated research library
+- The [Deep Zotero MCP server](https://github.com/ccam80/zotero-citation-mcp) in a Python virtual environment
+- Claude Code and/or Codex
+- A LaTeX distribution for compilation
+- Python 3.10 or newer; matplotlib for figure generation
 
-## Installation
+The local scripts default to `C:\local_working_projects\zotero_citation_mcp`. Pass `--mcp-root` on another machine. The generated MCP configuration contains only the resolved virtual-environment interpreter and `-m deep_zotero.server`; it never copies or prints API keys.
 
-1. Add the plugin marketplace in Claude Code:
-   ```
-   /plugin marketplace add https://github.com/ccam80/thesis-writer
-   ```
+## Install or update locally
 
-2. Install the plugin:
-   ```
-   /plugin install claude-thesis-writer
-   ```
+Build and validate both plugins first:
 
-3. Restart Claude Code when prompted.
-
-4. Initialise in your thesis project:
-   ```
-   /thesis-writer:init
-   ```
-   This creates a `CLAUDE.md` with thesis writing instructions and makes all skills available.
-
-## Skills
-
-### Core Workflow
-
-| Skill | Role |
-|-------|------|
-| `zotero-research` | Spawnable research agent — topic search, claim support, citation verification |
-| `document-planner` | Multi-scope interactive planning (thesis, chapter, section, subsection) with verified references and figure stubs |
-| `writer` | LaTeX prose from plans (conversational, checks wording with user, enforces `prose-style.md` anti-slop rules) |
-| `figure-generator` | Generates matplotlib plots and schematics from figure placeholders |
-| `formatter` | LaTeX formatting checker (packages, placement, units, cross-refs) |
-| `reviewer` | Plan compliance, reference verification, and per-sentence prose style audit |
-
-## Quick Start
-
-```
-> I need to plan my background chapter on adaptive filtering
-
-[document-planner runs: searches Zotero, proposes structure, iterates with you]
-
-> Approved. Now let's do detailed planning for section 2.
-
-[document-planner runs: paragraph-level planning with verified references]
-
-> Plan looks good, write it up.
-
-[writer runs: produces LaTeX prose from the approved plan]
-[figure-generator runs: creates plots from placeholders]
-[formatter runs: checks LaTeX compliance]
-[reviewer runs: verifies plan coverage and citation accuracy]
+```powershell
+python scripts\build_plugin.py --vendor all
+python scripts\validate_all.py --mcp-root C:\path\to\zotero_citation_mcp
 ```
 
-## Key Principles
+Install or update Codex:
 
-- **Collaborative**: You are the domain expert. The agent organises your knowledge, never invents content.
-- **Plan-driven**: All writing follows approved plan.md files with explicit authority hierarchy.
-- **Zotero-first**: Every citation comes from your Zotero library. No external API searches.
-- **IEEE style**: Concise technical prose, numeric citations, equations with defined variables.
+```powershell
+python scripts\install_plugin.py --vendor codex --mcp-root C:\path\to\zotero_citation_mcp --execute
+```
+
+This copies the disposable generated plugin to `~/plugins/thesis-writer`, creates the standard personal marketplace entry only when needed, applies Codex's required local cachebuster, and runs `codex plugin add thesis-writer@personal`. Start a new Codex task after installation so skills and MCP tools are reloaded.
+
+The installer stages and fully configures the replacement before swapping it into place, so a missing MCP interpreter, failed server import, or missing cachebuster cannot destroy a working installation. A custom `--marketplace` is supported when it follows `<root>/.agents/plugins/marketplace.json` and `--plugin-home` is `<root>/plugins`; the installer reads and uses that marketplace's actual top-level name in the Codex command.
+
+Install or update Claude Code:
+
+```powershell
+python scripts\install_plugin.py --vendor claude --mcp-root C:\path\to\zotero_citation_mcp --execute
+```
+
+The script builds the Claude distribution, updates or registers this repository as the `thesis-writer-marketplace`, and updates or installs `thesis-writer@thesis-writer-marketplace`. Restart Claude Code after installation. From the Claude Code interface, published updates can also be applied with `/plugin marketplace update thesis-writer-marketplace` followed by `/plugin update thesis-writer@thesis-writer-marketplace`.
+
+Omit `--execute` to build and show the vendor commands without running them. Codex's plugin files and marketplace entry are still prepared locally so their paths and MCP import can be verified.
+
+## Initialize a thesis project
+
+- Claude Code: run `/thesis-writer:init`.
+- Codex: ask to use the `thesis-writer-init` skill.
+
+If project instructions already exist, the initializer asks before backing up/replacing or merging them. It never silently overwrites an existing backup or produces a reduced fallback template.
+
+## Source and build architecture
+
+```text
+metadata.json                         shared plugin identity and release version
+src/
+  skills/<name>/skill.yaml           shared name and description
+  skills/<name>/body.md               shared workflow with explicit vendor markers
+  skills/<name>/references|scripts/  shared companion files
+  templates/thesis-instructions.md   shared project instructions
+vendors/
+  claude/skills.json                 Claude allowed-tools frontmatter overlay
+  claude/fragments/                  Claude tool/delegation wording
+  claude/commands/                   Claude initializer command
+  codex/skills.json                  intentionally empty frontmatter overlay
+  codex/fragments/                   Codex tool/delegation wording
+  codex/init-skill/                  Codex initializer skill
+scripts/                              build, install, validate, and release tooling
+dist/claude/thesis-writer/           generated Claude plugin
+dist/codex/thesis-writer/            generated Codex plugin
+```
+
+The committed Codex distribution contains `.mcp.json.example`, not a machine-specific path. During installation, the installer verifies `deep_zotero.server`, writes the installed plugin's `.mcp.json` with the selected virtual-environment interpreter, and adds `mcpServers` to that installed manifest. The committed source and distribution therefore remain portable.
+
+Each generated `SKILL.md` is compiled as:
+
+```text
+shared skill.yaml
+  + vendor frontmatter overlay
+  + shared body.md with vendor fragments inserted
+  = dist/<vendor>/thesis-writer/skills/<name>/SKILL.md
+```
+
+Claude output contains shared `name` and `description` plus its skill-specific `allowed-tools`. Codex output contains exactly `name` and `description`. Fragment markers use `<!-- vendor:fragment-name -->`. The build fails when a referenced fragment is missing, a supplied fragment is unused, or any marker remains unresolved.
+
+Do not edit `dist/`, installed plugin caches, root marketplace JSON, or generated `SKILL.md` files. Edit `metadata.json`, `src/`, or `vendors/`, then rebuild. Generated Markdown files carry a notice pointing back to these authoritative sources. JSON cannot carry comments, so its generated status is documented here and enforced by rebuild validation.
+
+## Contributor workflow
+
+1. Edit shared behavior under `src/`. Put host tool names, delegation syntax, initialization semantics, and attribution under the appropriate `vendors/` tree.
+2. Run `python scripts\build_plugin.py --vendor all`.
+3. Run `python -m pytest tests`.
+4. Run `python scripts\validate_all.py` for deterministic-build checks, vendor-leakage checks, every Codex skill's `quick_validate.py`, Codex `validate_plugin.py`, Claude plugin validation, and a Deep Zotero import check.
+5. Inspect `git diff -- dist` and commit shared source and both generated distributions together.
+
+The vendor-leakage validator rejects Claude-only concepts in Codex output and Codex-only concepts in Claude output. The builder also adapts the legacy paper-cache default to the correct vendor directory while preserving the `THESIS_PAPER_CACHE` override.
+
+## Release workflow
+
+```powershell
+python scripts\release.py --version 0.3.0 --mcp-root C:\path\to\zotero_citation_mcp
+git add metadata.json src vendors scripts dist .claude-plugin\marketplace.json README.md
+git commit -m "Release thesis-writer 0.3.0"
+git tag thesis-writer-v0.3.0
+git push --follow-tags
+```
+
+`release.py` updates the canonical version, regenerates both distributions, and validates them. Codex cachebusters are applied only to the disposable installed copy; they never modify the shared release version or committed distribution.
+
+## Key policies
+
+- All substantive writing is collaborative and follows an approved plan.
+- All citations come from the user's Zotero library through the isolated `zotero-research` worker.
+- No placeholder or invented citations are permitted.
+- The generated distributions retain the complete planning, writing, figure, formatting, review, and logging behavior from the original Claude plugin.
 
 ## License
 

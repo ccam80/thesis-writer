@@ -1,18 +1,17 @@
 {
   "name": "thesis-writer-marketplace",
   "metadata": {
-    "description": "Skills and setup for doctoral thesis writing, using Zotero for research and citations. Adapted from K-Dense AI's Claude Scientific Writer.",
-    "version": "0.2.0",
-    "homepage": "https://github.com/ccam80/thesis-writer"
+    "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
+    "version": "0.2.0"
   },
   "owner": {
     "name": "Chris Cameron"
   },
   "plugins": [
     {
-      "name": "claude-thesis-writer",
-      "description": "Collection of thesis writing skills",
-      "source": "./",
+      "name": "thesis-writer",
+      "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
+      "source": "./dist/claude/thesis-writer",
       "version": "0.2.0",
       "author": {
         "name": "Chris Cameron"
@@ -25,16 +24,6 @@
         "zotero",
         "academic-writing",
         "citations"
-      ],
-      "strict": false,
-      "skills": [
-        "./skills/zotero-research",
-        "./skills/document-planner",
-        "./skills/writer",
-        "./skills/figure-generator",
-        "./skills/formatter",
-        "./skills/reviewer",
-        "./skills/log-session"
       ]
     }
   ]

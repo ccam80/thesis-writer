@@ -1,0 +1,2 @@
+name: "formatter"
+description: "LaTeX formatting checker and corrector. Ensures figure placement, equation alignment, table formatting, cross-references, and units comply with thesis conventions."

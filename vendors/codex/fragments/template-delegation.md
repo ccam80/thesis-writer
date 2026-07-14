@@ -1,0 +1,1 @@
+- **NEVER call `mcp__deep-zotero__*` tools directly.** Only an isolated sub-agent using the `zotero-research` skill may call these MCP tools. All other skills and agents must delegate Zotero requests to that research agent.

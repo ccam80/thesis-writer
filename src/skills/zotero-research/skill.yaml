@@ -1,0 +1,2 @@
+name: "zotero-research"
+description: "Isolated research worker. Accepts research requests and uses the deep-zotero MCP server to search indexed PDFs. Invoke only through the host's delegation mechanism."

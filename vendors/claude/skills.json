@@ -1,0 +1,9 @@
+{
+  "document-planner": ["Read", "Write", "Edit", "Bash", "Task", "AskUserQuestion"],
+  "figure-generator": ["Read", "Write", "Edit", "Bash", "Task"],
+  "formatter": ["Read", "Write", "Edit", "Bash"],
+  "log-session": ["Read", "Write", "Edit", "AskUserQuestion"],
+  "reviewer": ["Read", "Write", "Edit", "Bash", "Task"],
+  "writer": ["Read", "Write", "Edit", "Bash", "Task", "AskUserQuestion"],
+  "zotero-research": ["Read", "Write", "Edit", "Bash", "Task"]
+}

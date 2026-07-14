@@ -1,0 +1,1 @@
+- **Tool**: Claude [model/version], thesis-writer plugin v[version]
