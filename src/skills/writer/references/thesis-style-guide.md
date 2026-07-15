@@ -2,22 +2,22 @@
 
 Reference document for the `writer` skill. Contains IEEE style conventions, equation formatting, citation guidelines, figure placeholders, table formatting, field-specific terminology, and common pitfalls.
 
-## Plan Authority
+## Plan and Evidence Authority
 
-Every chapter MUST be written from an approved plan.md file.
+Every chapter MUST be written from an approved `plan.md` and its sibling `evidence.md`.
 
-1. If a point is in the plan, it MUST appear in the document
-2. If a reference is in the plan, it MUST be cited
-3. Do not add content beyond the plan without explicit approval
-4. Do not omit planned content without explicit approval
+1. `plan.md` is the author-readable content and structure authority.
+2. `evidence.md` is the grounding and provenance authority and cannot introduce or alter planned content.
+3. Every point ID must occur exactly once in each file; missing or orphan IDs block writing.
+4. If a point is in the plan, it MUST appear in the document unless it is `structure-only` or `open`.
+5. If a reference is in the plan, it MUST be cited only when the matching ledger card approves it.
+6. Do not add content beyond the plan or omit planned content without explicit approval.
 
-### Grounded Plan Structure
+### Author-readable plan structure
 
 ```markdown
 # Plan: [Title]
-Type: [background|research|conclusions|future-work]
-Structural status: approved
-Grounding status: write-ready
+Status: approved
 
 ## Narrative Thread
 [1-2 sentences describing the story this chapter tells]
@@ -25,14 +25,12 @@ Grounding status: write-ready
 ## Sections
 
 ### Section 1: [Title]
-**Purpose:** C01-S01-PU01 — PURPOSE — [narrative function]
+**Purpose:** [C01-S01-PU01 | structure-only] [narrative function]
 
 #### Paragraph 1
-- C01-S01-P01-CL01 — CLAIM — [bounded proposition] \cite{ref1,ref2}
-  - Evidence card with immediate passages, qualifications, and contradictions
-- C01-S01-P01-PF01 — PROJECT_FACT — [project-specific proposition]
-  - Evidence: [exact project locator]
-- C01-S01-P01-LK01 — LINK — [ordering instruction; no thesis sentence]
+- [C01-S01-P01-CL01 | write-ready] [bounded proposition] \cite{ref1,ref2}
+- [C01-S01-P01-PF01 | write-ready] [project-specific proposition]
+- [C01-S01-P01-LK01 | structure-only] [ordering instruction; no thesis sentence]
 
 ### Section 2: [Title]
 [continue with stable typed point IDs]
@@ -42,13 +40,22 @@ Grounding status: write-ready
 - Figure 2: [Description]
 
 ## Unresolved points
-[must be empty for writer input]
+[readable index of open IDs/questions; must be empty for writer input]
 ```
 
-The point types are `CLAIM`, `PROJECT_FACT`, `DERIVATION`,
-`AUTHOR_ASSERTION`, `INFERENCE`, `LINK`, `PURPOSE`, and `OPEN`. The writer
-uses only write-ready technical points. `LINK` and `PURPOSE` guide structure;
-`OPEN` blocks drafting.
+Plan points contain only an ID and status as machine metadata. Types, origins,
+evidence cards, passages, search receipts, project locators, derivation steps,
+author attestations, inference warrants, and full `OPEN` gap records belong in
+the matching `evidence.md` entries. The point types are `CLAIM`, `PROJECT_FACT`,
+`DERIVATION`, `AUTHOR_ASSERTION`, `INFERENCE`, `LINK`, `PURPOSE`, and `OPEN`.
+The writer reads these types from the ledger and uses only `write-ready`
+technical points. `structure-only` points guide structure; `open` blocks
+drafting.
+
+The plan header contains only the author-visible `Status: draft|approved` field.
+Document type, recording date, parent path, and grounding bookkeeping belong in
+`evidence.md`. Determine readiness from each in-scope point's status and matching
+receipt; do not require or add a block-level grounding field in `plan.md`.
 
 ## Figure Placeholders
 
@@ -133,15 +140,17 @@ SD & 0.05 & 0.07 \\
 **STRICT**: All citations must come from Zotero library.
 
 ### Before Writing
-1. Confirm the target plan block is marked write-ready.
-2. Confirm every literature `CLAIM` has an approved Zotero evidence card.
-3. Confirm project facts, derivations, author assertions, and inferences have
+1. Confirm the plan is `approved` and every in-scope point has a stable ID and status.
+2. Confirm every ID has exactly one matching ledger entry and no orphan entry exists.
+3. Confirm the ledger scope semantically matches the planned content.
+4. Confirm every literature `CLAIM` has an approved Zotero evidence card in `evidence.md`.
+5. Confirm project facts, derivations, author assertions, and inferences have
    their type-specific receipts.
-4. Stop on any `OPEN` point or missing receipt and return its ID to planning.
+6. Stop on any non-ready point, missing receipt, or mismatch and return its ID to planning.
 
 ### During Writing
 1. Map every technical sentence to stable plan point IDs.
-2. Cite `CLAIM` sentences with only the card's approved Zotero item keys.
+2. Cite `CLAIM` sentences with only the matching ledger card's approved Zotero item keys.
 3. Keep citations adjacent to the supported sentence or clause.
 4. Do not add, fabricate, or substitute citations.
 5. Do not force citations onto `LINK` or `PURPOSE` metadata.

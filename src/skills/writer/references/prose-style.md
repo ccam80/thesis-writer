@@ -216,6 +216,6 @@ explanation; this is the fast pass.
 - [ ] Sentence-level information test run; cuts applied.
 - [ ] Every sentence maps to plan point IDs; every technical clause is covered.
 - [ ] Negation, modality, conditions, quantities, comparison, population,
-      and causal status match the mapped points and evidence cards.
+      and causal status match the mapped plan points and their `evidence.md` entries.
 - [ ] Citations are adjacent to supported clauses and use only approved keys.
 - [ ] Voice matches the author's existing .tex prose, not this file's.

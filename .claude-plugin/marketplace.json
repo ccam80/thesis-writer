@@ -2,7 +2,7 @@
   "name": "thesis-writer-marketplace",
   "metadata": {
     "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
-    "version": "0.2.0"
+    "version": "0.2.1"
   },
   "owner": {
     "name": "Chris Cameron"
@@ -12,7 +12,7 @@
       "name": "thesis-writer",
       "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
       "source": "./dist/claude/thesis-writer",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "author": {
         "name": "Chris Cameron"
       },

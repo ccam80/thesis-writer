@@ -56,6 +56,70 @@ def test_writer_and_reviewer_require_complete_traceability() -> None:
     assert "TODO" not in reviewer
 
 
+def test_plan_is_author_readable_and_provenance_lives_in_evidence_ledger() -> None:
+    planner = text("src/skills/document-planner/body.md")
+    writer = text("src/skills/writer/body.md")
+    reviewer = text("src/skills/reviewer/body.md")
+    style_guide = text("src/skills/writer/references/thesis-style-guide.md")
+    template = text("src/templates/thesis-instructions.md")
+
+    plan_format = planner.split("## Plan format", 1)[1].split("## Citation density", 1)[0]
+    evidence_format = planner.split("## Evidence-ledger format", 1)[1].split("## Corpus gaps", 1)[0]
+    assert "only a stable point ID plus status as machine metadata" in planner
+    assert "Status: [draft|approved]" in plan_format
+    for forbidden_header in (
+        "Type: [background|research|conclusions|future-work]",
+        "Structural status:",
+        "Grounding status:",
+        "Date: [YYYY-MM-DD]",
+        "Parent: [parent plan path]",
+    ):
+        assert forbidden_header not in plan_format
+    assert "Document type: [background|research|conclusions|future-work]" in evidence_format
+    assert "Recorded: [YYYY-MM-DD]" in evidence_format
+    assert "Parent plan: [parent plan path]" in evidence_format
+    assert "[C03-S02-P01-CL01 | write-ready]" in plan_format
+    assert "[embedded evidence card]" not in plan_format
+    assert "Evidence: [file/data/code locator]" not in plan_format
+    assert "Premises: [IDs]" not in plan_format
+
+    for contract in (planner, writer, reviewer, style_guide, template):
+        assert "`evidence.md`" in contract
+
+    assert "`plan.md` is authoritative for what the thesis should say" in planner
+    assert "`evidence.md` is authoritative for whether each planned point is grounded" in planner
+    assert "The ledger may not add a point that is absent from its sibling plan" in planner
+    assert "full gap record in the matching `evidence.md` entry" in planner
+
+
+def test_writer_and_reviewer_fail_closed_on_plan_ledger_divergence() -> None:
+    writer = text("src/skills/writer/body.md")
+    reviewer = text("src/skills/reviewer/body.md")
+
+    for failure in (
+        "plan's author-visible `Status` is not `approved`",
+        "no stable ID or status",
+        "no exactly matching `evidence.md` entry",
+        "orphan ID absent from `plan.md`",
+        "status is not `write-ready`",
+        "lacks its complete type-specific receipt",
+        "do not semantically match the planned content",
+    ):
+        assert failure in writer
+    assert "block-level `Grounding status`" not in writer
+
+    for failure in (
+        "without an ID or status",
+        "missing ledger entry",
+        "orphan ledger ID",
+        "non-ready technical status",
+        "incomplete type-specific receipt",
+        "semantic mismatch",
+    ):
+        assert failure in reviewer
+    assert "Reject any content introduced only by `evidence.md`" in reviewer
+
+
 def test_source_acquisition_is_a_separate_exact_approval_lane() -> None:
     skill_dir = SKILLS / "zotero-source-acquisition"
     assert (skill_dir / "skill.yaml").is_file()

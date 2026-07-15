@@ -4,7 +4,7 @@
 
 Audit academic prose without editing it. Verify the complete chain:
 
-`plan point → evidence receipt → mapped sentence → citation/provenance → prose`
+`plan point → matching evidence.md entry → mapped sentence → citation/provenance → prose`
 
 Review every sentence and every plan point in scope. Sampling "critical" claims is prohibited. Produce actionable findings with locations and stable IDs.
 
@@ -12,13 +12,14 @@ Review every sentence and every plan point in scope. Sampling "critical" claims 
 
 Require:
 
-1. The exact directory-level `plan.md` used by the writer.
-2. The reviewed `.tex` files.
-3. Each corresponding `<target-stem>.claim-map.md`.
-4. Parent `plan.md` files needed to assess narrative compliance.
-5. `../writer/references/prose-style.md` and `thesis-style-guide.md`.
+1. The exact directory-level `plan.md` used by the writer, as content and structure authority.
+2. Its exact sibling `evidence.md`, as grounding and provenance authority.
+3. The reviewed `.tex` files.
+4. Each corresponding `<target-stem>.claim-map.md`.
+5. Parent `plan.md` files and their sibling evidence ledgers needed to assess narrative compliance.
+6. `../writer/references/prose-style.md` and `thesis-style-guide.md`.
 
-If a claim map or evidence receipt is missing, report the affected scope as unverifiable. Do not infer a mapping after the fact and call it verified.
+If the ledger, a matching ledger entry, a claim map, or an evidence receipt is missing, report the affected scope as unverifiable. Do not infer a mapping, type, provenance, or intended meaning after the fact and call it verified.
 
 ## Review process
 
@@ -34,6 +35,8 @@ Enumerate every plan point and mark it:
 
 Enumerate every prose sentence and identify unplanned content. Confirm that changes to lower-level narrative, structure, or emphasis appear in the affected parent plans with author approval.
 
+Reconcile `plan.md` and `evidence.md` before reviewing prose. Report as blocking failures every plan point without an ID or status, missing ledger entry, orphan ledger ID, non-ready technical status, incomplete type-specific receipt, and semantic mismatch between planned content and the ledger's grounded scope. Reject any content introduced only by `evidence.md`; the ledger cannot expand or replace the plan.
+
 Use `plan.md` consistently. Never request `chapter_plan.md`.
 
 ### 2. Mapping integrity
@@ -46,13 +49,13 @@ For 100% of sentences:
 - reject IDs absent from `plan.md`;
 - reject a sentence mapped only to `LINK` if it contains a technical proposition;
 - identify plan points that map to no sentence;
-- identify citations not approved on the mapped cards.
+- identify citations not approved on the mapped `evidence.md` cards.
 
 Any mismatch makes the sentence unverified until the map or prose is corrected through the proper workflow.
 
 ### 3. Provenance and write-ready gate
 
-For every mapped point, enforce its type:
+For every mapped point, read its type and receipt from the matching `evidence.md` entry and enforce it:
 
 - `CLAIM`: approved Zotero evidence card and adjacent approved citation.
 - `PROJECT_FACT`: exact project locator; no generalization beyond the project.
@@ -62,7 +65,7 @@ For every mapped point, enforce its type:
 - `LINK`/`PURPOSE`: no hidden proposition and normally no emitted sentence.
 - `OPEN`: no prose mapping. Its appearance is a blocking failure.
 
-Confirm no separate `reference_debt.md` has become an authority or a route around the gate. Corpus gaps must remain attached to `OPEN` points in `plan.md`.
+Confirm no separate `reference_debt.md` has become an authority or a route around the gate. Each corpus gap must remain visible as an `open` ID/status item in `plan.md`, with its search and resolution record in the matching `evidence.md` entry.
 
 ### 4. Zotero verification of every literature claim
 
@@ -150,10 +153,12 @@ Write `<chapter_directory>/review_report.md`:
 Date: [YYYY-MM-DD]
 Source: [files]
 Plan: [plan.md]
+Evidence ledger: [evidence.md]
 Claim maps: [files]
 
 ## Verification receipt
 - Plan points checked: N/N
+- Evidence entries reconciled: N/N
 - Sentences mapped: N/N
 - Technical clauses mapped: N/N
 - Literature claim/citation pairs verified in Zotero: N/N

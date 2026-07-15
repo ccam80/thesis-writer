@@ -1,6 +1,6 @@
 ---
 name: document-planner
-description: "Interactive, evidence-grounded planning at thesis, chapter, section, subsection, and paragraph scope. Use to preserve top-down narrative narrowing while building typed, claim-addressable plan.md files through interleaved Zotero research and author review."
+description: "Interactive, evidence-grounded planning at thesis, chapter, section, subsection, and paragraph scope. Use to preserve top-down narrative narrowing while building author-readable plan.md files paired with claim-addressable evidence.md provenance ledgers through interleaved Zotero research and author review."
 allowed-tools: [Read, Write, Edit, Bash, Task, AskUserQuestion]
 ---
 
@@ -21,11 +21,14 @@ The planner may propose structure, reader-state transitions, purposes, research 
 Read, in this order:
 
 1. The target `.tex` file. Existing prose is authoritative for existing content.
-2. The directory-level `plan.md`. This is the detailed plan.
-3. Each parent `plan.md`, up to the thesis-level plan. Parent plans set narrative goals and scope.
-4. Existing project evidence named by the author: data, code, laboratory notes, methods records, figures, or calculations.
+2. The directory-level `plan.md`. This is the author-readable content and structure authority.
+3. The sibling `evidence.md`. This is the grounding and provenance authority for the stable point IDs in the local plan.
+4. Each parent `plan.md` and sibling `evidence.md`, up to the thesis level. Parent plans set narrative goals and scope; their ledgers ground their points.
+5. Existing project evidence named by the author: data, code, laboratory notes, methods records, figures, or calculations.
 
-Use `plan.md` at every hierarchy level. Do not use `chapter_plan.md`.
+Use a `plan.md` and sibling `evidence.md` at every hierarchy level. Do not use `chapter_plan.md`. Keep `plan.md` readable as a working document for the author: narrative, structure, planned content, citations, figures, cross-references, and only a stable point ID plus status as machine metadata. Put point type, origin, cards, passages, qualifications, contradictions, search receipts, and every non-literature receipt in `evidence.md`.
+
+`plan.md` is authoritative for what the thesis should say and how it is organised. `evidence.md` is authoritative for whether each planned point is grounded and how. The ledger may not add a point that is absent from its sibling plan, change its intended meaning, or become a second planning surface. Every stable point ID in either file must have exactly one matching entry in the other.
 
 Higher-level decisions constrain lower levels. A lower-level change to narrative, structure, emphasis, or scope requires author approval and a matching update to every affected parent plan. Existing `.tex` content cannot be removed without explicit discussion.
 
@@ -198,17 +201,24 @@ Iterate until the author approves both content and provenance. Record structural
 
 #### Step 5: Commit and descend
 
-Write approved points and cards into the directory `plan.md`. Then continue to the next paragraph and section. After a section is complete, check cross-paragraph duplication and claim scope. After a chapter is complete, check cross-section duplication and update parent plans for approved structural changes.
+Write approved point wording, citations, status, narrative, structure, and figure or cross-reference notes into the directory `plan.md`. Write the matching typed provenance entries into its sibling `evidence.md`. Before continuing, reconcile the files bidirectionally: reject a missing ledger entry, an orphan ledger ID, a status that exceeds its receipt, or a semantic mismatch between planned content and grounded scope. Then continue to the next paragraph and section. After a section is complete, check cross-paragraph duplication and claim scope. After a chapter is complete, check cross-section duplication and update parent plans and ledgers for approved structural changes.
 
-## Evidence-card format
+## Evidence-ledger format
 
-Keep evidence with the claim. Do not maintain a separate `reference_debt.md` authority.
+Keep all provenance in the sibling `evidence.md`. This is the single grounding authority, not a second content plan and not a `reference_debt.md` replacement. Entries are keyed by IDs already present in `plan.md`.
 
 ```markdown
-### C03-S02-P01-CL01 — CLAIM — qualified — write-ready
+# Evidence: [Title]
+Plan: [sibling plan path]
+Document type: [background|research|conclusions|future-work]
+Recorded: [YYYY-MM-DD]
+Parent plan: [parent plan path]
 
-**Claim:** [single bounded synthesis] \cite{keyA,keyB}
+## C03-S02-P01-CL01
+
+**Type:** CLAIM
 **Origin:** Zotero synthesis from research request [request ID]
+**Grounded scope:** [single bounded synthesis matching, without broadening, the planned content]
 
 #### Supporting evidence
 - `keyA` — [item title], p. 42, [section/chunk]
@@ -233,20 +243,30 @@ Keep evidence with the claim. Do not maintain a separate `reference_debt.md` aut
 
 List `None found within the search boundary` under an empty evidence class. "All" means all materially relevant results admitted by the recorded search, not corpus completeness.
 
-## Corpus gaps and non-Zotero facts
-
-Keep each unresolved item attached to its point in `plan.md`:
+Use the same entry envelope for every point type. `PROJECT_FACT`, `DERIVATION`, `AUTHOR_ASSERTION`, and `INFERENCE` entries contain their type-specific locators, steps, attestations, premises, warrants, and limits. `LINK` and `PURPOSE` entries contain their type and origin but no invented receipt. Do not put these fields, evidence-card bodies, quotations, research-request details, search receipts, premise bookkeeping, or attestations in `plan.md`.
 
 ```markdown
-### C03-S02-P01-OP04 — OPEN — corpus gap — not write-ready
-**Proposed proposition/question:** [...]
+## [point ID]
+**Type:** PROJECT_FACT | DERIVATION | AUTHOR_ASSERTION | INFERENCE | LINK | PURPOSE
+**Origin:** [author/project/plan/research origin]
+**Grounded scope:** [scope that semantically matches the plan item]
+**Receipt:** [exact project locator | premise IDs and checked steps | dated author attestation | premise IDs, warrant, and limits | not required]
+```
+
+## Corpus gaps and non-Zotero facts
+
+Keep an unresolved point visible and readable in `plan.md` as an ID, status, and bounded question or proposed content. Keep its full gap record in the matching `evidence.md` entry:
+
+```markdown
+## C03-S02-P01-OP04
+**Type:** OPEN
 **Origin:** author assertion | existing prose | project lead | research lead
 **Zotero search receipt:** [...]
 **Missing evidence:** [...]
 **Resolution:** project evidence | author attestation | source acquisition | revision | removal
 ```
 
-Do not create or append to `reference_debt.md`. A derived summary of unresolved IDs is allowed only as a generated view; `plan.md` remains the authority.
+Do not create or append to `reference_debt.md`. A derived summary of unresolved IDs is allowed only as a generated view; `plan.md` remains the content authority and `evidence.md` remains the grounding authority.
 
 Resolution lanes:
 
@@ -261,11 +281,7 @@ The planner and `zotero-research` must never fetch or import external sources th
 
 ```markdown
 # Plan: [Title]
-Type: [background|research|conclusions|future-work]
-Structural status: [draft|approved]
-Grounding status: [not-ready|write-ready]
-Date: [YYYY-MM-DD]
-Parent: [parent plan path]
+Status: [draft|approved]
 
 ## Narrative thread
 [Author-approved narrative]
@@ -273,29 +289,26 @@ Parent: [parent plan path]
 ## Sections
 
 ### Section X.Y: [Title]
-**Purpose ID:** C03-S02-PU01 — PURPOSE — [narrative function]
+**Purpose:** [C03-S02-PU01 | structure-only] [narrative function]
 
 #### Paragraph 1 — [label]
-**Purpose:** C03-S02-P01-PU01 — PURPOSE — [...]
+**Purpose:** [C03-S02-P01-PU01 | structure-only] [...]
 
-- C03-S02-P01-CL01 — CLAIM — supported — [bounded claim] \cite{keyA,keyB}
-  - [embedded evidence card]
-- C03-S02-P01-PF01 — PROJECT_FACT — [fact]
-  - Evidence: [file/data/code locator]
-- C03-S02-P01-IF01 — INFERENCE — [bounded inference]
-  - Premises: [IDs]; warrant and limits: [...]
-- C03-S02-P01-LK01 — LINK — [ordering instruction; no thesis sentence]
+- [C03-S02-P01-CL01 | write-ready] [bounded claim] \cite{keyA,keyB}
+- [C03-S02-P01-PF01 | write-ready] [project-specific planned content]
+- [C03-S02-P01-IF01 | write-ready] [bounded inference]
+- [C03-S02-P01-LK01 | structure-only] [ordering instruction; no thesis sentence]
+- [C03-S02-P01-OP01 | open] [bounded unresolved question or proposed content]
 
 → **Figure:** [descriptive label and specification]
 
 ## Unresolved points
-[OPEN cards repeated by ID as links or short index entries; full card remains at point location]
-
-## Notes for writer
-- Use only write-ready points.
-- Map every technical sentence to one or more point IDs.
-- Do not turn LINK or PURPOSE metadata into technical prose.
+[Optional readable index of `open` point IDs and their questions; full gap records remain only in `evidence.md`]
 ```
+
+Use only `write-ready`, `open`, and `structure-only` as point statuses. Status is the only machine field besides the stable ID in a plan point. Do not encode type, origin, evidence verdict, research request, or receipt details in a plan line. A technical point may be `write-ready` only when its matching ledger entry contains its complete type-specific receipt. `OPEN` points use `open`; `LINK` and `PURPOSE` points use `structure-only`.
+
+The plan header may contain only the author-visible `Status: draft|approved` field. Keep document type, recording date, parent path, research state, and grounding bookkeeping in `evidence.md`. Do not add a block-level grounding field to `plan.md`; derive readiness by reconciling every in-scope point status with its ledger receipt.
 
 ## Citation density
 
@@ -319,7 +332,7 @@ Do not checkpoint clarification or mechanical research calls. Preserve working s
 
 - Uses `zotero-research` only for the indexed Zotero corpus.
 - Hands corpus gaps to `zotero-source-acquisition`; imported material returns through `zotero-research` before promotion.
-- Produces `plan.md`.
-- Hands only write-ready plan blocks to `writer`.
+- Produces paired `plan.md` and `evidence.md` authority documents.
+- Hands only reconciled, write-ready plan blocks with their matching evidence ledger to `writer`.
 
 Autonomy is low. Read and analyse autonomously; propose structure and research questions; run bounded Zotero research after the relevant scope is agreed. Do not finalize structure, promote evidence, retype an author assertion, or write authority documents without author approval.
