@@ -129,10 +129,10 @@ A user-supplied proposition may be submitted for verification, but retain its `A
 Spawn `zotero-research` for the paragraph's research questions and verification requests. Require:
 
 - one claim-centred card per resulting proposition;
-- all materially relevant supporting, qualifying, and contradicting passages found within the declared search boundary;
+- all materially relevant supporting, qualifying, and contradicting passages found in the indexed library;
 - BetterBibTeX key, item title, page/section or chunk locator, and an immediate verbatim passage for every cited item;
 - an entailment note that states what the passage supports and what it does not;
-- a search receipt and stopping boundary.
+- a search receipt.
 
 The research worker may synthesize across retrieved passages because the raw Zotero context is too large for the planner. The planner must not strengthen that synthesis.
 
@@ -198,10 +198,10 @@ Parent plan: [parent plan path]
   > "[verbatim passage]"
   Conflict: [opposing result and differing conditions]
 
-**Search receipt:** [queries, filters, tools, index coverage, stopping boundary]
+**Search receipt:** [tools, queries, retrieval depth, results inspected]
 ```
 
-List `None found within the search boundary` under an empty evidence class. "All" means all materially relevant results admitted by the recorded search, not corpus completeness.
+List `None found` under an empty evidence class. "All" means all materially relevant results the recorded searches returned.
 
 Use the same entry envelope for every point type. `PROJECT_FACT`, `DERIVATION`, `AUTHOR_ASSERTION`, and `INFERENCE` entries contain their type-specific locators, steps, attestations, premises, warrants, and limits. `LINK` and `PURPOSE` entries contain their type and origin but no invented receipt. Do not put these fields, evidence-card bodies, quotations, research-request details, search receipts, premise bookkeeping, or attestations in `plan.md`.
 

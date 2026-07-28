@@ -25,7 +25,7 @@ Use the available `deep-zotero` tools according to their schemas:
 - `search_boolean`: exact-term search.
 - `search_tables` and `search_figures`: structured evidence.
 - `get_passage_context`: expand a specific result.
-- `get_index_stats`: record corpus/index coverage.
+- `get_index_stats`: confirm the index is populated before searching.
 - `get_reranking_config`: inspect valid reranking controls.
 - citation-network tools only to orient within already indexed Zotero holdings; a metadata result is not claim evidence.
 
@@ -59,16 +59,18 @@ Use the structured search tools. Include the table/figure content or caption and
 
 ## Search protocol
 
+Before the first search, call `get_index_stats` once. If it reports no indexed documents, report an index fault and process no requests. An unbuilt index is never a corpus gap.
+
 Process one bounded question or claim at a time.
 
-1. Call `get_index_stats` once per batch and record the relevant coverage.
-2. State the search boundary: collections/tags, years, required terms, content types, and maximum retrieval depth.
-3. Run semantic search using neutral language.
-4. Run Boolean or required-term variants for acronyms, identifiers, quantities, and likely contrary terminology.
-5. Search tables when the question concerns measurements or comparisons.
-6. Inspect every result admitted by the declared boundary. Judge relevance from content, never embedding score.
+1. Search the whole indexed library. Apply a collection, tag, author, or year filter only when the request explicitly supplies one.
+2. Run semantic search using neutral language.
+3. Run Boolean or required-term variants for acronyms, identifiers, quantities, and likely contrary terminology.
+4. Search tables when the question concerns measurements or comparisons.
+5. Inspect every result returned. Judge relevance from content, never embedding score.
+6. Raise `top_k` or `num_papers` and search again whenever the lowest-ranked results still carry relevant material.
 7. Expand context whenever negation, modality, population, conditions, comparison, causality, or conclusion status is ambiguous.
-8. Collect every materially relevant supporting, qualifying, and contradicting result found within the boundary. Do not stop after finding one convenient citation.
+8. Collect every materially relevant supporting, qualifying, and contradicting result found. Do not stop after finding one convenient citation.
 9. Synthesize the narrowest proposition jointly entailed by its supporting passages. Do not average away disagreement.
 10. Return the card immediately before starting the next request.
 
@@ -80,9 +82,9 @@ Reuse a source across requests when warranted, but create a distinct card for ea
 - **Qualifying:** supports only after narrowing a condition, population, magnitude, modality, or causal status.
 - **Contradicting:** reports an incompatible result or interpretation under comparable or explicitly different conditions.
 - **Context-only:** relevant background but does not entail the claim. Never cite it as support.
-- **Corpus gap:** no adequate supporting passage found within the recorded search boundary.
+- **Corpus gap:** no adequate supporting passage in the indexed library after the recorded searches.
 
-Report all five classes. Use `None found within the search boundary` rather than leaving a class absent.
+Report all five classes. Use `None found` rather than leaving a class absent.
 
 ## Required card format
 
@@ -116,7 +118,7 @@ Every synthesis must be followed immediately by the passages on which it relies.
 - `keyE` — [title], p. 6 — [why relevant but not supporting]
 
 **Entailment verdict:** [supports|partially supports|does not support] — [reason]
-**Search receipt:** [tools, exact query variants, filters, result counts inspected, index coverage, stopping boundary]
+**Search receipt:** [tools, exact query variants, retrieval depth, results inspected]
 ```
 
 For a corpus gap, retain the original proposition or question, state what evidence is missing, and provide search terms and source types for `zotero-source-acquisition`. These are acquisition leads, not citations.
@@ -172,4 +174,4 @@ End each batch with:
 - corpus gaps requiring `zotero-source-acquisition`;
 - confirmation that no external search, fetch, or import occurred.
 
-Do not claim corpus completeness. Claim only completeness within the recorded search boundary.
+Claim only what the recorded searches returned.

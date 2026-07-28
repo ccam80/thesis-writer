@@ -56,7 +56,7 @@ Every citation comes from the user's Zotero library via the `zotero-research` ag
 
 - No placeholder or invented citations
 - `zotero-research` searches and verifies only the indexed Zotero corpus
-- Every synthesized claim card lists all materially relevant supporting, qualifying, and contradicting results found within a declared search boundary
+- Every synthesized claim card lists all materially relevant supporting, qualifying, and contradicting results the recorded searches returned
 - Every cited item is followed immediately by its actual verbatim supporting passage, BetterBibTeX key, title, page, and section/chunk locator
 - Planner, writer, reviewer, and `zotero-research` perform no external search, fetch, or import
 - If Zotero lacks coverage, keep the point `OPEN`; after author approval, hand it to `zotero-source-acquisition`, which presents candidate sources for user review before importing approved items and PDFs
