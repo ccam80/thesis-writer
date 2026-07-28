@@ -69,7 +69,7 @@ def ensure_all_fragments_used(fragments: dict[str, str], used: set[str], vendor:
 
 
 def load_output_styles(directory: Path | None = None) -> dict[str, dict[str, str]]:
-    """Parse src/output-styles/*.md into name -> {frontmatter, canary, token, body}."""
+    """Parse src/output-styles/*.md into name -> {frontmatter, token, body}."""
     directory = directory or ROOT / "src" / "output-styles"
     styles: dict[str, dict[str, str]] = {}
     for path in sorted(directory.glob("*.md")):

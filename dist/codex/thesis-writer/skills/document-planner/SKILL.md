@@ -43,7 +43,7 @@ When presenting or reviewing one item in one layer, your most valuable contribut
 is evaluating the narrative flow of the wider document. Your role [and required action]
 is to identify whether:
 1. Inside the item, are ideas presented in a foundations-up order, arriving
-at the sythesis or conclusion only after the constituent parts are established? [suggest the ordering that achieves this]
+at the synthesis or conclusion only after the constituent parts are established? [suggest the ordering that achieves this]
 2. Do any points inside the item actually belong in a preceding or following item? [suggest the move and flow-on edits required to support it]
 3. Do any points inside the item lack support (either assumed reader knowledge, or 
 appearing in a prior item)? [propose additions to earlier work or verify the author considers

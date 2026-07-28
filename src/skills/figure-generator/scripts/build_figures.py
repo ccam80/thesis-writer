@@ -18,10 +18,11 @@ so a chapter includes its own figures with ``\\includegraphics{fig/settling_time
 The PDF is what the document includes. The PNG exists for render inspection and
 the reviewer pass.
 
-Shared styling lives beside this script at the project root: ``plot_defaults.py``
-for matplotlib, ``tikz_defaults.tex`` for TikZ, and the generated
-``tikz_colours.tex`` that carries one palette into both. Nothing registers a
-figure; adding the directory is what adds the figure.
+Shared styling lives at the project root (``--root``, defaulting to the
+directory holding this script): ``plot_defaults.py`` for matplotlib,
+``tikz_defaults.tex`` for TikZ, and the generated ``tikz_colours.tex`` that
+carries one palette into both. Nothing registers a figure; adding the
+directory is what adds the figure.
 
 Usage
 -----
@@ -220,15 +221,18 @@ def build_one(figure_dir: Path) -> Path:
 
 
 def main() -> int:
+    global ROOT
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--root", type=Path, default=ROOT, help="project directory to scan")
+    parser.add_argument("--root", type=Path, default=ROOT, help="project root to scan; styling and imports resolve against it")
     parser.add_argument("--only", action="append", default=[], metavar="NAME", help="build only this figure; repeatable")
     parser.add_argument("--force", action="store_true", help="rebuild even when outputs are current")
     parser.add_argument("--list", action="store_true", help="list discovered figures and exit")
     args = parser.parse_args()
 
+    ROOT = args.root.resolve()
+
     try:
-        figures = discover(args.root.resolve())
+        figures = discover(ROOT)
     except BuildError as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
