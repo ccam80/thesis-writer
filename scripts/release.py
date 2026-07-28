@@ -28,6 +28,7 @@ def main() -> None:
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     metadata["version"] = args.version
     metadata_path.write_text(json.dumps(metadata, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    subprocess.run([sys.executable, str(ROOT / "scripts" / "build_plugin.py"), "--vendor", "all"], check=True)
     command = [sys.executable, str(ROOT / "scripts" / "validate_all.py"), "--mcp-root", str(args.mcp_root.resolve())]
     if args.skip_claude_cli:
         command.append("--skip-claude-cli")
