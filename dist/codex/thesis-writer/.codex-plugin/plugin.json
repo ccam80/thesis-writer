@@ -1,6 +1,6 @@
 {
   "name": "thesis-writer",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
   "author": {
     "name": "Chris Cameron"
