@@ -1,5 +1,7 @@
 # Figure Generator
 
+<!-- style:image-output -->
+
 ## Overview
 
 This skill runs after the `writer` skill has produced LaTeX prose. It reads .tex files, finds figure placeholders, and generates actual figures where possible. It replaces `\figurePlaceholder{...}` blocks with `\includegraphics{...}` pointing to generated output.
@@ -12,10 +14,10 @@ This skill runs after the `writer` skill has produced LaTeX prose. It reads .tex
 
 ## Plot Defaults File
 
-**Before generating any figures**, check for `figures/plot_defaults.py` in the document directory. If it does not exist, create it. This file defines all shared styling for consistency across the entire thesis.
+**Before generating any figures**, check for `plot_defaults.py` at the project root. If it does not exist, create it. This file defines all shared styling for consistency across the entire thesis.
 
 ```python
-# figures/plot_defaults.py
+# plot_defaults.py
 # Shared matplotlib defaults for all thesis figures.
 # Edit this file to change styling globally.
 
@@ -41,10 +43,10 @@ HALF_COL = (3.15, 3.0)     # for subfigures
 
 # --- Font and text ---
 FONT_FAMILY = 'serif'
-FONT_SIZE = 10
-LABEL_SIZE = 11
-TICK_SIZE = 9
-LEGEND_SIZE = 9
+FONT_SIZE = 12
+LABEL_SIZE = 12
+TICK_SIZE = 11
+LEGEND_SIZE = 11
 
 # --- Line and marker ---
 LINE_WIDTH = 1.5
@@ -79,72 +81,131 @@ def savefig(fig, path_stem):
     """Save figure in all configured formats."""
     for fmt in FORMATS:
         fig.savefig(f'{path_stem}.{fmt}', dpi=DPI, bbox_inches='tight')
+
+
+def write_tikz_colours(path='tikz_colours.tex'):
+    """Emit the shared palette as \\definecolor lines for TikZ figures."""
+    with open(path, 'w', encoding='utf-8') as handle:
+        for name, value in COLOURS.items():
+            handle.write(f'\\definecolor{{{name}}}{{HTML}}{{{value.lstrip("#").upper()}}}\n')
 ```
 
-**Every generated script must**:
+**Every `render.py` must**:
 1. `import plot_defaults; plot_defaults.apply()` at the top
-2. Use `plot_defaults.savefig(fig, path)` to export
+2. Take its output stem as `sys.argv[1]` and export with `plot_defaults.savefig(fig, sys.argv[1])`
 3. Reference `plot_defaults.COLOURS`, `plot_defaults.SINGLE_COL`, etc. for sizing and colours
 
-**If `plot_defaults.py` already exists**, read it and respect the author's customisations. Only add missing keys — never overwrite existing choices.
+Generate at the width the figure is placed at. A figure generated wider than its `\includegraphics` width is scaled down by LaTeX, which shrinks every label below the size `plot_defaults` set. No font size in this file may drop below 11.
 
 ## Figure Categories
 
-### 1. Data Plots (auto-generate)
+A placeholder supplies the data source path (CSV, HDF5, or a reference to the code that produces the data), the plot type, the axes labels and units, and the features the plan requires the figure to show.
 
-For placeholders that specify data sources, generate Python scripts using matplotlib:
+Each generated figure produces:
 
-**Input** (from placeholder):
-- Data source path (CSV, HDF5, or reference to source code that produces data)
-- Plot type (time series, scatter, bar chart, box plot, Bland-Altman, etc.)
-- Axes labels and units
-- Key features to highlight
+- a directory named for the figure, beside the `.tex` that uses it, holding one `render.py`
+- `fig/<name>.pdf` and `fig/<name>.png` in that `.tex`'s own `fig/` directory
+- the `.tex` placeholder replaced by `\includegraphics{fig/<name>}`
 
-**Output**:
-- Python script in `figures/scripts/` that reads data and produces the plot
-- Generated figure in `figures/` (PDF and PNG)
-- Updated .tex with `\includegraphics` replacing the placeholder
+Use matplotlib, not seaborn. Schematics go through TikZ instead, with `render.tex` in place of `render.py`; see below.
 
-**Script requirements**:
-- Self-contained: runs independently with `python script.py`
-- Imports and applies `plot_defaults` for consistent styling
-- Uses matplotlib only (not seaborn)
-- Outputs both PDF (for LaTeX) and PNG (for preview)
+## Project layout
 
-### 2. Simple Schematics (auto-generate)
+Nothing registers a figure. Creating the directory is what adds it.
 
-For block diagrams, system architectures, signal processing pipelines:
+```text
+plot_defaults.py            shared matplotlib styling
+tikz_defaults.tex           shared TikZ preamble
+tikz_colours.tex            generated from plot_defaults.COLOURS
+build_figures.py            builds every figure it discovers
 
-**Approach**: Generate using TikZ directly in LaTeX, or Python (matplotlib/networkx) for more complex diagrams.
+chapters/03-methods/
+    methods.tex             \includegraphics{fig/settling_time}
+    settling_time/
+        render.py
+    control_loop/
+        render.tex
+    fig/                    generated; never edited by hand
+        settling_time.pdf
+        settling_time.png
+        control_loop.pdf
+        control_loop.png
+```
 
-**Types**:
-- Block diagrams of systems/methods
-- Signal processing pipelines
-- Simple circuit representations
-- Algorithm flowcharts
-- Data flow diagrams
+A figure directory holds exactly one entry point. `render.py` and `render.tex` in the same directory is an error, not a choice.
 
-### 3. Complex/Custom Figures (flag for user)
+Where a figure cannot be generated, keep the placeholder and add a `% TODO: MANUAL FIGURE REQUIRED` comment naming what is needed and why.
 
-Some figures cannot be auto-generated:
-- Photographs or microscopy images
-- Figures requiring the author's unpublished data in inaccessible formats
-- Highly specialised domain diagrams
-- Figures requiring specific artistic choices
+## TikZ Figures
 
-**Action**: Keep the placeholder but add a `% TODO: MANUAL FIGURE REQUIRED` comment explaining what's needed and why it couldn't be auto-generated.
+Schematics are standalone LaTeX documents, never inline `tikzpicture` blocks. Each compiles on its own, so there is a file to open and hand to the reviewer before it reaches the chapter.
+
+### Shared preamble
+
+`tikz_defaults.tex` at the project root is the preamble every schematic inputs. Create it if absent. If it exists, respect the author's choices: add missing entries, never overwrite existing ones.
+
+```latex
+% tikz_defaults.tex
+\usepackage{tikz}
+\usepackage{siunitx}
+\usetikzlibrary{arrows.meta, positioning, calc}
+
+\input{tikz_colours}   % generated by plot_defaults.write_tikz_colours()
+
+\tikzset{
+  every node/.style={font=\fontsize{12}{14}\selectfont},
+  block/.style={draw, rectangle, minimum height=1cm, minimum width=1.5cm},
+  signal/.style={-{Stealth[length=2mm]}, line width=1.5pt},
+}
+```
+
+Font family and base size here must match the thesis body text, and the node font size must match `plot_defaults.FONT_SIZE`. A standalone document inherits nothing from the thesis preamble.
+
+Colours come from `plot_defaults.COLOURS` through `plot_defaults.write_tikz_colours()`, so one palette change reaches both pipelines. `plot_defaults.py` is canonical; `tikz_colours.tex` is generated and never hand-edited.
+
+### Figure document
+
+```latex
+% chapters/03-methods/control_loop/render.tex
+\documentclass[12pt,border=2pt]{standalone}
+\input{tikz_defaults}
+\begin{document}
+\begin{tikzpicture}
+  \node[block] (ctrl) {Controller};
+  \node[block, right=2cm of ctrl] (plant) {Plant};
+  \draw[signal] (ctrl) -- (plant);
+\end{tikzpicture}
+\end{document}
+```
+
+The `standalone` class crops to the drawing, so it is emitted at its natural size. Size the drawing to its placement width: a schematic scaled down by `\includegraphics` loses label size exactly as a plot does.
+
+## Build
+
+`build_figures.py` ships with this skill under `scripts/`. Copy it to the project root on first use, alongside `plot_defaults.py` and `tikz_defaults.tex`.
+
+It walks the project, finds every directory holding a `render.py` or `render.tex`, and writes the outputs into the `fig/` directory beside that figure directory's parent. A `render.py` is run with the project root on `PYTHONPATH` and its output stem as `sys.argv[1]`, so `import plot_defaults` resolves and `plot_defaults.savefig` writes both formats. A `render.tex` is compiled with `pdflatex` with the project root on `TEXINPUTS`, so the bare `\input{tikz_defaults}` resolves, then rasterised to PNG at `plot_defaults.DPI`.
+
+The chapter includes the PDF. The PNG exists for the render inspection and the reviewer pass.
+
+```
+python build_figures.py              build what is stale
+python build_figures.py --force      rebuild everything
+python build_figures.py --only NAME  build one figure
+python build_figures.py --list       list what was discovered
+```
+
+A figure rebuilds when any file in its directory is newer than its PDF, or when `plot_defaults.py`, `tikz_defaults.tex`, or `tikz_colours.tex` changed. `tikz_colours.tex` is only rewritten when the palette actually changed, so an unchanged palette does not force a rebuild. Exit status is 1 if any figure failed and 2 if the layout is malformed; a failure reports the underlying traceback or LaTeX log and does not stop the other figures.
 
 ## Workflow
 
-1. **Check defaults**: Read or create `figures/plot_defaults.py`
-2. **Scan**: Read .tex file(s), find all figure placeholder blocks
-3. **Classify**: For each placeholder, determine category (data plot / schematic / complex)
-4. **Generate**: For auto-generatable figures:
-   a. Create Python script (importing plot_defaults) or TikZ code
-   b. Run script to produce figure file
-   c. Replace placeholder with `\includegraphics`
-5. **Flag**: For complex figures, add TODO comments
-6. **Report**: Summary of what was generated, what was flagged, any issues
+1. **Check defaults**: read or create `plot_defaults.py`, `tikz_defaults.tex`, and `build_figures.py` at the project root.
+2. **Scan**: read the `.tex` file(s) and find every figure placeholder block.
+3. **Generate**: create the figure directory, write its `render.py` or `render.tex`, run `build_figures.py --only <name>`, and open the PNG it produced.
+4. **Resolve**: fix every defect visible in the render, then rebuild.
+5. **Review**: send the reviewer agent the render and the placeholder's brief. Resolve its findings and rebuild until a pass returns nothing.
+6. **Place**: replace the placeholder with `\includegraphics{fig/<name>}`, or add the `% TODO: MANUAL FIGURE REQUIRED` comment where the figure could not be generated.
+7. **Report**: what was generated, what was flagged, what failed.
 
 ## LaTeX Integration
 
@@ -175,7 +236,6 @@ With:
 
 - Does not change prose content
 - Does not add or remove figures beyond what the plan specifies
-- Does not modify captions (preserves writer's captions)
 - Does not change figure labels or cross-references
 
 ## Integration
