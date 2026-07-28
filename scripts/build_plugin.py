@@ -68,9 +68,9 @@ def ensure_all_fragments_used(fragments: dict[str, str], used: set[str], vendor:
         raise ValueError(f"unused {vendor} vendor fragments: {unused}")
 
 
-def load_output_styles() -> dict[str, dict[str, str]]:
+def load_output_styles(directory: Path | None = None) -> dict[str, dict[str, str]]:
     """Parse src/output-styles/*.md into name -> {frontmatter, canary, token, body}."""
-    directory = ROOT / "src" / "output-styles"
+    directory = directory or ROOT / "src" / "output-styles"
     styles: dict[str, dict[str, str]] = {}
     for path in sorted(directory.glob("*.md")):
         text = path.read_text(encoding="utf-8")
