@@ -124,7 +124,7 @@ git push --follow-tags
 - All substantive writing is collaborative and follows an approved plan.
 - All citations come from the user's Zotero library through the isolated `zotero-research` worker.
 - External discovery is isolated in `zotero-source-acquisition`; candidate tabs remain open for review and exact candidate IDs require approval before Zotero metadata/PDF import.
-- Every literature claim card carries the supporting, qualifying, and contradicting passages found within its declared search boundary.
+- Every literature claim card carries the supporting, qualifying, and contradicting passages its recorded searches returned.
 - Technical prose maps every sentence to stable grounded point IDs; narrative `LINK` and `PURPOSE` points cannot hide factual premises.
 - No placeholder or invented citations are permitted.
 - The generated distributions retain the complete planning, writing, figure, formatting, review, and logging behavior from the original Claude plugin.

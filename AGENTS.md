@@ -101,7 +101,7 @@ The plugin organizes the author's knowledge; it does not invent research. Change
 - Top-down narrowing from thesis to chapter, section, paragraph, and sentence remains author-controlled.
 - Technical plan points use stable typed provenance. Narrative `LINK` and `PURPOSE` points cannot conceal factual premises.
 - Unsupported propositions remain inline `OPEN` points and never become writer input. Do not create a separate reference-debt authority.
-- `zotero-research` is read-only and isolated. It reports claim-centred evidence cards with immediate passages and all material supporting, qualifying, and contradicting sources found within the declared boundary.
+- `zotero-research` is read-only and isolated. It searches the whole indexed library, filtering only when the request supplies a filter, and reports claim-centred evidence cards with immediate passages and all material supporting, qualifying, and contradicting sources found.
 - External discovery and Zotero mutation belong only to `zotero-source-acquisition`.
 - Source acquisition requires visible user review, exact candidate-ID approval, matching metadata and PDF identity, access preflight, atomic journalling, verified Zotero fetchback, and attachment-first rollback.
 - Imported items are not evidence until indexing completes and a new Zotero research pass verifies them.
