@@ -14,7 +14,17 @@ ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 MARKER = "<!-- GENERATED FILE — edit src/ or vendors/, then run scripts/build_plugin.py -->"
 FRAGMENT_RE = re.compile(r"<!-- vendor:([a-z0-9-]+) -->")
+STYLE_RE = re.compile(r"<!-- style:([a-z0-9-]+) -->")
+CANARY_RE = re.compile(r"^Canary: (?P<name>[a-z0-9-]+) output style active\. (?P<token>[A-Z]{2}-CANARY-[0-9a-f]{4})\.$", re.MULTILINE)
 DEFAULT_MCP_ROOT = Path(r"C:\local_working_projects\zotero_citation_mcp")
+
+CANARY_TEMPLATE = """This skill is intended to run with the `{name}` output style, which ships \
+with this plugin. If your system prompt does not contain the line `{token}`, append this to your \
+response to the author:
+
+> This skill is intended to be used with the {name} output style. It is included in the plugin.
+> Ask me to set it up in your user Claude settings, or select it yourself under Output style in
+> Claude's `/config`."""
 
 
 def read_skill_metadata(path: Path) -> dict[str, str]:
@@ -56,6 +66,70 @@ def ensure_all_fragments_used(fragments: dict[str, str], used: set[str], vendor:
     unused = sorted(set(fragments) - used)
     if unused:
         raise ValueError(f"unused {vendor} vendor fragments: {unused}")
+
+
+def load_output_styles() -> dict[str, dict[str, str]]:
+    """Parse src/output-styles/*.md into name -> {frontmatter, canary, token, body}."""
+    directory = ROOT / "src" / "output-styles"
+    styles: dict[str, dict[str, str]] = {}
+    for path in sorted(directory.glob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        if not text.startswith("---\n"):
+            raise ValueError(f"output style missing frontmatter: {path}")
+        _, frontmatter, remainder = text.split("---\n", 2)
+        match = CANARY_RE.search(remainder)
+        if match is None:
+            raise ValueError(f"output style missing canary line: {path}")
+        if match.group("name") != path.stem:
+            raise ValueError(f"canary name {match.group('name')!r} does not match filename: {path}")
+        styles[path.stem] = {
+            "frontmatter": frontmatter,
+            "token": match.group("token"),
+            "body": remainder.replace(match.group(0), "", 1).strip(),
+        }
+    if not styles:
+        raise ValueError("no output styles found in src/output-styles")
+    tokens = [style["token"] for style in styles.values()]
+    if len(set(tokens)) != len(tokens):
+        raise ValueError(f"duplicate output-style canary tokens: {sorted(tokens)}")
+    return styles
+
+
+def render_styles(
+    text: str,
+    vendor: str,
+    styles: dict[str, dict[str, str]],
+    used: set[str],
+    source: Path,
+) -> str:
+    for name in STYLE_RE.findall(text):
+        if name not in styles:
+            raise ValueError(f"missing output style {name!r} required by {source}")
+        if vendor == "codex":
+            replacement = re.sub(r"^(#+ )", r"#\1", styles[name]["body"], flags=re.MULTILINE)
+        else:
+            replacement = CANARY_TEMPLATE.format(name=name, token=styles[name]["token"])
+        text = text.replace(f"<!-- style:{name} -->", replacement)
+        used.add(name)
+    unresolved = STYLE_RE.findall(text)
+    if unresolved:
+        raise ValueError(f"unresolved output styles in {source}: {unresolved}")
+    return text
+
+
+def ensure_all_styles_used(styles: dict[str, dict[str, str]], used: set[str]) -> None:
+    unused = sorted(set(styles) - used)
+    if unused:
+        raise ValueError(f"unused output styles: {unused}")
+
+
+def copy_output_styles(plugin_root: Path) -> None:
+    target = plugin_root / "output-styles"
+    target.mkdir(parents=True)
+    for path in sorted((ROOT / "src" / "output-styles").glob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        target_path = target / path.name
+        target_path.write_text(text.replace("\r\n", "\n"), encoding="utf-8", newline="\n")
 
 
 def skill_text(metadata: dict[str, str], body: str, allowed_tools: list[str] | None) -> str:
@@ -178,12 +252,15 @@ def build(
     plugin_root.mkdir(parents=True)
 
     fragments = load_fragments(vendor)
+    styles = load_output_styles()
     used: set[str] = set()
+    used_styles: set[str] = set()
     allowed_by_skill = json.loads((ROOT / "vendors" / vendor / "skills.json").read_text(encoding="utf-8"))
     source_skills = ROOT / "src" / "skills"
     for source in sorted(path for path in source_skills.iterdir() if path.is_dir()):
         skill_metadata = read_skill_metadata(source / "skill.yaml")
         body = render_fragments((source / "body.md").read_text(encoding="utf-8"), fragments, used, source / "body.md")
+        body = render_styles(body, vendor, styles, used_styles, source / "body.md")
         allowed = allowed_by_skill.get(source.name) if vendor == "claude" else None
         if vendor == "claude" and allowed is None:
             raise ValueError(f"Claude allowed-tools overlay missing for {source.name}")
@@ -206,16 +283,21 @@ def build(
         command = (ROOT / "vendors" / "claude" / "commands" / "thesis-writer-init.md").read_text(encoding="utf-8")
         command_target.write_text(command.replace("---\n\n#", f"---\n\n{MARKER}\n\n#", 1), encoding="utf-8", newline="\n")
 
+    if vendor == "claude":
+        copy_output_styles(plugin_root)
+
+    template_source = ROOT / "src" / "templates" / "thesis-instructions.md"
     template = render_fragments(
-        (ROOT / "src" / "templates" / "thesis-instructions.md").read_text(encoding="utf-8"),
-        fragments, used, ROOT / "src" / "templates" / "thesis-instructions.md"
+        template_source.read_text(encoding="utf-8"), fragments, used, template_source
     )
+    template = render_styles(template, vendor, styles, used_styles, template_source)
     template_name = "CLAUDE.thesis-writer.md" if vendor == "claude" else "AGENTS.thesis-writer.md"
     template_target = plugin_root / "templates" / template_name
     template_target.parent.mkdir(parents=True)
     template_target.write_text(f"{MARKER}\n\n{template.rstrip()}\n", encoding="utf-8", newline="\n")
 
     ensure_all_fragments_used(fragments, used, vendor)
+    ensure_all_styles_used(styles, used_styles)
     build_manifest(vendor, plugin_root, metadata)
     build_marketplace(vendor, metadata, dist_root, repository_output_root)
 

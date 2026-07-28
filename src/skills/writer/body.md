@@ -1,12 +1,10 @@
 # Writer
 
-## Role
-
-Convert an approved, write-ready paragraph block from `plan.md` into technical LaTeX prose using its sibling `evidence.md` for grounding. Preserve the plan's meaning and evidence boundaries. Do not add claims, premises, causal links, examples, quantities, interpretations, or citations.
-
-Writing is collaborative. Ask when wording would change emphasis or epistemic scope. The author controls substantive choices; the writer controls sentence construction and voice.
+<!-- style:technical-writing -->
 
 ## Required inputs
+
+Convert an approved, write-ready paragraph block from `plan.md` into technical LaTeX prose, using its sibling `evidence.md` for grounding.
 
 1. The directory-level `plan.md`, the author-readable content and structure authority; never `chapter_plan.md`.
 2. Its sibling `evidence.md`, the grounding and provenance authority.
@@ -29,20 +27,13 @@ Do not repair these failures by inferring a type, receipt, status, or intended m
 
 ## Point handling
 
-Read each point's type from its matching `evidence.md` entry, never from extra type labels inserted into `plan.md`.
+Read each point's type from its matching `evidence.md` entry, never from extra type labels inserted into `plan.md`. Treat each type as the shared vocabulary defines it.
 
-| Point type | Writer action |
-|---|---|
-| `CLAIM` | State only the plan's bounded content within the evidence card's supported scope; attach only its approved Zotero citations. |
-| `PROJECT_FACT` | State the project fact from its locator without generalizing beyond the project. |
-| `DERIVATION` | Render the approved steps and premises; do not skip a material step or add a premise. |
-| `AUTHOR_ASSERTION` | State with the author-approved scope and uncited status. Do not present it as literature consensus. |
-| `INFERENCE` | Preserve premise IDs, warrant, modality, and limits. Do not strengthen an inference into a fact. |
-| `LINK` | Use as ordering metadata. Usually emit no sentence. |
-| `PURPOSE` | Use to judge emphasis. Emit no sentence. |
-| `OPEN` | Stop; it is not writer input. |
+Three treatments the vocabulary does not spell out:
 
-A transition is not permission to introduce a premise. If a connective such as "therefore," "because," "however," or "in contrast" asserts a relation absent from the grounded points, stop and return the missing relation to planning.
+- `CLAIM`: state only the plan's bounded content within the evidence card's supported scope, and attach only its approved Zotero citations.
+- `DERIVATION`: render the approved steps and premises without skipping a material step or adding one.
+- `AUTHOR_ASSERTION`: state it with the author-approved scope and uncited status, and never present it as literature consensus.
 
 ## Sentence-to-claim mapping
 
@@ -68,32 +59,11 @@ Rules:
 
 Keep the map through reviewer verification. It is an audit artifact, not a second content authority; `plan.md` remains the content and structure authority, and `evidence.md` remains the grounding authority.
 
-## Epistemic-preservation pass
-
-For each sentence, compare it against all mapped points and their evidence cards. Preserve:
-
-- negation;
-- modality and uncertainty;
-- population, apparatus, or system;
-- operating and experimental conditions;
-- quantities, units, ranges, and uncertainty;
-- comparison class and baseline;
-- correlation versus causation;
-- temporal and spatial limits;
-- source role: measurement, interpretation, review synthesis, or hypothesis.
-
-Do not collapse mixed evidence into consensus. Do not remove a qualification because it makes the sentence cumbersome. Split the sentence or return the wording problem to the author.
-
 ## Voice authorities
 
-Read both before drafting:
+`references/prose-style.md` is binding for density, information content, banned model patterns, register, and claim fidelity. Read it before drafting.
 
-1. `references/prose-style.md` is binding for density, information content, banned model patterns, register, and claim fidelity.
-2. The author's existing prose is the voice reference. Match sentence length, terminology, citation placement, hedging, mathematical exposition, and transition habits. When it conflicts with a binding epistemic rule, preserve the evidence and flag the style conflict.
-
-Do not infer the author's voice from Zotero passages. Sources establish content and disciplinary terminology, not the author's prose.
-
-Before drafting a new scope, select three to five nearby author-written paragraphs with the same rhetorical function (background, methods, results, or discussion). Record a compact calibration block in the claim map: source locations, typical sentence-length range, active/passive and first-person usage, citation placement, transition form, and hedging conventions. Do not copy distinctive phrases. If no suitable author sample exists, state that voice calibration is unavailable rather than substituting generic academic style.
+Before drafting a new scope, select three to five nearby author-written paragraphs with the same rhetorical function (background, methods, results, or discussion). Record a compact calibration block in the claim map: source locations, typical sentence-length range, active/passive and first-person usage, citation placement, transition form, and mathematical exposition. Do not copy distinctive phrases. If no suitable author sample exists, state that voice calibration is unavailable rather than substituting generic academic style.
 
 ## Drafting protocol
 
@@ -101,45 +71,16 @@ Work one paragraph or author-approved paragraph group at a time.
 
 1. **Map:** Draft a sentence inventory from write-ready point IDs. Identify any point that cannot be expressed without adding information.
 2. **Draft:** Convert mapped points to direct technical prose. Use paragraph order and syntax for flow; do not add a transition claim.
-3. **Epistemic check:** Compare every clause with the planned content and its matching `evidence.md` scope.
-4. **Information test:** Name the new information in every sentence. Cut framing, repetition, document narration, and rhythm-only sentences.
-5. **Voice check:** Compare the chunk with nearby author prose for register, cadence, terminology, and citation handling.
-6. **Style scan:** Apply every item in `prose-style.md`'s pre-presentation checklist.
-7. **Deterministic lint:** Run `scripts/lint_prose.py` on the drafted `.tex` scope and resolve every finding or record the author's explicit exception in the claim map.
-8. **Trace check:** Confirm exact agreement among `.tex`, the sentence map, point IDs, and citation keys.
+3. **Ledger check:** Compare every clause with the planned content and its matching `evidence.md` scope.
+4. **Deterministic lint:** Run `scripts/lint_prose.py` on the drafted `.tex` scope and resolve every finding or record the author's explicit exception in the claim map.
+5. **Trace check:** Confirm exact agreement among `.tex`, the sentence map, point IDs, and citation keys.
+6. **Review:** Send the reviewer agent the point list and the draft, and resolve every finding it returns before presenting.
 
-Present only the checked version. If a failure requires new content or changed emphasis, ask the author and return the affected point to planning/research rather than improvising.
-
-## Collaboration
-
-Ask when:
-
-- two phrasings carry different emphasis or modality;
-- the approved plan leaves technical terminology ambiguous;
-- paragraph order does not yield a truthful transition;
-- the author voice and evidence-preserving wording conflict;
-- a derivation step or project locator is incomplete.
-
-Batch related questions. Do not ask about routine LaTeX, citations already fixed by the plan, or minor synonymous choices that preserve meaning.
+If a failure requires new content or changed emphasis, ask the author and return the affected point to planning/research rather than improvising. Ask when a derivation step or a project locator is incomplete.
 
 ## LaTeX requirements
 
-- Use `\cite{}` only with keys approved on mapped claim cards.
-- Place citations adjacent to the sentence or clause they support; never rely on an end-of-paragraph citation to cover unrelated claims.
-- Use `\cref{}` and `\Cref{}` for cross-references.
-- Use `\SI{}{}` for units.
-- Number equations and define each variable at first use.
-- Use approved figure placeholders without adding interpretive claims to captions.
-- Follow the target project's established commands and environments.
-
-## Tense
-
-- Methods and observed results: past tense.
-- Established technical propositions: present tense when the evidence supports generality.
-- Current interpretations: present tense with the approved modality.
-- Literature actions: past tense.
-
-Tense must not change evidential scope. A source-specific observation cannot become a timeless fact merely because present tense reads smoothly.
+Use `\cite{}` only with keys approved on the mapped claim cards. Use the plan's approved figure placeholders without adding interpretive claims to captions.
 
 ## Output and handoff
 
@@ -151,8 +92,5 @@ Hand off to `formatter`, then `reviewer`. The reviewer must retain access to the
 
 - Do not conduct research or add sources.
 - Do not draft from a structurally approved but ungrounded plan.
-- Do not turn `LINK` or `PURPOSE` metadata into factual prose.
 - Do not silently retype or promote a point.
-- Do not strengthen a claim, inference, or author assertion.
-- Do not omit contradicting or qualifying scope encoded in the approved point.
 - Do not restructure the plan.

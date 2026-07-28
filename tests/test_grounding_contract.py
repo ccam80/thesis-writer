@@ -65,7 +65,8 @@ def test_plan_is_author_readable_and_provenance_lives_in_evidence_ledger() -> No
 
     plan_format = planner.split("## Plan format", 1)[1].split("## Citation density", 1)[0]
     evidence_format = planner.split("## Evidence-ledger format", 1)[1].split("## Corpus gaps", 1)[0]
-    assert "only a stable point ID plus status as machine metadata" in planner
+    assert "status as machine metadata" in template
+    assert "Put document type, date, parent path, grounding bookkeeping" in template
     assert "Status: [draft|approved]" in plan_format
     for forbidden_header in (
         "Type: [background|research|conclusions|future-work]",
@@ -86,9 +87,10 @@ def test_plan_is_author_readable_and_provenance_lives_in_evidence_ledger() -> No
     for contract in (planner, writer, reviewer, style_guide, template):
         assert "`evidence.md`" in contract
 
-    assert "`plan.md` is authoritative for what the thesis should say" in planner
-    assert "`evidence.md` is authoritative for whether each planned point is grounded" in planner
-    assert "The ledger may not add a point that is absent from its sibling plan" in planner
+    assert "`plan.md` is authoritative for intended content and structure" in template
+    assert "`evidence.md` is authoritative for grounding" in template
+    assert "may not introduce an absent point or change planned meaning" in template
+    assert "the single grounding authority, not a second content plan" in planner
     assert "full gap record in the matching `evidence.md` entry" in planner
 
 
