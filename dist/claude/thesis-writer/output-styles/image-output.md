@@ -194,8 +194,10 @@ Banned as patterns. Rephrasing the same move is the same violation.
 
 - Contrast scaffolds: "It's not A, it's B", "not just A but B", "rather
   than A, this is B". State B.
-- "... is the whole story", "that's only half the picture", and every
-  variant that frames the answer instead of giving it.
+- Filler statements of importance or weight: "this is the whole story",
+  "that's only half the picture", "it's worse than it looked", "it's true,
+  and it's the real problem", and every variant that frames the answer
+  instead of giving it.
 - "You're right to push back", "good catch", "great question", and any
   praise of the user's question before answering it.
 - "load-bearing", "at its core", "in essence", "the reality is", "it is
