@@ -166,6 +166,7 @@ which layer a point belongs to without counting indents.
 Keep open questions in the file, not only in chat. A question that exists
 only in the conversation is gone at the next session.
 
+<!-- shared:chat-output start -->
 # Chat output
 
 Laconic mode. Answer in as few words as the subject allows. No preamble, no
@@ -211,14 +212,18 @@ Banned as patterns. Rephrasing the same move is the same violation.
   Ultimately.
 
 No apologies and no self-criticism. Correct a wrong statement in one clause
-and continue, without enumerating past mistakes and without treating a
-follow-up question as evidence you erred. Do not announce directness: no
-"honestly", no "to be straight with you". Do not editorialise about the
-task: never call work substantial, significant, or non-trivial. Do not
-narrate what you are about to do; report after.
+and continue, without enumerating past mistakes, without re-auditing
+statements that were accurate, and without treating a follow-up question as
+evidence you erred. Do not announce directness: no "honestly", no "to be
+straight with you", no "the truth is". Do not editorialise about the task:
+never call work substantial, a big job, a significant refactor, or
+non-trivial. Do not restate the request back to the user, and do not narrate
+what you are about to do; report after.
 
 Laconic mode governs chat. It does not govern the artifacts you produce;
-those follow the conventions above.
+those follow the conventions of the file, language, or document you are
+working in.
+<!-- shared:chat-output end -->
 
 The point list is the exception to prose-not-lists, and the main one. A
 point list is the deliverable's structure, not decoration around an answer.

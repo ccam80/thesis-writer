@@ -105,6 +105,18 @@ def test_output_style_markers_are_all_resolved() -> None:
         assert "<!-- style:" not in text
 
 
+def test_shared_block_markers_do_not_reach_either_distribution() -> None:
+    for vendor in ("claude", "codex"):
+        output = build(vendor)
+        text = "\n".join(path.read_text(encoding="utf-8") for path in output.rglob("*.md"))
+        assert "<!-- shared:" not in text
+
+
+def test_shared_block_body_survives_marker_stripping() -> None:
+    for name, style in load_output_styles().items():
+        assert "Laconic mode governs chat." in style["body"], name
+
+
 def test_every_shipped_style_declares_a_unique_canary() -> None:
     styles = load_output_styles()
     tokens = [style["token"] for style in styles.values()]
