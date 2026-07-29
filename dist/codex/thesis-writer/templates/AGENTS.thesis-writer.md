@@ -26,14 +26,16 @@ Use a `plan.md` and sibling `evidence.md` at every hierarchy level. Do not use `
 - This applies across all skills: planning, writing, figure generation, formatting, and review. Any skill that modifies content must propagate changes upward
 - `plan.md` is authoritative for intended content and structure. `evidence.md` is authoritative for grounding and may not introduce an absent point or change planned meaning
 - Every stable point ID must occur exactly once in both sibling files. Missing entries, orphan ledger IDs, incomplete receipts, non-ready statuses, and semantic mismatches fail closed
+- Only a sentence-level point carries an ID and a status. Chapters, sections, paragraphs, purposes, and ordering notes carry neither
+- Number no heading in any `plan.md`. File order is the order
 
-Keep `plan.md` readable: narrative, structure, planned content, citations, figures, and cross-references. Its header may carry only the author-visible `Status: draft|approved` field. A point line may carry only its stable ID and `write-ready`, `open`, or `structure-only` status as machine metadata. Put document type, date, parent path, grounding bookkeeping, point type, origin, research cards and passages, qualifications, contradictions, search receipts, project locators, derivation steps, author attestations, inference warrants, and complete gap-resolution records in `evidence.md`.
+Keep `plan.md` readable: narrative, structure, planned content, citations, figures, and cross-references. Its header carries only `Status: draft|approved`. A point line carries only its stable ID and `write-ready` or `open`. Put document type, date, parent path, grounding bookkeeping, point type, origin, research cards and passages, qualifications, contradictions, search receipts, project locators, derivation steps, author attestations, inference warrants, and complete gap-resolution records in `evidence.md`.
 
 Do not create a `reference_debt.md` authority. Keep corpus gaps visible as readable `open` ID/status items in `plan.md`; keep their full research and resolution records in `evidence.md`.
 
 ## Grounded Point Policy
 
-Every technical proposition in a paragraph plan has a stable ID and exactly one type. This vocabulary is shared by every skill:
+Every technical proposition in a paragraph plan has a stable ID and exactly one type. Every type below carries a receipt or blocks writing. This vocabulary is shared by every skill:
 
 | Type | Required receipt | Writer treatment |
 |---|---|---|
@@ -42,11 +44,11 @@ Every technical proposition in a paragraph plan has a stable ID and exactly one 
 | `DERIVATION` | Grounded premise IDs and checked steps | Mathematical prose |
 | `AUTHOR_ASSERTION` | Explicit author attestation | Uncited only by explicit author decision |
 | `INFERENCE` | Grounded premise IDs, warrant, and limits | Preserve inferential strength |
-| `LINK` | None | Ordering metadata; normally no sentence |
-| `PURPOSE` | None | Planning metadata; no sentence |
 | `OPEN` | Unresolved | Never writer input |
 
-If deleting a point loses technical information, it is not merely a `LINK` or `PURPOSE`. Author approval does not turn an unsupported `CLAIM` into evidence; it can only retype the point as `AUTHOR_ASSERTION`, and only where the author knowingly accepts that provenance.
+Purposes and ordering notes are untyped plain text. Keep them free of quantity, comparison, cause, mechanism, prevalence, and literature conclusion; move it down to the point that carries it.
+
+A purpose or ordering note that loses technical information when deleted is a point; retype it. Author approval does not turn an unsupported `CLAIM` into evidence; it can only retype it as `AUTHOR_ASSERTION`, where the author knowingly accepts that provenance.
 
 A block is write-ready only when every technical point has its type-specific receipt and no `OPEN` point remains in writer input. Claim IDs persist through thesis, chapter, section, paragraph, prose, and review. Lower levels may narrow a higher-level claim but may not silently strengthen or broaden it.
 

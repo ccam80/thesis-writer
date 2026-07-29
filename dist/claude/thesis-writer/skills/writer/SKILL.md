@@ -30,9 +30,8 @@ Before drafting, reconcile the two authorities. Refuse the block and return the 
 - a plan point has no stable ID or status;
 - a plan point has no exactly matching `evidence.md` entry;
 - `evidence.md` contains an orphan ID absent from `plan.md`;
-- a technical point's plan status is not `write-ready`, including every `open` point;
-- a structural point is not `structure-only`;
-- a technical point lacks its complete type-specific receipt;
+- a point's plan status is not `write-ready`, including every `open` point;
+- a point lacks its complete type-specific receipt;
 - the ledger's grounded scope, qualifications, or limits do not semantically match the planned content.
 
 Do not repair these failures by inferring a type, receipt, status, or intended meaning. `plan.md` controls intended content and structure. `evidence.md` controls provenance and may neither introduce a point nor broaden or replace the plan wording.
@@ -56,14 +55,14 @@ Map every prose sentence before writing it into `.tex`. Create `<target-stem>.cl
 
 | Sentence ID | Location | Point IDs | Citation keys | Sentence |
 |---|---|---|---|---|
-| S-X.Y-P01-01 | §X.Y ¶1 s1 | C03-S02-P01-CL01 | keyA; keyB | [exact sentence] |
+| S-PHYS-S02-P01-01 | § Ion channels ¶1 s1 | PHYS-S02-P01-CL01 | keyA; keyB | [exact sentence] |
 ```
 
 Rules:
 
 - Every sentence maps to one or more stable point IDs.
 - Every technical clause within a compound sentence maps to a point ID.
-- A sentence mapped only to `LINK` is exceptional and must contain no technical proposition. Prefer cutting it.
+- A transition sentence carrying no proposition maps to nothing. Prefer cutting it.
 - Citation keys must be a subset of those approved on the mapped `CLAIM` cards.
 - A point may map to multiple sentences only when decomposition adds no proposition.
 - Multiple points may map to one sentence only when the sentence preserves each point's scope and remains readable.

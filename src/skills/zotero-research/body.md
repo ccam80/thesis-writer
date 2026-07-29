@@ -37,7 +37,7 @@ Do not presuppose the answer. Derive candidate claims from the evidence returned
 
 Use when the author or existing thesis supplies a proposition:
 
-> Verify C03-S02-P01-OP01: [bounded proposition].
+> Verify PHYS-S02-P01-OP01: [bounded proposition].
 
 Treat the proposition as unverified. Search for support, qualification, and contradiction. Do not optimize the wording until a source appears to support it.
 

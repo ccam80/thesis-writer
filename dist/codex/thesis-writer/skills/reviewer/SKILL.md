@@ -37,12 +37,14 @@ Enumerate every plan point and mark it:
 - covered exactly;
 - covered with scope drift;
 - omitted;
-- not prose-eligible (`LINK`, `PURPOSE`, `OPEN`);
+- not prose-eligible (`OPEN`);
 - improperly promoted.
 
 Enumerate every prose sentence and identify unplanned content. Confirm that changes to lower-level narrative, structure, or emphasis appear in the affected parent plans with author approval.
 
-Reconcile `plan.md` and `evidence.md` before reviewing prose. Report as blocking failures every plan point without an ID or status, missing ledger entry, orphan ledger ID, non-ready technical status, incomplete type-specific receipt, and semantic mismatch between planned content and the ledger's grounded scope. Reject any content introduced only by `evidence.md`; the ledger cannot expand or replace the plan.
+Reconcile `plan.md` and `evidence.md` before reviewing prose. Report as blocking failures every plan point without an ID or status, missing ledger entry, orphan ledger ID, non-ready status, incomplete type-specific receipt, and semantic mismatch between planned content and the ledger's grounded scope. Reject any content introduced only by `evidence.md`; the ledger cannot expand or replace the plan.
+
+Flag as an untyped point any purpose or ordering note stating a quantity, comparison, cause, mechanism, prevalence, or literature conclusion.
 
 Use `plan.md` consistently. Never request `chapter_plan.md`.
 
@@ -54,7 +56,6 @@ For 100% of sentences:
 - require one or more stable point IDs;
 - map each technical clause in a compound sentence;
 - reject IDs absent from `plan.md`;
-- reject a sentence mapped only to `LINK` if it contains a technical proposition;
 - identify plan points that map to no sentence;
 - identify citations not approved on the mapped `evidence.md` cards.
 
@@ -69,7 +70,6 @@ For every mapped point, read its type and receipt from the matching `evidence.md
 - `DERIVATION`: grounded premise IDs and checked steps.
 - `AUTHOR_ASSERTION`: explicit author attestation; not presented as literature consensus.
 - `INFERENCE`: grounded premise IDs, explicit warrant, and preserved limits.
-- `LINK`/`PURPOSE`: no hidden proposition and normally no emitted sentence.
 - `OPEN`: no prose mapping. Its appearance is a blocking failure.
 
 Confirm no separate `reference_debt.md` has become an authority or a route around the gate. Each corpus gap must remain visible as an `open` ID/status item in `plan.md`, with its search and resolution record in the matching `evidence.md` entry.

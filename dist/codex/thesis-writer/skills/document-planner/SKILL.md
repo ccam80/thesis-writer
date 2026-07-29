@@ -263,21 +263,21 @@ Do not copy an ungrounded factual bullet into a lower-level plan as though inher
 
 ## Point types
 
-Every paragraph-level point takes exactly one type from the shared vocabulary. Apply the same types to substantive bullets at higher levels when they contain technical information.
+Every sentence-level point takes exactly one type from the shared vocabulary. Nothing above sentence level is typed.
 
-A transition containing a causal premise contains a claim even if it also links paragraphs. Split the claim from the link.
+A transition carrying a causal premise contains a claim. Split the claim out as a point; leave the ordering note untyped.
 
 ## Stable IDs
 
-Assign stable IDs before research and never reuse an ID. Use a readable hierarchical prefix and an immutable serial, for example:
+Assign stable IDs before research and never reuse an ID. Prefix with the chapter directory's slug, then mint-time section, paragraph, and point serials:
 
-- `C03-S02-P01-CL01`
-- `C03-S02-P01-LK01`
-- `C03-S02-P01-OP01`
+- `PHYS-S02-P01-CL01`
+- `CUBIE-S01-P03-PF02`
+- `VVS-S02-P01-OP01`
 
-The location prefix may become stale after reordering; the ID remains unchanged. Record the current location separately. When one point splits, retain the original ID for the surviving proposition and assign new IDs to additional propositions. When points merge, retain all contributing IDs as aliases.
+Serials go stale after a reorder; the ID never changes. File position gives current location. When one point splits, retain the original ID for the surviving proposition and assign new IDs to additional propositions. When points merge, retain all contributing IDs as aliases.
 
-Claim IDs persist through thesis, chapter, section, paragraph, prose, and review. Lower levels may narrow a higher-level claim but may not silently strengthen or broaden it.
+Point IDs persist from paragraph plan through prose and review. A point may narrow its parent plan's stated scope, never strengthen or broaden it.
 
 ## Write-ready invariant
 
@@ -290,7 +290,7 @@ A paragraph is write-ready only when:
 - Every `AUTHOR_ASSERTION` records explicit author attestation.
 - Every `INFERENCE` names grounded premises and states its inferential limits.
 - Contradicting and qualifying evidence remains attached and is reflected in the claim wording.
-- `LINK` and `PURPOSE` points contain no hidden propositions.
+- Purposes and ordering notes contain no hidden propositions.
 - No `OPEN` point is included in writer input.
 
 Fail closed. A plan may be structurally approved while not write-ready. Label those states separately.
@@ -311,7 +311,7 @@ Ask the author to resolve substantive mismatches before editing authority docume
 
 ### Phase 2: Narrow narrative top-down
 
-The layers are `thesis → chapter → section → subsection → paragraph`. Each child's purpose becomes a `PURPOSE` point; the narrative order between children becomes `LINK` points.
+The layers are `thesis → chapter → section → subsection → paragraph`. State each child's purpose and the order between children as plain text; neither is typed or IDed.
 
 Present a compact visual chain, for example:
 
@@ -319,7 +319,7 @@ Present a compact visual chain, for example:
 [Feedback vocabulary] → [Sensor and actuator paths] → [Controller design] → [Robustness limits]
 ```
 
-Structural planning may proceed without citations because `PURPOSE` and `LINK` are not factual content. If a proposed stub asserts a mechanism, quantity, comparison, cause, prevalence, or literature conclusion, type it as `OPEN` until grounded.
+Structural planning needs no citations. A stub asserting a mechanism, quantity, comparison, cause, prevalence, or literature conclusion is a point, not scope. Drop it to paragraph level and type it `OPEN` until grounded.
 
 Check cross-chapter duplication and record the agreed ownership in the parent plan.
 
@@ -328,9 +328,9 @@ Check cross-chapter duplication and record the agreed ownership in the parent pl
 Propose section-local paragraphs (`¶1`, `¶2`, ...), each with:
 
 - a descriptive label;
-- one `PURPOSE`;
+- its purpose, in plain text;
 - required predecessor concepts;
-- provisional `LINK` instructions;
+- provisional ordering notes;
 - research questions or author/project inputs needed to populate it;
 - figure and cross-reference opportunities.
 
@@ -384,7 +384,7 @@ If sources disagree, retain the conflict in the card and propose contested wordi
 
 Present the paragraph's typed point list with its evidence cards. The author may change scope, ordering, emphasis, or provenance. Any substantive rewording that exceeds the passages' entailment requires a new Zotero verification request.
 
-After feedback, rerun prerequisite, topic-coherence, gap, framing, and quantitative checks. A framing check may add only `PURPOSE` or `LINK`; it cannot add a technical premise.
+After feedback, rerun prerequisite, topic-coherence, gap, framing, and quantitative checks. A framing check may add only purposes or ordering notes; it cannot add a technical premise.
 
 Iterate until the author approves both content and provenance. Record structural approval and write-ready approval separately.
 
@@ -403,7 +403,7 @@ Document type: [background|research|conclusions|future-work]
 Recorded: [YYYY-MM-DD]
 Parent plan: [parent plan path]
 
-## C03-S02-P01-CL01
+## PHYS-S02-P01-CL01
 
 **Type:** CLAIM
 **Origin:** Zotero synthesis from research request [request ID]
@@ -432,14 +432,14 @@ Parent plan: [parent plan path]
 
 List `None found` under an empty evidence class. "All" means all materially relevant results the recorded searches returned.
 
-Use the same entry envelope for every point type. `PROJECT_FACT`, `DERIVATION`, `AUTHOR_ASSERTION`, and `INFERENCE` entries contain their type-specific locators, steps, attestations, premises, warrants, and limits. `LINK` and `PURPOSE` entries contain their type and origin but no invented receipt. Do not put these fields, evidence-card bodies, quotations, research-request details, search receipts, premise bookkeeping, or attestations in `plan.md`.
+Use the same entry envelope for every point type. `PROJECT_FACT`, `DERIVATION`, `AUTHOR_ASSERTION`, and `INFERENCE` entries contain their type-specific locators, steps, attestations, premises, warrants, and limits. Every entry carries a receipt. Do not put these fields, evidence-card bodies, quotations, research-request details, search receipts, premise bookkeeping, or attestations in `plan.md`.
 
 ```markdown
 ## [point ID]
-**Type:** PROJECT_FACT | DERIVATION | AUTHOR_ASSERTION | INFERENCE | LINK | PURPOSE
+**Type:** PROJECT_FACT | DERIVATION | AUTHOR_ASSERTION | INFERENCE
 **Origin:** [author/project/plan/research origin]
 **Grounded scope:** [scope that semantically matches the plan item]
-**Receipt:** [exact project locator | premise IDs and checked steps | dated author attestation | premise IDs, warrant, and limits | not required]
+**Receipt:** [exact project locator | premise IDs and checked steps | dated author attestation | premise IDs, warrant, and limits]
 ```
 
 ## Corpus gaps and non-Zotero facts
@@ -447,7 +447,7 @@ Use the same entry envelope for every point type. `PROJECT_FACT`, `DERIVATION`, 
 Keep an unresolved point visible and readable in `plan.md` as an ID, status, and bounded question or proposed content. Keep its full gap record in the matching `evidence.md` entry:
 
 ```markdown
-## C03-S02-P01-OP04
+## PHYS-S02-P01-OP04
 **Type:** OPEN
 **Origin:** author assertion | existing prose | project lead | research lead
 **Zotero search receipt:** [...]
@@ -477,17 +477,17 @@ Status: [draft|approved]
 
 ## Sections
 
-### Section X.Y: [Title]
-**Purpose:** [C03-S02-PU01 | structure-only] [narrative function]
+### [Section title]
+**Purpose:** [narrative function]
 
 #### Paragraph 1 — [label]
-**Purpose:** [C03-S02-P01-PU01 | structure-only] [...]
+**Purpose:** [narrative function]
+**Order:** [ordering note, where one is needed]
 
-- [C03-S02-P01-CL01 | write-ready] [bounded claim] \cite{keyA,keyB}
-- [C03-S02-P01-PF01 | write-ready] [project-specific planned content]
-- [C03-S02-P01-IF01 | write-ready] [bounded inference]
-- [C03-S02-P01-LK01 | structure-only] [ordering instruction; no thesis sentence]
-- [C03-S02-P01-OP01 | open] [bounded unresolved question or proposed content]
+- [PHYS-S02-P01-CL01 | write-ready] [bounded claim] \cite{keyA,keyB}
+- [PHYS-S02-P01-PF01 | write-ready] [project-specific planned content]
+- [PHYS-S02-P01-IF01 | write-ready] [bounded inference]
+- [PHYS-S02-P01-OP01 | open] [bounded unresolved question or proposed content]
 
 → **Figure:** [descriptive label and specification]
 
@@ -495,7 +495,9 @@ Status: [draft|approved]
 [Optional readable index of `open` point IDs and their questions; full gap records remain only in `evidence.md`]
 ```
 
-Use only `write-ready`, `open`, and `structure-only` as point statuses. Status is the only machine field besides the stable ID in a plan point. Do not encode type, origin, evidence verdict, research request, or receipt details in a plan line. A technical point may be `write-ready` only when its matching ledger entry contains its complete type-specific receipt. `OPEN` points use `open`; `LINK` and `PURPOSE` points use `structure-only`.
+Use only `write-ready` and `open` as point statuses. Status is the only machine field besides the stable ID in a plan point. Do not encode type, origin, evidence verdict, research request, or receipt details in a plan line. A point is `write-ready` only when its matching ledger entry contains its complete type-specific receipt.
+
+Number no heading; refer to a unit by directory and heading.
 
 The plan header may contain only the author-visible `Status: draft|approved` field. Keep document type, recording date, parent path, research state, and grounding bookkeeping in `evidence.md`. Do not add a block-level grounding field to `plan.md`; derive readiness by reconciling every in-scope point status with its ledger receipt.
 

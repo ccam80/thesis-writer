@@ -9,7 +9,7 @@ Every chapter MUST be written from an approved `plan.md` and its sibling `eviden
 1. `plan.md` is the author-readable content and structure authority.
 2. `evidence.md` is the grounding and provenance authority and cannot introduce or alter planned content.
 3. Every point ID must occur exactly once in each file; missing or orphan IDs block writing.
-4. If a point is in the plan, it MUST appear in the document unless it is `structure-only` or `open`.
+4. If a point is in the plan, it MUST appear in the document unless it is `open`.
 5. If a reference is in the plan, it MUST be cited only when the matching ledger card approves it.
 6. Do not add content beyond the plan or omit planned content without explicit approval.
 
@@ -24,15 +24,14 @@ Status: approved
 
 ## Sections
 
-### Section 1: [Title]
-**Purpose:** [C01-S01-PU01 | structure-only] [narrative function]
+### [Section title]
+**Purpose:** [narrative function]
 
 #### Paragraph 1
-- [C01-S01-P01-CL01 | write-ready] [bounded proposition] \cite{ref1,ref2}
-- [C01-S01-P01-PF01 | write-ready] [project-specific proposition]
-- [C01-S01-P01-LK01 | structure-only] [ordering instruction; no thesis sentence]
+- [PHYS-S01-P01-CL01 | write-ready] [bounded proposition] \cite{ref1,ref2}
+- [PHYS-S01-P01-PF01 | write-ready] [project-specific proposition]
 
-### Section 2: [Title]
+### [Section title]
 [continue with stable typed point IDs]
 
 ## Figures
@@ -47,10 +46,10 @@ Plan points contain only an ID and status as machine metadata. Types, origins,
 evidence cards, passages, search receipts, project locators, derivation steps,
 author attestations, inference warrants, and full `OPEN` gap records belong in
 the matching `evidence.md` entries. The point types are `CLAIM`, `PROJECT_FACT`,
-`DERIVATION`, `AUTHOR_ASSERTION`, `INFERENCE`, `LINK`, `PURPOSE`, and `OPEN`.
-The writer reads these types from the ledger and uses only `write-ready`
-technical points. `structure-only` points guide structure; `open` blocks
-drafting.
+`DERIVATION`, `AUTHOR_ASSERTION`, `INFERENCE`, and `OPEN`. The writer reads
+these types from the ledger and uses only `write-ready` points; `open` blocks
+drafting. Purposes and ordering notes are untyped plain text and emit no
+sentence.
 
 The plan header contains only the author-visible `Status: draft|approved` field.
 Document type, recording date, parent path, and grounding bookkeeping belong in
@@ -153,7 +152,7 @@ SD & 0.05 & 0.07 \\
 2. Cite `CLAIM` sentences with only the matching ledger card's approved Zotero item keys.
 3. Keep citations adjacent to the supported sentence or clause.
 4. Do not add, fabricate, or substitute citations.
-5. Do not force citations onto `LINK` or `PURPOSE` metadata.
+5. Do not cite a purpose or ordering note.
 6. Preserve the approved provenance for `PROJECT_FACT`, `DERIVATION`,
    `AUTHOR_ASSERTION`, and `INFERENCE` points.
 
