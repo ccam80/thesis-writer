@@ -16,7 +16,7 @@ MARKER = "<!-- GENERATED FILE — edit src/ or vendors/, then run scripts/build_
 FRAGMENT_RE = re.compile(r"<!-- vendor:([a-z0-9-]+) -->")
 STYLE_RE = re.compile(r"<!-- style:([a-z0-9-]+) -->")
 CANARY_RE = re.compile(r"^Canary: (?P<name>[a-z0-9-]+) output style active\. (?P<token>[A-Z]{2}-CANARY-[0-9a-f]{4})\.$", re.MULTILINE)
-# Source-only markers delimiting text synced from ~/.claude/style-shared; see sync.mjs.
+# Marks a synced region in a style source; stripped from every distribution.
 SHARED_RE = re.compile(r"^<!-- shared:[a-z0-9-]+ (?:start|end) -->\r?\n", re.MULTILINE)
 DEFAULT_MCP_ROOT = Path(r"C:\local_working_projects\zotero_citation_mcp")
 
