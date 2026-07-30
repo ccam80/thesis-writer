@@ -8,8 +8,8 @@ Every chapter MUST be written from an approved `plan.md` and its sibling `eviden
 
 1. `plan.md` is the author-readable content and structure authority.
 2. `evidence.md` is the grounding and provenance authority and cannot introduce or alter planned content.
-3. Every point ID must occur exactly once in each file; missing or orphan IDs block writing.
-4. If a point is in the plan, it MUST appear in the document unless its status is below `write-ready`.
+3. Every grounded point ID must occur exactly once in each file; missing or orphan IDs block writing.
+4. If a sentence point is in the plan, it MUST appear in the document unless its ledger status is below `write-ready`.
 5. If a reference is in the plan, it MUST be cited only when the matching ledger card approves it.
 6. Do not add content beyond the plan or omit planned content without explicit approval.
 
@@ -21,39 +21,32 @@ Every chapter MUST be written from an approved `plan.md` and its sibling `eviden
 ## Narrative Thread
 [1-2 sentences describing the story this chapter tells]
 
-## Sections
+## [Section title]
+[One or two prose sentences: what the section covers and does.]
 
-### [Section title]
-**Purpose:** [narrative function]
+**¶ [label]** — [paragraph point]
+- [sentence point] [PHYS-041] \cite{ref1,ref2}
+- [sentence point] [PHYS-042]
 
-#### Paragraph 1
-- [PHYS-S01-P01-CL01 | write-ready] [bounded proposition] \cite{ref1,ref2}
-- [PHYS-S01-P01-PF01 | write-ready] [project-specific proposition]
-
-### [Section title]
-[continue with stable typed point IDs]
-
-## Figures
-- Figure 1: [Description of what it shows]
-- Figure 2: [Description]
+→ **Figure:** [descriptive label and specification]
 
 ## Unresolved points
 [readable index of open IDs/questions; must be empty for writer input]
 ```
 
-Plan points contain only an ID and status as machine metadata. Types, origins,
-evidence cards, passages, search receipts, project locators, derivation steps,
-author attestations, inference warrants, and full gap records belong in
-the matching `evidence.md` entries. The point types are `CLAIM`, `PROJECT_FACT`,
-`DERIVATION`, `AUTHOR_ASSERTION`, and `INFERENCE`. The writer reads these
-types from the ledger and uses only `write-ready` points; any earlier status
-blocks drafting. Purposes and ordering notes are untyped plain text and emit no
-sentence.
+Plan points carry only their text, a bracketed stable ID, and approved citation
+keys. Types, statuses, origins, evidence cards, passages, search receipts,
+project locators, derivation steps, author attestations, inference warrants,
+and full gap records belong in the matching `evidence.md` entries. The point
+types are `CLAIM`, `PROJECT_FACT`, `DERIVATION`, `AUTHOR_ASSERTION`, and
+`INFERENCE`. The writer reads type and status from the ledger and uses only
+`write-ready` points; ledger status `open` blocks drafting. Plan prose and `¶`
+paragraph lines are untyped and emit no sentence.
 
 The plan header contains the title only.
 Document type, recording date, parent path, and grounding bookkeeping belong in
-`evidence.md`. Determine readiness from each in-scope point's status and matching
-receipt; do not require or add a block-level grounding field in `plan.md`.
+`evidence.md`. Determine readiness from each in-scope point's ledger entry; do
+not require or add a block-level grounding field in `plan.md`.
 
 ## Figure Placeholders
 
@@ -138,7 +131,7 @@ SD & 0.05 & 0.07 \\
 **STRICT**: All citations must come from Zotero library.
 
 ### Before Writing
-1. Confirm the plan is `approved` and every in-scope point has a stable ID and status.
+1. Confirm every in-scope sentence point has a stable ID and ledger status `write-ready`.
 2. Confirm every ID has exactly one matching ledger entry and no orphan entry exists.
 3. Confirm the ledger scope semantically matches the planned content.
 4. Confirm every literature `CLAIM` has an approved Zotero evidence card in `evidence.md`.

@@ -26,10 +26,10 @@ Convert an approved, write-ready paragraph block from `plan.md` into technical L
 
 Before drafting, reconcile the two authorities. Refuse the block and return the blocking locations or IDs to `document-planner` when:
 
-- a plan point has no stable ID or status;
+- a sentence point has no stable ID;
 - a plan point has no exactly matching `evidence.md` entry;
 - `evidence.md` contains an orphan ID absent from `plan.md`;
-- a point's plan status is not `write-ready`;
+- a point's ledger status is not `write-ready`;
 - a point lacks its complete type-specific receipt;
 - the ledger's grounded scope, qualifications, or limits do not semantically match the planned content.
 
@@ -37,7 +37,7 @@ Do not repair these failures by inferring a type, receipt, status, or intended m
 
 ## Point handling
 
-Read each point's type from its matching `evidence.md` entry, never from extra type labels inserted into `plan.md`. Treat each type as the shared vocabulary defines it.
+Read each point's type and status from its matching `evidence.md` entry, never from extra labels inserted into `plan.md`. Treat each type as the shared vocabulary defines it.
 
 Three treatments the vocabulary does not spell out:
 
@@ -54,7 +54,7 @@ Map every prose sentence before writing it into `.tex`. Create `<target-stem>.cl
 
 | Sentence ID | Location | Point IDs | Citation keys | Sentence |
 |---|---|---|---|---|
-| S-PHYS-S02-P01-01 | § Ion channels ¶1 s1 | PHYS-S02-P01-CL01 | keyA; keyB | [exact sentence] |
+| S-PHYS-041-01 | § Ion channels ¶1 s1 | PHYS-041 | keyA; keyB | [exact sentence] |
 ```
 
 Rules:

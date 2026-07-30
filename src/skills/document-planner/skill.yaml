@@ -1,2 +1,2 @@
 name: "document-planner"
-description: "Interactive, evidence-grounded planning at thesis, chapter, section, subsection, and paragraph scope. Use to preserve top-down narrative narrowing while building author-readable plan.md files paired with claim-addressable evidence.md provenance ledgers through interleaved Zotero research and author review."
+description: "Interactive top-down planning at thesis, chapter, section, paragraph, and sentence scope. Use to draft author-readable plan.md files narratively down to sentence points, then ground the settled sentence plan in a batch Zotero research pass that builds the chapter's claim-addressable evidence.md ledger for author haggling."

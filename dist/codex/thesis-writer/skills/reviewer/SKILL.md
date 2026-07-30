@@ -42,9 +42,9 @@ Enumerate every plan point and mark it:
 
 Enumerate every prose sentence and identify unplanned content. Confirm that changes to lower-level narrative, structure, or emphasis appear in the affected parent plans with author approval.
 
-Reconcile `plan.md` and `evidence.md` before reviewing prose. Report as blocking failures every plan point without an ID or status, missing ledger entry, orphan ledger ID, non-ready status, incomplete type-specific receipt, and semantic mismatch between planned content and the ledger's grounded scope. Reject any content introduced only by `evidence.md`; the ledger cannot expand or replace the plan.
+Reconcile `plan.md` and `evidence.md` before reviewing prose. Report as blocking failures every sentence point without an ID, missing ledger entry, orphan ledger ID, ledger status below `write-ready`, incomplete type-specific receipt, and semantic mismatch between planned content and the ledger's grounded scope. Reject any content introduced only by `evidence.md`; the ledger cannot expand or replace the plan.
 
-Flag as an untyped point any purpose or ordering note stating a quantity, comparison, cause, mechanism, prevalence, or literature conclusion.
+Flag any technical sentence sourced only from plan prose or a `¶` paragraph line; only grounded sentence points are prose-eligible.
 
 Use `plan.md` consistently. Never request `chapter_plan.md`.
 
@@ -70,9 +70,9 @@ For every mapped point, read its type and receipt from the matching `evidence.md
 - `DERIVATION`: grounded premise IDs and checked steps.
 - `AUTHOR_ASSERTION`: explicit author attestation; not presented as literature consensus.
 - `INFERENCE`: grounded premise IDs, explicit warrant, and preserved limits.
-- Any status below `write-ready`: no prose mapping. Its appearance is a blocking failure.
+- Ledger status `open`: no prose mapping. Its appearance in prose is a blocking failure.
 
-Confirm no separate `reference_debt.md` has become an authority or a route around the gate. Each corpus gap must remain visible as an ID/status item in `plan.md`, with its search and resolution record in the matching `evidence.md` entry.
+Confirm no separate `reference_debt.md` has become an authority or a route around the gate. Each corpus gap must remain visible in the plan's `## Unresolved points` index, with its search and resolution record in the matching `evidence.md` entry.
 
 ### 4. Zotero verification of every literature claim
 

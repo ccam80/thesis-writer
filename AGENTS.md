@@ -100,12 +100,14 @@ Use `plugin-creator` guidance for manifest, marketplace, cachebuster, or local-i
 The plugin organizes the author's knowledge; it does not invent research. Changes must preserve these boundaries:
 
 - Top-down narrowing from thesis to chapter, section, paragraph, and sentence remains author-controlled.
-- Only sentence-level points are typed, IDed, and statused.
+- Planning is ungrounded through the structure, paragraph, and sentence phases; grounding is a batch pass over a settled sentence plan, run on the author's request.
+- Only sentence points are ever typed, IDed, or statused, and only from the grounding pass onward.
 - Type carries proposition kind and lives in `evidence.md`: `CLAIM`, `PROJECT_FACT`, `DERIVATION`, `AUTHOR_ASSERTION`, `INFERENCE`.
-- Status carries review stage and is the only machine field beside the ID in a plan line: `agent-proposed`, `author-proposed`, `accepted`, `write-ready`. Only `write-ready` reaches the writer.
-- Purposes and ordering notes are untyped plain text with no ID or status, and cannot conceal factual premises.
-- An unsupported proposition stays below `write-ready`, visible in `plan.md` as an ID and status item with its gap record in `evidence.md`, and never becomes writer input.
-- `plan.md` carries no block-level or file-level status field; readiness reconciles each point status with its ledger receipt.
+- Status lives only in `evidence.md` with two values, `open` and `write-ready`; a plan line carries only its text, bracketed ID, and approved citation keys. Only `write-ready` reaches the writer.
+- Plan prose and `¶` paragraph lines are untyped and never writer input; factual content in them that must survive into prose is pulled down into a sentence point at grounding.
+- An unsupported proposition stays `open` in the ledger, visible in the plan's `## Unresolved points` index, and never becomes writer input.
+- `plan.md` carries no machine field beyond bracketed IDs and citation keys, and no block-level or file-level status; readiness reconciles each grounded point with its ledger receipt.
+- The thesis `plan.md` is permanently ungrounded with no sibling ledger; chapter-plan divergence from it is normal work product, synced upward in one author-approved batch at session close.
 - `zotero-research` is read-only and isolated. It searches the whole indexed library, filtering only when the request supplies a filter, and reports claim-centred evidence cards with immediate passages and all material supporting, qualifying, and contradicting sources found.
 - External discovery and Zotero mutation belong only to `zotero-source-acquisition`.
 - Source acquisition requires visible user review, exact candidate-ID approval, matching metadata and PDF identity, access preflight, atomic journalling, verified Zotero fetchback, and attachment-first rollback.

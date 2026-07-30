@@ -10,30 +10,36 @@ These instructions are the always-loaded contract. They define the vocabulary, t
 
 ## Document Hierarchy
 
-Three levels form an authority chain. Higher levels set narrative and structure; lower levels add detail:
+Two plan tiers and the prose form the authority chain:
 
-1. **Parent plan.md + evidence.md** (chapter-level or thesis-level — sets narrative goals and grounds its stable IDs)
-2. **Directory plan.md + evidence.md** (`plan.md` is the author-readable paragraph plan; `evidence.md` holds typed provenance)
-3. **.tex file** (the actual prose, authoritative for existing content)
+1. **Thesis `plan.md`** — each chapter, its content in a few sentences, and its section breakdown. Narratively haggled and permanently ungrounded: no IDs, no types, no statuses, no sibling `evidence.md`
+2. **Chapter `plan.md` + `evidence.md`** — the author-readable chapter plan down to sentence points; the sibling ledger holds typed provenance and exists once grounding begins
+3. **`.tex` file** — the actual prose, authoritative for existing content
 
-Use a `plan.md` and sibling `evidence.md` at every hierarchy level. Do not use `chapter_plan.md`.
+Use `plan.md` at both tiers. Do not use `chapter_plan.md`. There are no deeper plan files.
 
 **Authority rules:**
-- If a point appears in a higher-level document, it must be preserved in lower levels unless the user explicitly approves removal
-- If a lower-level document changes narrative, structure, or emphasis, the higher-level document must be updated to match (with user approval)
-- This applies across all skills: planning, writing, figure generation, formatting, and review. Any skill that modifies content must propagate changes upward
 - `plan.md` is authoritative for intended content and structure. `evidence.md` is authoritative for grounding and may not introduce an absent point or change planned meaning
-- Every stable point ID must occur exactly once in both sibling files. Missing entries, orphan ledger IDs, incomplete receipts, non-ready statuses, and semantic mismatches fail closed
-- Only a sentence-level point carries an ID and a status. Chapters, sections, paragraphs, purposes, and ordering notes carry neither
+- Lower-level planning is expected to diverge from the thesis plan as understanding improves. Divergence is noted, never blocking; at session close the thesis plan is updated to match in one author-approved batch
+- Every grounded point ID must occur exactly once in both sibling files. Missing entries, orphan ledger IDs, incomplete receipts, and semantic mismatches fail closed
+- Only a grounded sentence point carries an ID. Type and status live only in `evidence.md`. Chapters, sections, prose, paragraph lines, and candidate points carry no machine fields
 - Number no heading in any `plan.md`. File order is the order
 
-Keep `plan.md` readable: narrative, structure, planned content, citations, figures, and cross-references. Its header carries the title only. A point line carries only its stable ID and one status. Put document type, date, parent path, grounding bookkeeping, point type, origin, research cards and passages, qualifications, contradictions, search receipts, project locators, derivation steps, author attestations, inference warrants, and complete gap-resolution records in `evidence.md`.
+**Plan grammar** — stage is encoded by shape, not labels:
+- Prose under a heading is summary and purpose; it is never grounded and emits no sentence
+- A bold `**¶ [label]**` line is a paragraph point
+- A bullet nested under a `¶` line is a sentence point; only sentence points are ever grounded
+- A loose bullet outside any `¶` line is a candidate point not yet sorted into a paragraph
 
-Do not create a `reference_debt.md` authority. Keep corpus gaps visible as readable ID/status items in `plan.md`; keep their full research and resolution records in `evidence.md`.
+Keep `plan.md` readable: narrative, structure, planned content, citations, figures, and cross-references. Its header carries the title only. A grounded point line carries only its text, bracketed ID, and approved citation keys. Put document type, date, parent path, grounding bookkeeping, point type, status, origin, research cards and passages, qualifications, contradictions, search receipts, project locators, derivation steps, author attestations, inference warrants, and complete gap-resolution records in `evidence.md`.
+
+Do not create a `reference_debt.md` authority. Keep corpus gaps readable in the plan's `## Unresolved points` index; keep their full research and resolution records in `evidence.md`.
 
 ## Grounded Point Policy
 
-Every technical proposition in a paragraph plan has a stable ID and exactly one type. Every type below carries a receipt or blocks writing. This vocabulary is shared by every skill:
+Planning is ungrounded through the structure, paragraph, and sentence phases: points are narrative drafts with no IDs, types, or statuses, and candidate facts may come from the author, the discussion, or general knowledge, because grounding verifies every sentence point regardless of origin.
+
+Grounding is a batch pass over a settled sentence plan, run on the author's request. It mints stable IDs, assigns each sentence point exactly one type, creates its ledger entry, and verifies it against the corpus at the precision the plan states. Every type below carries a receipt or blocks writing. This vocabulary is shared by every skill:
 
 | Type | Required receipt | Writer treatment |
 |---|---|---|
@@ -43,13 +49,11 @@ Every technical proposition in a paragraph plan has a stable ID and exactly one 
 | `AUTHOR_ASSERTION` | Explicit author attestation | Uncited only by explicit author decision |
 | `INFERENCE` | Grounded premise IDs, warrant, and limits | Preserve inferential strength |
 
-Statuses in order: `agent-proposed` and `author-proposed` are introduced but unreviewed, `accepted` has structure and inclusion settled, `write-ready` is grounded. Only `write-ready` reaches the writer. Set type when the point is introduced; change it only when evidence forces it.
+Two statuses exist, recorded only in `evidence.md`: `open` (grounding or wording unsettled) and `write-ready` (receipt complete and grounded wording author-accepted). Only `write-ready` reaches the writer. Wording changes after promotion reopen the point.
 
-Purposes and ordering notes are untyped plain text. Keep them free of quantity, comparison, cause, mechanism, prevalence, and literature conclusion; move it down to the point that carries it.
+Plan prose and `¶` paragraph lines are never writer input and are not policed for provenance before grounding. At grounding, factual content in them that must survive into the written paragraph is pulled down into a sentence point. Author approval does not turn an unsupported `CLAIM` into evidence; it can only retype it as `AUTHOR_ASSERTION`, where the author knowingly accepts that provenance.
 
-A purpose or ordering note that loses technical information when deleted is a point; retype it. Author approval does not turn an unsupported `CLAIM` into evidence; it can only retype it as `AUTHOR_ASSERTION`, where the author knowingly accepts that provenance.
-
-A block is write-ready only when every technical point has its type-specific receipt and no point below `write-ready` remains in writer input. Claim IDs persist through thesis, chapter, section, paragraph, prose, and review. Lower levels may narrow a higher-level claim but may not silently strengthen or broaden it.
+A block is write-ready only when every sentence point has its type-specific receipt and no point below `write-ready` remains in writer input. Point IDs persist from grounded plan through prose and review. A grounded point's wording may not exceed the scope its evidence supports; narrowing against evidence is normal, silent broadening is a failure.
 
 ## Citation Policy
 
@@ -85,7 +89,7 @@ document-planner ⇄ zotero-research → writer → figure-generator → formatt
 
 | Step | Skill | Autonomy | Role |
 |------|-------|----------|------|
-| 1 | `document-planner` | **Low** — every structural and claim-promotion decision discussed | Preserves top-down narrowing while interleaving paragraph planning with bounded Zotero research. Creates author-readable `plan.md` files paired with `evidence.md` ledgers. |
+| 1 | `document-planner` | **Low** — every structural and promotion decision discussed | Narrows top-down through ungrounded structure, paragraph, and sentence phases, then grounds the settled sentence plan in a batch Zotero pass with author haggling. Creates the thesis `plan.md` and per-chapter `plan.md`/`evidence.md` pairs. |
 | 2 | `writer` | **Low** — asks about wording that affects meaning, checks per section | Reconciles each plan/ledger pair, converts only write-ready plan points to LaTeX, maps every sentence to point IDs, and preserves evidential scope. |
 | 3 | `figure-generator` | **Medium** — generates from plan specs, flags ambiguity | Reads .tex, finds figure placeholders, generates plot scripts or schematics, and replaces placeholders with `\includegraphics`. |
 | 4 | `formatter` | **High** — runs autonomously | LaTeX formatting compliance. Does not change content. |
@@ -107,7 +111,7 @@ LaTeX conventions: concise technical prose, active voice, IEEE numeric citations
 
 Before marking a chapter complete:
 - [ ] All plan.md points covered
-- [ ] Every plan.md point has exactly one matching evidence.md entry and no orphan ledger entry exists
+- [ ] Every grounded point has exactly one matching evidence.md entry and no orphan ledger entry exists
 - [ ] Every planned point and grounded scope match semantically
 - [ ] Every technical sentence maps to stable point IDs
 - [ ] Every point has its type-specific evidence receipt
@@ -118,7 +122,7 @@ Before marking a chapter complete:
 - [ ] Figures generated or placeholders flagged per plan
 - [ ] LaTeX compiles without errors
 - [ ] Review completed using reviewer skill
-- [ ] Higher-level plans updated if any scope changes occurred
+- [ ] Thesis plan synced with the chapter plan at session close
 
 ## Completion Policy
 
