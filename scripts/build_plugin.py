@@ -16,6 +16,8 @@ MARKER = "<!-- GENERATED FILE — edit src/ or vendors/, then run scripts/build_
 FRAGMENT_RE = re.compile(r"<!-- vendor:([a-z0-9-]+) -->")
 STYLE_RE = re.compile(r"<!-- style:([a-z0-9-]+) -->")
 CANARY_RE = re.compile(r"^Canary: (?P<name>[a-z0-9-]+) output style active\. (?P<token>[A-Z]{2}-CANARY-[0-9a-f]{4})\.$", re.MULTILINE)
+# Marks a synced region in a style source; stripped from every distribution.
+SHARED_RE = re.compile(r"^<!-- shared:[a-z0-9-]+ (?:start|end) -->\r?\n", re.MULTILINE)
 DEFAULT_MCP_ROOT = Path(r"C:\local_working_projects\zotero_citation_mcp")
 
 CANARY_TEMPLATE = """This skill is intended to run with the `{name}` output style, which ships \
@@ -85,7 +87,7 @@ def load_output_styles(directory: Path | None = None) -> dict[str, dict[str, str
         styles[path.stem] = {
             "frontmatter": frontmatter,
             "token": match.group("token"),
-            "body": remainder.replace(match.group(0), "", 1).strip(),
+            "body": SHARED_RE.sub("", remainder.replace(match.group(0), "", 1)).strip(),
         }
     if not styles:
         raise ValueError("no output styles found in src/output-styles")
@@ -127,7 +129,7 @@ def copy_output_styles(plugin_root: Path) -> None:
     target = plugin_root / "output-styles"
     target.mkdir(parents=True)
     for path in sorted((ROOT / "src" / "output-styles").glob("*.md")):
-        text = path.read_text(encoding="utf-8")
+        text = SHARED_RE.sub("", path.read_text(encoding="utf-8"))
         target_path = target / path.name
         target_path.write_text(text.replace("\r\n", "\n"), encoding="utf-8", newline="\n")
 

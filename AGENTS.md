@@ -19,6 +19,7 @@ Edit authoritative inputs, then regenerate outputs:
 | `src/skills/<name>/body.md` | Shared skill behavior |
 | `src/skills/<name>/references/` and `scripts/` | Shared skill companions |
 | `src/templates/thesis-instructions.md` | End-user thesis-project instructions generated into installed plugins |
+| `src/output-styles/*.md` | Output styles, except regions marked `<!-- shared:NAME -->`; edit those in `~/.claude/style-shared/NAME.md` and run its `sync.mjs` |
 | `vendors/claude/` | Claude-only tools, commands, fragments, and frontmatter |
 | `vendors/codex/` | Codex-only fragments and initializer skill |
 | `scripts/` | Build, installation, validation, and release tooling |
