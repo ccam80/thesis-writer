@@ -38,7 +38,7 @@ Enumerate every plan point and mark it:
 - covered exactly;
 - covered with scope drift;
 - omitted;
-- not prose-eligible (`OPEN`);
+- not prose-eligible (below `write-ready`);
 - improperly promoted.
 
 Enumerate every prose sentence and identify unplanned content. Confirm that changes to lower-level narrative, structure, or emphasis appear in the affected parent plans with author approval.
@@ -71,9 +71,9 @@ For every mapped point, read its type and receipt from the matching `evidence.md
 - `DERIVATION`: grounded premise IDs and checked steps.
 - `AUTHOR_ASSERTION`: explicit author attestation; not presented as literature consensus.
 - `INFERENCE`: grounded premise IDs, explicit warrant, and preserved limits.
-- `OPEN`: no prose mapping. Its appearance is a blocking failure.
+- Any status below `write-ready`: no prose mapping. Its appearance is a blocking failure.
 
-Confirm no separate `reference_debt.md` has become an authority or a route around the gate. Each corpus gap must remain visible as an `open` ID/status item in `plan.md`, with its search and resolution record in the matching `evidence.md` entry.
+Confirm no separate `reference_debt.md` has become an authority or a route around the gate. Each corpus gap must remain visible as an ID/status item in `plan.md`, with its search and resolution record in the matching `evidence.md` entry.
 
 ### 4. Zotero verification of every literature claim
 

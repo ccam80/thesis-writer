@@ -278,9 +278,9 @@ Assign stable IDs before research and never reuse an ID. Prefix with the chapter
 
 - `PHYS-S02-P01-CL01`
 - `CUBIE-S01-P03-PF02`
-- `VVS-S02-P01-OP01`
+- `VVS-S02-P01-IF01`
 
-Serials go stale after a reorder; the ID never changes. File position gives current location. When one point splits, retain the original ID for the surviving proposition and assign new IDs to additional propositions. When points merge, retain all contributing IDs as aliases.
+Serials go stale after a reorder; the ID never changes. When one point splits, retain the original ID for the surviving proposition and assign new IDs to additional propositions. When points merge, retain all contributing IDs as aliases.
 
 Point IDs persist from paragraph plan through prose and review. A point may narrow its parent plan's stated scope, never strengthen or broaden it.
 
@@ -289,14 +289,14 @@ Point IDs persist from paragraph plan through prose and review. A point may narr
 A paragraph is write-ready only when:
 
 - Every technical proposition is a typed point with a stable ID.
-- Every `CLAIM` has an approved evidence card containing at least one supporting passage; otherwise retype it as `OPEN`.
+- Every `CLAIM` has an approved evidence card containing at least one supporting passage; otherwise its status stays below `write-ready`.
 - Every `PROJECT_FACT` has a precise project locator.
 - Every `DERIVATION` names grounded premises and has checked steps.
 - Every `AUTHOR_ASSERTION` records explicit author attestation.
 - Every `INFERENCE` names grounded premises and states its inferential limits.
 - Contradicting and qualifying evidence remains attached and is reflected in the claim wording.
 - Purposes and ordering notes contain no hidden propositions.
-- No `OPEN` point is included in writer input.
+- No point below `write-ready` is included in writer input.
 
 Fail closed. A plan may be structurally approved while not write-ready. Label those states separately.
 
@@ -324,7 +324,7 @@ Present a compact visual chain, for example:
 [Feedback vocabulary] → [Sensor and actuator paths] → [Controller design] → [Robustness limits]
 ```
 
-Structural planning needs no citations. A stub asserting a mechanism, quantity, comparison, cause, prevalence, or literature conclusion is a point, not scope. Drop it to paragraph level and type it `OPEN` until grounded.
+Structural planning needs no citations. A stub asserting a mechanism, quantity, comparison, cause, prevalence, or literature conclusion is a point, not scope. Drop it to paragraph level and give it `agent-proposed` or `author-proposed`.
 
 Check cross-chapter duplication and record the agreed ownership in the parent plan.
 
@@ -339,7 +339,7 @@ Propose section-local paragraphs (`¶1`, `¶2`, ...), each with:
 - research questions or author/project inputs needed to populate it;
 - figure and cross-reference opportunities.
 
-Do not invent a concrete factual stub to make the outline look complete. Express missing content as `OPEN`: a bounded question or evidence need.
+Do not invent a concrete factual stub to make the outline look complete. Express missing content as a bounded question or evidence need.
 
 ### Phase 3: Interleave point generation and research
 
@@ -356,7 +356,7 @@ For each paragraph, distinguish:
 - bounded questions that Zotero must answer;
 - narrative-only links and purposes.
 
-A user-supplied proposition may be submitted for verification, but retain its `AUTHOR_ASSERTION` or `OPEN` origin until the evidence verdict returns.
+A user-supplied proposition may be submitted for verification, but keep its status below `write-ready` until the evidence verdict returns.
 
 #### Step 2: Bounded Zotero research
 
@@ -411,7 +411,7 @@ Parent plan: [parent plan path]
 ## PHYS-S02-P01-CL01
 
 **Type:** CLAIM
-**Origin:** Zotero synthesis from research request [request ID]
+**Research request:** [request ID]
 **Grounded scope:** [single bounded synthesis matching, without broadening, the planned content]
 
 #### Supporting evidence
@@ -442,7 +442,6 @@ Use the same entry envelope for every point type. `PROJECT_FACT`, `DERIVATION`, 
 ```markdown
 ## [point ID]
 **Type:** PROJECT_FACT | DERIVATION | AUTHOR_ASSERTION | INFERENCE
-**Origin:** [author/project/plan/research origin]
 **Grounded scope:** [scope that semantically matches the plan item]
 **Receipt:** [exact project locator | premise IDs and checked steps | dated author attestation | premise IDs, warrant, and limits]
 ```
@@ -452,9 +451,9 @@ Use the same entry envelope for every point type. `PROJECT_FACT`, `DERIVATION`, 
 Keep an unresolved point visible and readable in `plan.md` as an ID, status, and bounded question or proposed content. Keep its full gap record in the matching `evidence.md` entry:
 
 ```markdown
-## PHYS-S02-P01-OP04
-**Type:** OPEN
-**Origin:** author assertion | existing prose | project lead | research lead
+## PHYS-S02-P01-CL03
+**Type:** CLAIM
+**Scope:** [scope that semantically matches the plan item]
 **Zotero search receipt:** [...]
 **Missing evidence:** [...]
 **Resolution:** project evidence | author attestation | source acquisition | revision | removal
@@ -475,7 +474,6 @@ The planner and `zotero-research` must never fetch or import external sources th
 
 ```markdown
 # Plan: [Title]
-Status: [draft|approved]
 
 ## Narrative thread
 [Author-approved narrative]
@@ -490,21 +488,21 @@ Status: [draft|approved]
 **Order:** [ordering note, where one is needed]
 
 - [PHYS-S02-P01-CL01 | write-ready] [bounded claim] \cite{keyA,keyB}
-- [PHYS-S02-P01-PF01 | write-ready] [project-specific planned content]
-- [PHYS-S02-P01-IF01 | write-ready] [bounded inference]
-- [PHYS-S02-P01-OP01 | open] [bounded unresolved question or proposed content]
+- [PHYS-S02-P01-PF01 | accepted] [project-specific planned content]
+- [PHYS-S02-P01-IF01 | author-proposed] [bounded inference]
+- [PHYS-S02-P01-CL02 | agent-proposed] [bounded claim awaiting inclusion review]
 
 → **Figure:** [descriptive label and specification]
 
 ## Unresolved points
-[Optional readable index of `open` point IDs and their questions; full gap records remain only in `evidence.md`]
+[Optional readable index of point IDs below `write-ready` and their questions; full gap records remain only in `evidence.md`]
 ```
 
-Use only `write-ready` and `open` as point statuses. Status is the only machine field besides the stable ID in a plan point. Do not encode type, origin, evidence verdict, research request, or receipt details in a plan line. A point is `write-ready` only when its matching ledger entry contains its complete type-specific receipt.
+Use only `agent-proposed`, `author-proposed`, `accepted`, and `write-ready` as point statuses. Status is the only machine field besides the stable ID in a plan point. Do not encode type, origin, evidence verdict, research request, or receipt details in a plan line. A point is `write-ready` only when its matching ledger entry contains its complete type-specific receipt.
 
 Number no heading; refer to a unit by directory and heading.
 
-The plan header may contain only the author-visible `Status: draft|approved` field. Keep document type, recording date, parent path, research state, and grounding bookkeeping in `evidence.md`. Do not add a block-level grounding field to `plan.md`; derive readiness by reconciling every in-scope point status with its ledger receipt.
+The plan header carries the title only. Keep document type, recording date, parent path, research state, and grounding bookkeeping in `evidence.md`. Add no block-level or file-level status field; derive readiness by reconciling every in-scope point status with its ledger receipt.
 
 ## Citation density
 
