@@ -14,22 +14,48 @@ def text(relative: str) -> str:
 
 def test_planner_is_research_interleaved_and_fail_closed() -> None:
     planner = text("src/skills/document-planner/body.md")
+    assert "Every sentence-level point takes exactly one type from the shared vocabulary" in planner
+    assert "Nothing above sentence level is typed" in planner
+    assert "Use only `agent-proposed`, `author-proposed`, `accepted`, and `write-ready` as point statuses" in planner
+    assert "Status is the only machine field besides the stable ID in a plan point" in planner
+    assert "generate from whole cloth" not in planner.lower()
+    assert "citation marking (after author approval)" not in planner.lower()
+    assert "Do not create or append to `reference_debt.md`" in planner
+    assert "No point below `write-ready` is included in writer input" in planner
+    assert "Do not generate a section's factual skeleton before research" in planner
+
+
+def test_point_vocabulary_is_shared_and_retired_names_are_gone() -> None:
+    template = text("src/templates/thesis-instructions.md")
+    style_guide = text("src/skills/writer/references/thesis-style-guide.md")
+
     for point_type in (
         "`CLAIM`",
         "`PROJECT_FACT`",
         "`DERIVATION`",
         "`AUTHOR_ASSERTION`",
         "`INFERENCE`",
-        "`LINK`",
-        "`PURPOSE`",
-        "`OPEN`",
     ):
-        assert point_type in planner
-    assert "generate from whole cloth" not in planner.lower()
-    assert "citation marking (after author approval)" not in planner.lower()
-    assert "Do not create or append to `reference_debt.md`" in planner
-    assert "No `OPEN` point is included in writer input" in planner
-    assert "Do not generate a section's factual skeleton before research" in planner
+        assert point_type in template
+        assert point_type in style_guide
+    assert "This vocabulary is shared by every skill" in template
+    assert "Statuses in order: `agent-proposed` and `author-proposed` are introduced but unreviewed" in template
+    assert "Only `write-ready` reaches the writer" in template
+    assert "Only a sentence-level point carries an ID and a status" in template
+    assert "Purposes and ordering notes are untyped plain text" in template
+
+    contracts = (
+        "src/skills/document-planner/body.md",
+        "src/skills/writer/body.md",
+        "src/skills/reviewer/body.md",
+        "src/skills/zotero-research/body.md",
+        "src/skills/zotero-source-acquisition/body.md",
+        "src/skills/writer/references/thesis-style-guide.md",
+        "src/templates/thesis-instructions.md",
+    )
+    for retired in ("`LINK`", "`PURPOSE`", "`OPEN`"):
+        for contract in contracts:
+            assert retired not in text(contract)
 
 
 def test_research_contract_keeps_passages_with_multisource_claims() -> None:
@@ -65,11 +91,13 @@ def test_plan_is_author_readable_and_provenance_lives_in_evidence_ledger() -> No
 
     plan_format = planner.split("## Plan format", 1)[1].split("## Citation density", 1)[0]
     evidence_format = planner.split("## Evidence-ledger format", 1)[1].split("## Corpus gaps", 1)[0]
-    assert "status as machine metadata" in template
+    assert "Plan points contain only an ID and status as machine metadata" in style_guide
+    assert "A point line carries only its stable ID and one status" in template
     assert "Put document type, date, parent path, grounding bookkeeping" in template
-    assert "Status: [draft|approved]" in plan_format
+    assert "Add no block-level or file-level status field" in plan_format
     for forbidden_header in (
         "Type: [background|research|conclusions|future-work]",
+        "Status: [draft|approved]",
         "Structural status:",
         "Grounding status:",
         "Date: [YYYY-MM-DD]",
@@ -79,7 +107,7 @@ def test_plan_is_author_readable_and_provenance_lives_in_evidence_ledger() -> No
     assert "Document type: [background|research|conclusions|future-work]" in evidence_format
     assert "Recorded: [YYYY-MM-DD]" in evidence_format
     assert "Parent plan: [parent plan path]" in evidence_format
-    assert "[C03-S02-P01-CL01 | write-ready]" in plan_format
+    assert "[PHYS-S02-P01-CL01 | write-ready]" in plan_format
     assert "[embedded evidence card]" not in plan_format
     assert "Evidence: [file/data/code locator]" not in plan_format
     assert "Premises: [IDs]" not in plan_format
@@ -99,22 +127,22 @@ def test_writer_and_reviewer_fail_closed_on_plan_ledger_divergence() -> None:
     reviewer = text("src/skills/reviewer/body.md")
 
     for failure in (
-        "plan's author-visible `Status` is not `approved`",
-        "no stable ID or status",
-        "no exactly matching `evidence.md` entry",
+        "a plan point has no stable ID or status",
+        "a plan point has no exactly matching `evidence.md` entry",
         "orphan ID absent from `plan.md`",
-        "status is not `write-ready`",
-        "lacks its complete type-specific receipt",
+        "a point's plan status is not `write-ready`",
+        "a point lacks its complete type-specific receipt",
         "do not semantically match the planned content",
     ):
         assert failure in writer
+    assert "Do not repair these failures by inferring a type, receipt, status, or intended meaning" in writer
     assert "block-level `Grounding status`" not in writer
 
     for failure in (
         "without an ID or status",
         "missing ledger entry",
         "orphan ledger ID",
-        "non-ready technical status",
+        "non-ready status",
         "incomplete type-specific receipt",
         "semantic mismatch",
     ):
