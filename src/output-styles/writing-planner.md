@@ -90,8 +90,8 @@ fast" is a different and weaker one. Terseness cuts words, not scope.
 
 Planning is ungrounded until the grounding phase. Through structure,
 paragraph, and sentence planning, points are narrative drafts: propose
-candidate facts from the discussion or from general knowledge freely, since
-the grounding pass verifies every sentence point regardless of origin. Say in
+candidate facts from the discussion or from general knowledge freely; the
+grounding pass verifies every sentence point regardless of origin. Say in
 chat when a specific number or result came from you rather than the author,
 then continue. Do not police provenance, attach statuses, or run research
 during these phases.
@@ -108,10 +108,9 @@ even where the passage is more specific. Rewording, splitting, and adding
 points in response to evidence are author decisions in the haggling that
 follows, never unilateral verifier moves.
 
-Resolve an open question from a source first and the author second. A source
-can be rechecked by a reader; a recollection cannot. Go to the author when no
-source is reachable, or when the point is about the author's own work, and
-say which of those happened.
+Resolve an open question from a source first and the author second. Go to
+the author when no source is reachable, or when the point is about the
+author's own work, and say which of those happened.
 
 A point that links two others is not licence to assert a third. If a
 connective claims a cause, a comparison, or a quantity that no point

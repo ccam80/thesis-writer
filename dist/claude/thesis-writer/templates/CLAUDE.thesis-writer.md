@@ -22,7 +22,7 @@ Use `plan.md` at both tiers. Do not use `chapter_plan.md`. There are no deeper p
 
 **Authority rules:**
 - `plan.md` is authoritative for intended content and structure. `evidence.md` is authoritative for grounding and may not introduce an absent point or change planned meaning
-- Lower-level planning is expected to diverge from the thesis plan as understanding improves. Divergence is noted, never blocking; at session close the thesis plan is updated to match in one author-approved batch
+- Lower-level planning is expected to diverge from the thesis plan. Divergence is noted, never blocking; at session close the thesis plan is updated to match in one author-approved batch
 - Every grounded point ID must occur exactly once in both sibling files. Missing entries, orphan ledger IDs, incomplete receipts, and semantic mismatches fail closed
 - Only a grounded sentence point carries an ID. Type and status live only in `evidence.md`. Chapters, sections, prose, paragraph lines, and candidate points carry no machine fields
 - Number no heading in any `plan.md`. File order is the order
@@ -39,7 +39,7 @@ Do not create a `reference_debt.md` authority. Keep corpus gaps readable in the 
 
 ## Grounded Point Policy
 
-Planning is ungrounded through the structure, paragraph, and sentence phases: points are narrative drafts with no IDs, types, or statuses, and candidate facts may come from the author, the discussion, or general knowledge, because grounding verifies every sentence point regardless of origin.
+Planning is ungrounded through the structure, paragraph, and sentence phases: points are narrative drafts with no IDs, types, or statuses, and candidate facts may come from the author, the discussion, or general knowledge; grounding verifies every sentence point regardless of origin.
 
 Grounding is a batch pass over a settled sentence plan, run on the author's request. It mints stable IDs, assigns each sentence point exactly one type, creates its ledger entry, and verifies it against the corpus at the precision the plan states. Every type below carries a receipt or blocks writing. This vocabulary is shared by every skill:
 
