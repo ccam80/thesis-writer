@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """Set a release version, rebuild both vendors, run the complete validator, then commit and tag."""
 
 from __future__ import annotations
@@ -19,7 +20,7 @@ TAG_PREFIX = "thesis-writer-v"
 # Paths the release commit carries.
 RELEASE_PATHS = ("metadata.json", ".claude-plugin/marketplace.json", "dist")
 
-# Build inputs that must already be committed, because the release regenerates from them.
+# Build inputs the release regenerates from.
 INPUT_PATHS = ("src", "vendors", "scripts")
 
 
@@ -51,7 +52,7 @@ def assert_nothing_uncommitted(
     reason: str,
     include_untracked: bool = False,
 ) -> None:
-    """Compares filtered content, so a platform line-ending difference is not an edit."""
+    """Compares filtered content; line-ending differences do not count as edits."""
     reports = [
         git(repository, "diff", "--name-only", "--", *paths),
         git(repository, "diff", "--cached", "--name-only", "--", *paths),
