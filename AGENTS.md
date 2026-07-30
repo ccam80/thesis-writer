@@ -133,7 +133,7 @@ python scripts\install_plugin.py --vendor claude --mcp-root C:\path\to\zotero_ci
 
 Omit `--execute` only when a dry run is intended. After Codex installation, start a new Codex task. After Claude installation, restart Claude Code.
 
-For a release, use `scripts/release.py`; do not update generated versions independently. Verify the release diff, commit source and distributions, create the requested tag, and push tags only when explicitly authorized.
+For a release, use `scripts/release.py`; do not update generated versions independently. It refuses an uncommitted build input, an uncommitted release path, an existing tag, and a detached HEAD, then commits `metadata.json` with the marketplace and both distributions and creates the annotated `thesis-writer-v<version>` tag. `--no-commit` builds and validates without committing. Verify the release diff, and push commits and tags only when explicitly authorized.
 
 ## Security and portability
 
