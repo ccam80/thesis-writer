@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """Set a release version, rebuild both vendors, run the complete validator, then commit and tag."""
 
 from __future__ import annotations
