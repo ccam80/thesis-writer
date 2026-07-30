@@ -29,9 +29,9 @@ Use a `plan.md` and sibling `evidence.md` at every hierarchy level. Do not use `
 - Only a sentence-level point carries an ID and a status. Chapters, sections, paragraphs, purposes, and ordering notes carry neither
 - Number no heading in any `plan.md`. File order is the order
 
-Keep `plan.md` readable: narrative, structure, planned content, citations, figures, and cross-references. Its header carries only `Status: draft|approved`. A point line carries only its stable ID and `write-ready` or `open`. Put document type, date, parent path, grounding bookkeeping, point type, origin, research cards and passages, qualifications, contradictions, search receipts, project locators, derivation steps, author attestations, inference warrants, and complete gap-resolution records in `evidence.md`.
+Keep `plan.md` readable: narrative, structure, planned content, citations, figures, and cross-references. Its header carries the title only. A point line carries only its stable ID and one status. Put document type, date, parent path, grounding bookkeeping, point type, origin, research cards and passages, qualifications, contradictions, search receipts, project locators, derivation steps, author attestations, inference warrants, and complete gap-resolution records in `evidence.md`.
 
-Do not create a `reference_debt.md` authority. Keep corpus gaps visible as readable `open` ID/status items in `plan.md`; keep their full research and resolution records in `evidence.md`.
+Do not create a `reference_debt.md` authority. Keep corpus gaps visible as readable ID/status items in `plan.md`; keep their full research and resolution records in `evidence.md`.
 
 ## Grounded Point Policy
 
@@ -44,13 +44,14 @@ Every technical proposition in a paragraph plan has a stable ID and exactly one 
 | `DERIVATION` | Grounded premise IDs and checked steps | Mathematical prose |
 | `AUTHOR_ASSERTION` | Explicit author attestation | Uncited only by explicit author decision |
 | `INFERENCE` | Grounded premise IDs, warrant, and limits | Preserve inferential strength |
-| `OPEN` | Unresolved | Never writer input |
+
+Statuses in order: `agent-proposed` and `author-proposed` are introduced but unreviewed, `accepted` has structure and inclusion settled, `write-ready` is grounded. Only `write-ready` reaches the writer. Set type when the point is introduced; change it only when evidence forces it.
 
 Purposes and ordering notes are untyped plain text. Keep them free of quantity, comparison, cause, mechanism, prevalence, and literature conclusion; move it down to the point that carries it.
 
 A purpose or ordering note that loses technical information when deleted is a point; retype it. Author approval does not turn an unsupported `CLAIM` into evidence; it can only retype it as `AUTHOR_ASSERTION`, where the author knowingly accepts that provenance.
 
-A block is write-ready only when every technical point has its type-specific receipt and no `OPEN` point remains in writer input. Claim IDs persist through thesis, chapter, section, paragraph, prose, and review. Lower levels may narrow a higher-level claim but may not silently strengthen or broaden it.
+A block is write-ready only when every technical point has its type-specific receipt and no point below `write-ready` remains in writer input. Claim IDs persist through thesis, chapter, section, paragraph, prose, and review. Lower levels may narrow a higher-level claim but may not silently strengthen or broaden it.
 
 ## Citation Policy
 
@@ -61,7 +62,7 @@ Every citation comes from the user's Zotero library via the `zotero-research` ag
 - Every synthesized claim card lists all materially relevant supporting, qualifying, and contradicting results the recorded searches returned
 - Every cited item is followed immediately by its actual verbatim supporting passage, BetterBibTeX key, title, page, and section/chunk locator
 - Planner, writer, reviewer, and `zotero-research` perform no external search, fetch, or import
-- If Zotero lacks coverage, keep the point `OPEN`; after author approval, hand it to `zotero-source-acquisition`, which presents candidate sources for user review before importing approved items and PDFs
+- If Zotero lacks coverage, leave the point below `write-ready`; after author approval, hand it to `zotero-source-acquisition`, which presents candidate sources for user review before importing approved items and PDFs
 - An imported source becomes evidence only after indexing and a new `zotero-research` verification
 
 Citation need follows point type, not chapter type. There is no "standard textbook" exemption and no citation-density target.
@@ -112,7 +113,7 @@ Before marking a chapter complete:
 - [ ] Every planned point and grounded scope match semantically
 - [ ] Every technical sentence maps to stable point IDs
 - [ ] Every point has its type-specific evidence receipt
-- [ ] No OPEN point entered prose
+- [ ] No point below `write-ready` entered prose
 - [ ] All literature claim/citation pairs verified against Zotero passages
 - [ ] Qualifications and contradictions preserved
 - [ ] 100% citations from Zotero

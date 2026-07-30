@@ -216,11 +216,10 @@ Convert an approved, write-ready paragraph block from `plan.md` into technical L
 
 Before drafting, reconcile the two authorities. Refuse the block and return the blocking locations or IDs to `document-planner` when:
 
-- the plan's author-visible `Status` is not `approved`;
 - a plan point has no stable ID or status;
 - a plan point has no exactly matching `evidence.md` entry;
 - `evidence.md` contains an orphan ID absent from `plan.md`;
-- a point's plan status is not `write-ready`, including every `open` point;
+- a point's plan status is not `write-ready`;
 - a point lacks its complete type-specific receipt;
 - the ledger's grounded scope, qualifications, or limits do not semantically match the planned content.
 
