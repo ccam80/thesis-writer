@@ -1,0 +1,2 @@
+# The builder emits LF; keep every text file LF in the index and the working tree.
+* text=auto eol=lf
