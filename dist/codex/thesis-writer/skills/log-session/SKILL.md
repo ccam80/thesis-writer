@@ -210,3 +210,4 @@ The value of this log is its credibility — an honest record protects the autho
 - **Very short session**: Still log it. A 10-minute correction session is worth recording. If only a few points were touched, provenance table may be trivial — include it anyway for completeness.
 - **Context heavily compacted**: Rely primarily on checkpoint notes. Note that context was compacted and detail may be limited.
 - **Mixed session (planning + writing)**: Only count provenance for the planning portion. Writing is mechanical conversion of already-attributed content.
+- **Ungrounded-phase checkpoints (structure, paragraph, or sentence phases)**: No per-type provenance tables; compute provenance metrics from grounded-scope checkpoints only.

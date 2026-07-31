@@ -46,9 +46,11 @@ Do not presuppose the answer. Derive candidate claims from the evidence returned
 
 Use when the author or existing thesis supplies a proposition:
 
-> Verify PHYS-S02-P01-OP01: [bounded proposition].
+> Verify PHYS-041: [bounded proposition].
 
 Treat the proposition as unverified. Search for support, qualification, and contradiction. Do not optimize the wording until a source appears to support it.
+
+Verify the proposition at the precision it states: it is supported when its wording is entailed, even where the passage is more specific. Recommend narrowing only when the recorded evidence cannot support the wording as stated. Never add, split, or widen propositions; note any finer finding on the card for the planner's haggling.
 
 ### Citation verification
 
