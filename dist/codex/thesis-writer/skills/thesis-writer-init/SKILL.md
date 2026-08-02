@@ -1,6 +1,6 @@
 ---
 name: thesis-writer-init
-description: "Initialize a project with the Thesis Writer AGENTS.md instructions, preserving or merging any existing project instructions with explicit approval."
+description: "Initialize a project with the Thesis Writer contract block in AGENTS.md, appending beside existing instructions and updating the block in place when the plugin version changes."
 ---
 
 <!-- GENERATED FILE — edit src/ or vendors/, then run scripts/build_plugin.py -->
@@ -10,9 +10,11 @@ description: "Initialize a project with the Thesis Writer AGENTS.md instructions
 Initialize the current project from the generated `templates/AGENTS.thesis-writer.md` file in this installed plugin.
 
 1. Locate `templates/AGENTS.thesis-writer.md` within this installed plugin. Do not recreate or paraphrase it.
-2. Append a horizontal rule and the complete template to `AGENTS.md`, creating the file if it does not exist. Never replace, reorder, or rewrite existing content.
-3. If the contract is already present, change nothing and say so.
-4. Report the action taken and remind the user that the plugin-local `deep-zotero` MCP server must be available for research features.
+2. Copy the contract block: `<!-- thesis-writer:contract v... -->` through `<!-- /thesis-writer:contract -->`, inclusive. Do not copy the generated-file notice above it.
+3. If `AGENTS.md` has no contract markers, append a horizontal rule and the block, creating the file if it does not exist.
+4. If `AGENTS.md` has a contract block at the template's version, change nothing and say so.
+5. If `AGENTS.md` has a contract block at any other version, replace that marked block with the template's block. Never replace, reorder, or rewrite content outside the markers.
+6. Report the action taken and remind the user that the plugin-local `deep-zotero` MCP server must be available for research features.
 
 Use Codex filesystem tools and preserve unrelated working-tree changes. If the template cannot be found, report the missing installed artifact and stop; do not create a reduced substitute.
 

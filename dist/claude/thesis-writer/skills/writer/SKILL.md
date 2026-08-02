@@ -24,6 +24,8 @@ Convert an approved, write-ready paragraph block from `plan.md` into technical L
 4. `references/prose-style.md` and `references/thesis-style-guide.md`.
 5. Existing author prose in `.tex` files and `author_reference/`.
 
+The shared contract is the `Thesis Writing Contract` block in the project's `CLAUDE.md`, added by `/thesis-writer:init`. If the block is absent, stop and ask the author to run the initializer.
+
 Before drafting, reconcile the two authorities. Refuse the block and return the blocking locations or IDs to `document-planner` when:
 
 - a sentence point has no stable ID;

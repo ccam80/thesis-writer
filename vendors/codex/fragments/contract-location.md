@@ -1,0 +1,1 @@
+The shared contract is the `Thesis Writing Contract` block in the project's `AGENTS.md`, added by the `thesis-writer-init` skill. If the block is absent, stop and ask the author to run the initializer.

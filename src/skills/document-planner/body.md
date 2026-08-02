@@ -22,7 +22,7 @@ On entering an existing chapter, report what `.tex`, the chapter plan, and the t
 
 ## Plan tiers
 
-The hierarchy, plan grammar, point types, and statuses are the shared contract's. Author both tiers to it.
+The hierarchy, plan grammar, point types, and statuses are the shared contract's. Author both tiers to it. <!-- vendor:contract-location -->
 
 A thesis-plan number or claim is assumed-to-be-grounded and is verified only when the owning chapter reaches its grounding pass. There are no plan files below the chapter tier.
 

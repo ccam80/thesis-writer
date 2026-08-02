@@ -94,6 +94,19 @@ def test_point_vocabulary_is_shared_and_retired_names_are_gone() -> None:
             assert retired not in text(contract), f"{retired!r} found in {contract}"
 
 
+def test_skills_name_the_contract_location_and_fail_closed_without_it() -> None:
+    for relative in (
+        "src/skills/document-planner/body.md",
+        "src/skills/writer/body.md",
+        "src/skills/reviewer/body.md",
+    ):
+        assert "<!-- vendor:contract-location -->" in text(relative)
+    for vendor in ("claude", "codex"):
+        fragment = text(f"vendors/{vendor}/fragments/contract-location.md")
+        assert "`Thesis Writing Contract` block" in fragment
+        assert "stop and ask the author to run the initializer" in fragment
+
+
 def test_research_contract_keeps_passages_with_multisource_claims() -> None:
     research = text("src/skills/zotero-research/body.md")
     assert "Never search the web" in research

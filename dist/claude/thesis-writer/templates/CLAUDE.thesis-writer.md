@@ -1,5 +1,7 @@
 <!-- GENERATED FILE — edit src/ or vendors/, then run scripts/build_plugin.py -->
 
+<!-- thesis-writer:contract v0.5.0 -->
+
 # Thesis Writing Contract
 
 ## Document hierarchy
@@ -81,3 +83,5 @@ Two statuses exist, recorded only in `evidence.md`.
 - Only `write-ready` reaches the writer.
 - Rewording a promoted point returns it to `open`.
 - A point's wording stays within the scope its receipt supports. Narrowing is normal; broadening is a failure.
+
+<!-- /thesis-writer:contract -->

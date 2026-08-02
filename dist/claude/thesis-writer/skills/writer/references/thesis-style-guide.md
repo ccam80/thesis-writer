@@ -4,7 +4,7 @@ Reference document for the `writer` skill. Contains IEEE style conventions, equa
 
 ## Plan and Evidence Authority
 
-Every chapter MUST be written from an approved `plan.md` and its sibling `evidence.md`, read under the shared contract's hierarchy, plan grammar, point types, and statuses.
+Every chapter MUST be written from an approved `plan.md` and its sibling `evidence.md`, read under the hierarchy, plan grammar, point types, and statuses of the project instructions' `Thesis Writing Contract` block.
 
 1. A sentence point in the plan MUST appear in the document unless its ledger status is below `write-ready`.
 2. A reference in the plan MUST be cited only when the matching ledger card approves it.

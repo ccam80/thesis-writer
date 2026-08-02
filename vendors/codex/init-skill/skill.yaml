@@ -1,2 +1,2 @@
 name: "thesis-writer-init"
-description: "Initialize a project with the Thesis Writer AGENTS.md instructions, preserving or merging any existing project instructions with explicit approval."
+description: "Initialize a project with the Thesis Writer contract block in AGENTS.md, appending beside existing instructions and updating the block in place when the plugin version changes."

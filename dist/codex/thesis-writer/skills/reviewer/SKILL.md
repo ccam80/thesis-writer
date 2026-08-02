@@ -26,6 +26,8 @@ Require:
 5. Parent `plan.md` files and their sibling evidence ledgers needed to assess narrative compliance.
 6. `../writer/references/prose-style.md` and `thesis-style-guide.md`.
 
+The shared contract is the `Thesis Writing Contract` block in the project's `AGENTS.md`, added by the `thesis-writer-init` skill. If the block is absent, stop and ask the author to run the initializer.
+
 If the ledger, a matching ledger entry, a claim map, or an evidence receipt is missing, report the affected scope as unverifiable. Do not infer a mapping, type, provenance, or intended meaning after the fact and call it verified.
 
 ## Review process
