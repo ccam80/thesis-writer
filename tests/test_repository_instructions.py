@@ -35,5 +35,5 @@ def test_maintainer_and_thesis_project_instructions_are_separate() -> None:
 
     assert "This repository is not a thesis project." in maintainers
     assert "Root `AGENTS.md` is not an input to the plugin builder." in maintainers
-    assert "doctoral thesis writing assistant" not in maintainers
-    assert "doctoral thesis writing assistant" in thesis_projects
+    assert "Rewording a promoted point returns it to `open`." not in maintainers
+    assert "Rewording a promoted point returns it to `open`." in thesis_projects

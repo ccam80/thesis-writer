@@ -4,49 +4,14 @@ Reference document for the `writer` skill. Contains IEEE style conventions, equa
 
 ## Plan and Evidence Authority
 
-Every chapter MUST be written from an approved `plan.md` and its sibling `evidence.md`.
+Every chapter MUST be written from an approved `plan.md` and its sibling `evidence.md`, read under the shared contract's hierarchy, plan grammar, point types, and statuses.
 
-1. `plan.md` is the author-readable content and structure authority.
-2. `evidence.md` is the grounding and provenance authority and cannot introduce or alter planned content.
-3. Every grounded point ID must occur exactly once in each file; missing or orphan IDs block writing.
-4. If a sentence point is in the plan, it MUST appear in the document unless its ledger status is below `write-ready`.
-5. If a reference is in the plan, it MUST be cited only when the matching ledger card approves it.
-6. Do not add content beyond the plan or omit planned content without explicit approval.
+1. A sentence point in the plan MUST appear in the document unless its ledger status is below `write-ready`.
+2. A reference in the plan MUST be cited only when the matching ledger card approves it.
+3. Do not add content beyond the plan or omit planned content without explicit approval.
+4. The `## Unresolved points` index must be empty for the scope handed to the writer.
 
-### Author-readable plan structure
-
-```markdown
-# Plan: [Title]
-
-## Narrative Thread
-[1-2 sentences describing the story this chapter tells]
-
-## [Section title]
-[One or two prose sentences: what the section covers and does.]
-
-**¶ [label]** — [paragraph point]
-- [sentence point] [PHYS-041] \cite{ref1,ref2}
-- [sentence point] [PHYS-042]
-
-→ **Figure:** [descriptive label and specification]
-
-## Unresolved points
-[readable index of open IDs/questions; must be empty for writer input]
-```
-
-Plan points carry only their text, a bracketed stable ID, and approved citation
-keys. Types, statuses, origins, evidence cards, passages, search receipts,
-project locators, derivation steps, author attestations, inference warrants,
-and full gap records belong in the matching `evidence.md` entries. The point
-types are `CLAIM`, `PROJECT_FACT`, `DERIVATION`, `AUTHOR_ASSERTION`, and
-`INFERENCE`. The writer reads type and status from the ledger and uses only
-`write-ready` points; ledger status `open` blocks drafting. Plan prose and `¶`
-paragraph lines are untyped and emit no sentence.
-
-The plan header contains the title only.
-Document type, recording date, parent path, and grounding bookkeeping belong in
-`evidence.md`. Determine readiness from each in-scope point's ledger entry; do
-not require or add a block-level grounding field in `plan.md`.
+Determine readiness from each in-scope point's ledger entry.
 
 ## Figure Placeholders
 

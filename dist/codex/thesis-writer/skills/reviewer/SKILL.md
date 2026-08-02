@@ -63,14 +63,9 @@ Any mismatch makes the sentence unverified until the map or prose is corrected t
 
 ### 3. Provenance and write-ready gate
 
-For every mapped point, read its type and receipt from the matching `evidence.md` entry and enforce it:
+For every mapped point, read its type and receipt from the matching `evidence.md` entry, then enforce the receipt and prose treatment the shared contract assigns that type. A `CLAIM` additionally requires its approved citation adjacent to the sentence.
 
-- `CLAIM`: approved Zotero evidence card and adjacent approved citation.
-- `PROJECT_FACT`: exact project locator; no generalization beyond the project.
-- `DERIVATION`: grounded premise IDs and checked steps.
-- `AUTHOR_ASSERTION`: explicit author attestation; not presented as literature consensus.
-- `INFERENCE`: grounded premise IDs, explicit warrant, and preserved limits.
-- Ledger status `open`: no prose mapping. Its appearance in prose is a blocking failure.
+A point at ledger status `open` has no prose mapping. Its appearance in prose is a blocking failure.
 
 Confirm no separate `reference_debt.md` has become an authority or a route around the gate. Each corpus gap must remain visible in the plan's `## Unresolved points` index, with its search and resolution record in the matching `evidence.md` entry.
 

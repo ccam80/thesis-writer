@@ -232,13 +232,9 @@ Do not repair these failures by inferring a type, receipt, status, or intended m
 
 ## Point handling
 
-Read each point's type and status from its matching `evidence.md` entry, never from extra labels inserted into `plan.md`. Treat each type as the shared vocabulary defines it.
+Read each point's type and status from its matching `evidence.md` entry, never from extra labels inserted into `plan.md`. Apply the prose treatment the shared contract assigns that type.
 
-Three treatments the vocabulary does not spell out:
-
-- `CLAIM`: state only the plan's bounded content within the evidence card's supported scope, and attach only its approved Zotero citations.
-- `DERIVATION`: render the approved steps and premises without skipping a material step or adding one.
-- `AUTHOR_ASSERTION`: state it with the author-approved scope and uncited status, and never present it as literature consensus.
+State a point only within the scope its ledger receipt supports, and attach only the citations its card approves.
 
 ## Sentence-to-claim mapping
 
