@@ -24,7 +24,7 @@ Require:
 3. The reviewed `.tex` files.
 4. Each corresponding `<target-stem>.claim-map.md`.
 5. Parent `plan.md` files and their sibling evidence ledgers needed to assess narrative compliance.
-6. `../writer/references/prose-style.md` and `thesis-style-guide.md`.
+6. `../writer/references/prose-style.md`.
 
 The shared contract is the `Thesis Writing Contract` block in the project's `AGENTS.md`, added by the `thesis-writer-init` skill. If the block is absent, stop and ask the author to run the initializer.
 
@@ -96,17 +96,7 @@ Do not ask `zotero-research` to fetch or import a missing source. Mark a corpus 
 
 ### 5. Epistemic-scope audit
 
-Compare every sentence with its mapped points and evidence passages. Check:
-
-- negation;
-- modality and uncertainty;
-- population, system, and sample;
-- operating and experimental conditions;
-- quantities, units, ranges, and uncertainty;
-- comparison class and baseline;
-- correlation versus causation;
-- temporal and spatial bounds;
-- whether evidence is measurement, interpretation, synthesis, or hypothesis.
+Compare every sentence with its mapped points and evidence passages across every dimension of the contract's epistemic scope.
 
 Flag consensus language when the card is qualified or contested. Flag a project fact stated as a general property and an inference stated as an established fact.
 

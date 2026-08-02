@@ -87,7 +87,7 @@ The research worker synthesizes across retrieved passages; the planner must not 
 
 Present grounding results per section as a digest: points supported as written; points needing narrowing, each with a proposed rewording; contested points with both sides; refuted points; corpus gaps. The author decides wording, splits, additions, and removals. Any rewording that exceeds the passages' entailment goes back through `zotero-research`.
 
-Where sources disagree, retain the conflict in the card and propose contested wording. Never select only the convenient side. A reworded point preserves negation, modality and uncertainty, population or system, operating conditions, quantities and units, comparison class, correlation versus causation, and temporal and spatial bounds.
+Where sources disagree, retain the conflict in the card and propose contested wording. Never select only the convenient side. A reworded point preserves every dimension of the contract's epistemic scope.
 
 Iterate until the author accepts each point's grounded wording; acceptance flips its ledger status to `write-ready`. Wording changes after promotion reopen the point.
 

@@ -4,13 +4,7 @@
 
 ## Overview
 
-This skill runs after the `writer` skill has produced LaTeX prose. It reads .tex files, finds figure placeholders, and generates actual figures where possible. It replaces `\figurePlaceholder{...}` blocks with `\includegraphics{...}` pointing to generated output.
-
-## When to Use This Skill
-
-- After `writer` has produced .tex files containing figure placeholders
-- When updating figures after data or methods changes
-- When regenerating specific figures
+This skill runs after the `writer` skill has produced LaTeX prose. It reads .tex files, finds figure placeholder blocks in the `../writer/references/figure-placeholder.md` format, and generates actual figures where possible. It replaces each placeholder with `\includegraphics{...}` pointing to generated output.
 
 ## Plot Defaults File
 
@@ -209,24 +203,12 @@ A figure rebuilds when any file in its directory is newer than its PDF, or when 
 
 ## LaTeX Integration
 
-Replace:
-```latex
-\begin{figure}[tb]
-\centering
-\fbox{\parbox{0.8\textwidth}{
-\textbf{FIGURE PLACEHOLDER}\\[1em]
-...
-}}
-\caption{Caption text.}
-\label{fig:label}
-\end{figure}
-```
+Replace the placeholder `\fbox{\parbox{...}}` contents of the `figure` environment, keeping its caption and label:
 
-With:
 ```latex
 \begin{figure}[tb]
 \centering
-\includegraphics[width=\columnwidth]{figures/fig_label}
+\includegraphics[width=\columnwidth]{fig/label}
 \caption{Caption text.}
 \label{fig:label}
 \end{figure}
@@ -242,6 +224,6 @@ With:
 
 - **Receives from**: `writer` skill (.tex files with figure placeholders)
 - **Reads**: Data files referenced in placeholders, source code for data generation
-- **Maintains**: `figures/plot_defaults.py` (shared styling for all thesis figures)
-- **Produces**: Figure files in `figures/`, Python scripts in `figures/scripts/`, updated .tex files
+- **Maintains**: `plot_defaults.py`, `tikz_defaults.tex`, and `build_figures.py` at the project root
+- **Produces**: Per-figure directories with `render.py` or `render.tex`, outputs in each chapter's `fig/` directory, updated .tex files
 - **Hands off to**: `formatter` skill for final LaTeX polish

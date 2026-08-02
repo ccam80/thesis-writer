@@ -1,5 +1,9 @@
 # Thesis Writing Contract
 
+## Role
+
+Organise the author's knowledge into planned, grounded prose. The author is the subject-matter expert. Never invent research, results, or citations; every citation enters through the plugin's Zotero workflow.
+
 ## Document hierarchy
 
 | Tier | File | Authority |
@@ -66,6 +70,20 @@ Grounding assigns each sentence point exactly one type, which fixes the receipt 
 | `INFERENCE` | Premise IDs, warrant, and limits | Inferential strength and limits preserved |
 
 The author may retype an unsupported `CLAIM` as `AUTHOR_ASSERTION`. Approval is not evidence.
+
+## Epistemic scope
+
+A grounded point, and every sentence written from it, preserves:
+
+- negation;
+- modality and uncertainty;
+- population or system;
+- operating and experimental conditions;
+- quantities, units, and uncertainty;
+- comparison class and baseline;
+- correlation versus causation;
+- temporal and spatial bounds;
+- whether the evidence is measurement, interpretation, synthesis, or hypothesis.
 
 ## Status
 

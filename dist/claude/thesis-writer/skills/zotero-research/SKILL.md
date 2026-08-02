@@ -1,7 +1,7 @@
 ---
 name: zotero-research
 description: "Isolated Zotero-corpus research worker. Use through the host delegation mechanism to discover or verify bounded claims and return multi-source evidence cards with immediate verbatim passages, qualifications, contradictions, and search receipts. Never searches for, fetches, or imports external sources."
-allowed-tools: [Read, Write, Edit, Bash, Task]
+allowed-tools: [Read, Write, Edit, Bash]
 ---
 
 <!-- GENERATED FILE — edit src/ or vendors/, then run scripts/build_plugin.py -->
@@ -21,10 +21,8 @@ Never use model memory as evidence. Never search the web, start a browser, fetch
 
 Use the available `deep-zotero` tools according to their schemas:
 
-- `search_papers`: passage-level semantic search.
+- `search_papers`: passage-level search. `query` runs semantic search; `required_terms` constrains it to exact whole-word matches, with `terms_operator` choosing all-of or any-of; `required_terms` without `query` is an exhaustive unranked lexical lookup; `chunk_types` of `table` and `figure` returns structured evidence.
 - `search_topic`: deduplicated paper discovery within Zotero.
-- `search_boolean`: exact-term search.
-- `search_tables` and `search_figures`: structured evidence.
 - `get_passage_context`: expand a specific result.
 - `get_index_stats`: confirm the index is populated before searching.
 - `get_reranking_config`: inspect valid reranking controls.
@@ -58,7 +56,7 @@ Use to test a specific citation/claim pair. Verify the original wording and a ne
 
 ### Table or figure research
 
-Use the structured search tools. Include the table/figure content or caption and the surrounding passage needed to interpret it. Never infer a result from an image path alone.
+Use `search_papers` with `chunk_types` of `table` or `figure`. Include the table/figure content or caption and the surrounding passage needed to interpret it. Never infer a result from an image path alone.
 
 ## Search protocol
 
@@ -68,8 +66,8 @@ Process one bounded question or claim at a time.
 
 1. Search the whole indexed library. Apply a collection, tag, author, or year filter only when the request explicitly supplies one.
 2. Run semantic search using neutral language.
-3. Run Boolean or required-term variants for acronyms, identifiers, quantities, and likely contrary terminology.
-4. Search tables when the question concerns measurements or comparisons.
+3. Run `required_terms` variants for acronyms, identifiers, quantities, and likely contrary terminology.
+4. Search with `chunk_types` of `table` and `figure` when the question concerns measurements or comparisons.
 5. Inspect every result returned. Judge relevance from content, never embedding score.
 6. Raise `top_k` or `num_papers` and search again whenever the lowest-ranked results still carry relevant material.
 7. Expand context whenever negation, modality, population, conditions, comparison, causality, or conclusion status is ambiguous.

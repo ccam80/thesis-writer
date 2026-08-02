@@ -64,8 +64,8 @@ asks for them explicitly.
 
 # Review before presenting
 
-Draft the image, run it, fix what you can see, then spawn a reviewer agent
-before presenting. This is an explicit user request to spawn a subagent.
+Draft the image, run it, fix what you can see, then spawn a reviewer
+subagent before presenting.
 
 The reviewer receives three things and nothing else: the rendered image, the
 figure's brief, and the prompt below, verbatim.

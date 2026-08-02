@@ -75,7 +75,7 @@ def test_point_vocabulary_is_shared_and_retired_names_are_gone() -> None:
         "src/skills/reviewer/body.md",
         "src/skills/zotero-research/body.md",
         "src/skills/zotero-source-acquisition/body.md",
-        "src/skills/writer/references/thesis-style-guide.md",
+        "src/skills/writer/references/figure-placeholder.md",
         "src/templates/thesis-instructions.md",
         "src/output-styles/writing-planner.md",
     )
@@ -107,6 +107,34 @@ def test_skills_name_the_contract_location_and_fail_closed_without_it() -> None:
         assert "stop and ask the author to run the initializer" in fragment
 
 
+def test_contract_carries_role_and_canonical_epistemic_scope() -> None:
+    template = text("src/templates/thesis-instructions.md")
+    assert "Never invent research, results, or citations" in template
+    assert "## Epistemic scope" in template
+    for relative in (
+        "src/skills/document-planner/body.md",
+        "src/skills/reviewer/body.md",
+        "src/skills/writer/references/prose-style.md",
+        "src/output-styles/technical-writing.md",
+    ):
+        assert "epistemic scope" in text(relative)
+
+
+def test_research_worker_uses_only_current_deep_zotero_tools() -> None:
+    research = text("src/skills/zotero-research/body.md")
+    for retired_tool in ("search_boolean", "search_tables", "search_figures"):
+        assert retired_tool not in research
+    assert "required_terms" in research
+    assert "chunk_types" in research
+
+
+def test_figure_placeholder_format_has_one_owner() -> None:
+    assert "FIGURE PLACEHOLDER" in text("src/skills/writer/references/figure-placeholder.md")
+    assert "references/figure-placeholder.md" in text("src/skills/writer/body.md")
+    assert "../writer/references/figure-placeholder.md" in text("src/skills/figure-generator/body.md")
+    assert "FIGURE PLACEHOLDER" not in text("src/skills/figure-generator/body.md")
+
+
 def test_research_contract_keeps_passages_with_multisource_claims() -> None:
     research = text("src/skills/zotero-research/body.md")
     assert "Never search the web" in research
@@ -135,7 +163,6 @@ def test_plan_is_author_readable_and_provenance_lives_in_evidence_ledger() -> No
     planner = text("src/skills/document-planner/body.md")
     writer = text("src/skills/writer/body.md")
     reviewer = text("src/skills/reviewer/body.md")
-    style_guide = text("src/skills/writer/references/thesis-style-guide.md")
     template = text("src/templates/thesis-instructions.md")
 
     plan_format = template.split("## Plan grammar", 1)[1].split("## Point types", 1)[0]
@@ -162,7 +189,7 @@ def test_plan_is_author_readable_and_provenance_lives_in_evidence_ledger() -> No
     assert "Evidence: [file/data/code locator]" not in plan_format
     assert "Premises: [IDs]" not in plan_format
 
-    for contract in (planner, writer, reviewer, style_guide, template):
+    for contract in (planner, writer, reviewer, template):
         assert "`evidence.md`" in contract
 
     assert "`plan.md` is authoritative for intended content and structure" in template
