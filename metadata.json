@@ -1,6 +1,6 @@
 {
   "name": "thesis-writer",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
   "longDescription": "A dual-vendor thesis writing plugin with collaborative planning, Zotero-grounded research, LaTeX authoring, figures, formatting, review, and authorship logging.",
   "author": {
