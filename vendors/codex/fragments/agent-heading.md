@@ -1,1 +1,0 @@
-# Codex Agent System Instructions

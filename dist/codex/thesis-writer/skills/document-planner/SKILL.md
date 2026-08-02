@@ -268,47 +268,13 @@ On entering an existing chapter, report what `.tex`, the chapter plan, and the t
 
 ## Plan tiers
 
-Exactly two plan tiers exist.
+The hierarchy, plan grammar, point types, and statuses are the shared contract's. Author both tiers to it. The shared contract is the `Thesis Writing Contract` block in the project's `AGENTS.md`, added by the `thesis-writer-init` skill. If the block is absent, stop and ask the author to run the initializer.
 
-The thesis `plan.md` holds each chapter, its content in a few sentences, and its section breakdown, with subsections where useful. It is narratively haggled and permanently ungrounded: no IDs, no statuses, no types, and no sibling `evidence.md`. A number or claim in it is assumed-to-be-grounded and is verified only when the owning chapter reaches its grounding pass.
-
-Each chapter directory holds one `plan.md` carrying the chapter down to sentence points and, once grounding begins, one sibling `evidence.md` ledger. There are no deeper plan files.
-
-## Plan grammar
-
-Stage is encoded by shape, not labels. In a chapter `plan.md`:
-
-- Prose under a heading is summary and purpose. It is never grounded and emits no sentence.
-- A bold `**¶ [label]** — [paragraph point]` line is a paragraph point.
-- A bullet nested under a `¶` line is a sentence point. Only sentence points are ever grounded.
-- A loose bullet under a heading, outside any `¶` line, is a candidate point not yet sorted into a paragraph.
+A thesis-plan number or claim is assumed-to-be-grounded and is verified only when the owning chapter reaches its grounding pass. There are no plan files below the chapter tier.
 
 Read a half-done chapter's state from shape alone: a section with only prose has not been pointed; loose bullets are mid-sorting; a `¶` line without bullets is not yet expanded; a `¶` line with bullets has its sentence plan; a bullet ending in a bracketed ID has entered grounding.
 
-```markdown
-# Plan: [Title]
-
-## Narrative thread
-[Author-approved narrative]
-
-## [Section title]
-[One or two prose sentences: what the section covers and does.]
-
-**¶ [label]** — [paragraph point]
-- [sentence point]
-- [sentence point] [PHYS-041] \cite{keyA,keyB}
-
-**¶ [label]** — [paragraph point, not yet expanded]
-
-- [candidate point not yet sorted into a paragraph]
-
-→ **Figure:** [descriptive label and specification]
-
-## Unresolved points
-[Optional readable index of open point IDs and their bounded questions; full gap records live only in `evidence.md`]
-```
-
-Number no heading; refer to a unit by directory and heading. The plan header carries the title only. Keep document type, recording date, parent path, and grounding bookkeeping in `evidence.md`. Add no block-level or file-level status field; readiness reconciles each grounded point with its ledger receipt.
+Refer to a unit by directory and heading. Readiness reconciles each grounded point with its ledger receipt.
 
 ## Phases
 
@@ -374,20 +340,15 @@ The ID encodes no section, paragraph, or type and never changes on reorder. Neve
 
 ## Types and statuses
 
-Every grounded sentence point takes exactly one type from the shared vocabulary. Nothing above sentence level is typed, and nothing is typed before grounding. Type lives in `evidence.md`, never in `plan.md`.
+Every grounded sentence point takes exactly one type from the shared vocabulary. Nothing above sentence level is typed, and nothing is typed before grounding.
 
-Two statuses exist, recorded only in the point's ledger entry: `open` and `write-ready`. A plan line carries only its text, its bracketed ID, and any approved `\cite{}` keys; an `open` point gets no marker in `plan.md`. The optional `## Unresolved points` index is the plan's only readable view of open points. Only `write-ready` points reach the writer.
+The `## Unresolved points` index is the plan's only readable view of open points.
 
 ## Write-ready invariant
 
 A point becomes `write-ready` only when:
 
-- Its ledger entry carries its complete type-specific receipt.
-- Every `CLAIM` has an approved evidence card containing at least one supporting passage.
-- Every `PROJECT_FACT` has a precise project locator.
-- Every `DERIVATION` names grounded premises and has checked steps.
-- Every `AUTHOR_ASSERTION` records explicit author attestation.
-- Every `INFERENCE` names grounded premises and states its inferential limits.
+- Its ledger entry carries the complete receipt its type requires.
 - Contradicting and qualifying evidence remains attached and is reflected in the point wording.
 - The wording does not exceed the scope its evidence supports.
 - The author has accepted the grounded wording.

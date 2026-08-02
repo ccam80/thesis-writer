@@ -296,7 +296,13 @@ def build(
     template_name = "CLAUDE.thesis-writer.md" if vendor == "claude" else "AGENTS.thesis-writer.md"
     template_target = plugin_root / "templates" / template_name
     template_target.parent.mkdir(parents=True)
-    template_target.write_text(f"{MARKER}\n\n{template.rstrip()}\n", encoding="utf-8", newline="\n")
+    # Initializers copy only the marked contract block.
+    template_target.write_text(
+        f"{MARKER}\n\n<!-- thesis-writer:contract v{metadata['version']} -->\n\n"
+        f"{template.rstrip()}\n\n<!-- /thesis-writer:contract -->\n",
+        encoding="utf-8",
+        newline="\n",
+    )
 
     ensure_all_fragments_used(fragments, used, vendor)
     ensure_all_styles_used(styles, used_styles)

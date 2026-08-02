@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 from pathlib import Path
@@ -180,6 +181,26 @@ def test_codex_style_headings_are_demoted_under_the_skill_title() -> None:
         assert "## Role" in rendered
         assert "### Banned patterns" in rendered
         assert "\n# Role" not in rendered
+
+
+def test_template_contract_block_is_version_marked() -> None:
+    version = json.loads((ROOT / "metadata.json").read_text(encoding="utf-8"))["version"]
+    for vendor, name in (("claude", "CLAUDE.thesis-writer.md"), ("codex", "AGENTS.thesis-writer.md")):
+        template = (build(vendor) / "templates" / name).read_text(encoding="utf-8")
+        begin = f"<!-- thesis-writer:contract v{version} -->"
+        assert begin in template
+        assert template.rstrip().endswith("<!-- /thesis-writer:contract -->")
+        assert template.index("GENERATED FILE") < template.index(begin)
+
+
+def test_initializers_update_only_the_versioned_contract_block() -> None:
+    for relative in ("vendors/claude/commands/thesis-writer-init.md", "vendors/codex/init-skill/body.md"):
+        init = (ROOT / relative).read_text(encoding="utf-8")
+        assert "<!-- thesis-writer:contract v... -->" in init
+        assert "<!-- /thesis-writer:contract -->" in init
+        assert "Do not copy the generated-file notice" in init
+        assert "change nothing and say so" in init
+        assert "Never replace, reorder, or rewrite content outside the markers" in init
 
 
 def test_committed_codex_distribution_is_machine_independent() -> None:

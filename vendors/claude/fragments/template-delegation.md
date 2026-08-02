@@ -1,1 +1,0 @@
-- **NEVER call `mcp__deep-zotero__*` tools directly.** Only the `zotero-research` agent may call these MCP tools. All other skills and agents must spawn `zotero-research` via the Task tool.

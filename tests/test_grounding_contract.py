@@ -16,12 +16,10 @@ def test_planner_grounds_in_a_batch_pass_and_fails_closed() -> None:
     planner = text("src/skills/document-planner/body.md")
     assert "Every grounded sentence point takes exactly one type from the shared vocabulary" in planner
     assert "Nothing above sentence level is typed, and nothing is typed before grounding" in planner
-    assert "Two statuses exist, recorded only in the point's ledger entry: `open` and `write-ready`" in planner
     assert "Mint IDs at grounding, never earlier" in planner
     assert "Phases 1–4 are ungrounded" in planner
     assert "grounding verifies every sentence point regardless of origin" in planner
     assert "Run grounding as a batch pass over the settled sentence plan" in planner
-    assert "an `open` point gets no marker in `plan.md`" in planner
     assert "Do not create or append to `reference_debt.md`" in planner
     assert "No point below `write-ready` is included in writer input" in planner
     assert "generate from whole cloth" not in planner.lower()
@@ -36,10 +34,10 @@ def test_ungrounded_phases_carry_no_machine_fields_and_drift_is_not_blocking() -
     assert "They carry no IDs, no types, no statuses, and no ledger writes" in planner
     assert "divergence from the thesis plan is normal work product, not a conflict" in planner
     assert "update the thesis plan in a single approval batch" in planner
-    assert "no sibling `evidence.md`" in planner
     assert "Planning is ungrounded until the grounding phase" in style
     assert "is normal work product" in style
     assert "permanently ungrounded" in template
+    assert "no sibling `evidence.md`" in template
     assert "Divergence is noted, never blocking" in template
 
 
@@ -57,7 +55,6 @@ def test_grounding_verifies_at_stated_precision_without_point_inflation() -> Non
 
 def test_point_vocabulary_is_shared_and_retired_names_are_gone() -> None:
     template = text("src/templates/thesis-instructions.md")
-    style_guide = text("src/skills/writer/references/thesis-style-guide.md")
 
     for point_type in (
         "`CLAIM`",
@@ -67,8 +64,7 @@ def test_point_vocabulary_is_shared_and_retired_names_are_gone() -> None:
         "`INFERENCE`",
     ):
         assert point_type in template
-        assert point_type in style_guide
-    assert "This vocabulary is shared by every skill" in template
+    assert "| Type | Receipt | Prose treatment |" in template
     assert "Two statuses exist, recorded only in `evidence.md`" in template
     assert "Only `write-ready` reaches the writer" in template
     assert "Only a grounded sentence point carries an ID" in template
@@ -96,6 +92,19 @@ def test_point_vocabulary_is_shared_and_retired_names_are_gone() -> None:
     ):
         for contract in contracts:
             assert retired not in text(contract), f"{retired!r} found in {contract}"
+
+
+def test_skills_name_the_contract_location_and_fail_closed_without_it() -> None:
+    for relative in (
+        "src/skills/document-planner/body.md",
+        "src/skills/writer/body.md",
+        "src/skills/reviewer/body.md",
+    ):
+        assert "<!-- vendor:contract-location -->" in text(relative)
+    for vendor in ("claude", "codex"):
+        fragment = text(f"vendors/{vendor}/fragments/contract-location.md")
+        assert "`Thesis Writing Contract` block" in fragment
+        assert "stop and ask the author to run the initializer" in fragment
 
 
 def test_research_contract_keeps_passages_with_multisource_claims() -> None:
@@ -129,9 +138,8 @@ def test_plan_is_author_readable_and_provenance_lives_in_evidence_ledger() -> No
     style_guide = text("src/skills/writer/references/thesis-style-guide.md")
     template = text("src/templates/thesis-instructions.md")
 
-    plan_format = planner.split("## Plan grammar", 1)[1].split("## Phases", 1)[0]
+    plan_format = template.split("## Plan grammar", 1)[1].split("## Point types", 1)[0]
     evidence_format = planner.split("## Evidence-ledger format", 1)[1].split("## Corpus gaps", 1)[0]
-    assert "Plan points carry only their text, a bracketed stable ID, and approved citation" in style_guide
     assert "A grounded point line carries only its text, bracketed ID, and approved citation keys" in template
     assert "Put document type, date, parent path, grounding bookkeeping" in template
     assert "Add no block-level or file-level status field" in plan_format
