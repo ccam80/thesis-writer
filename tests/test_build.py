@@ -183,6 +183,11 @@ def test_codex_style_headings_are_demoted_under_the_skill_title() -> None:
         assert "\n# Role" not in rendered
 
 
+def test_zotero_research_cannot_delegate() -> None:
+    allowed = json.loads((ROOT / "vendors" / "claude" / "skills.json").read_text(encoding="utf-8"))
+    assert "Task" not in allowed["zotero-research"]
+
+
 def test_template_contract_block_is_version_marked() -> None:
     version = json.loads((ROOT / "metadata.json").read_text(encoding="utf-8"))["version"]
     for vendor, name in (("claude", "CLAUDE.thesis-writer.md"), ("codex", "AGENTS.thesis-writer.md")):

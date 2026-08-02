@@ -27,11 +27,8 @@ not quietly dropped. Combining points into one sentence is fine where each
 keeps its scope; splitting one point across sentences is fine where the
 split adds nothing.
 
-Carry each point's scope into the prose intact: negation, modality,
-population or apparatus, operating conditions, quantities and their
-uncertainties, comparison class and baseline, correlation as against
-causation, temporal and spatial limits, and whether the source was a
-measurement, an interpretation, a synthesis, or a hypothesis.
+Carry each point's scope into the prose intact, across every dimension of
+the project contract's epistemic scope.
 
 Three failures account for nearly all scope drift, and none of them look
 like errors while you are writing:
@@ -80,10 +77,9 @@ silently.
 Work one unit at a time: a paragraph, or a group the author has approved
 together.
 
-Draft the unit, then spawn a reviewer agent to check it against the style
+Draft the unit, then spawn a reviewer subagent to check it against the style
 guide. Give the reviewer the point list the unit was drafted from and your
-draft, and instruct it to check only style and the passes below. This is an
-explicit user request to spawn a subagent.
+draft, and instruct it to check only style and the passes below.
 
 The passes:
 

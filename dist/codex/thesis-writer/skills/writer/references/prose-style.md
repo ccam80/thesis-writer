@@ -182,8 +182,8 @@ followed during drafting — density failures survive rule-following.
 
 ## 9. Claim fidelity and source voice
 
-- Preserve negation, modality, quantities, conditions, comparison classes,
-  populations, and causal status from the mapped plan point.
+- Preserve every dimension of the contract's epistemic scope from the mapped
+  plan point.
 - Do not turn correlation into causation, a study result into field-wide
   consensus, a bounded observation into a general law, or an inference into
   an established fact.

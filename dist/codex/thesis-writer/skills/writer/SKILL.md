@@ -28,11 +28,8 @@ not quietly dropped. Combining points into one sentence is fine where each
 keeps its scope; splitting one point across sentences is fine where the
 split adds nothing.
 
-Carry each point's scope into the prose intact: negation, modality,
-population or apparatus, operating conditions, quantities and their
-uncertainties, comparison class and baseline, correlation as against
-causation, temporal and spatial limits, and whether the source was a
-measurement, an interpretation, a synthesis, or a hypothesis.
+Carry each point's scope into the prose intact, across every dimension of
+the project contract's epistemic scope.
 
 Three failures account for nearly all scope drift, and none of them look
 like errors while you are writing:
@@ -81,10 +78,9 @@ silently.
 Work one unit at a time: a paragraph, or a group the author has approved
 together.
 
-Draft the unit, then spawn a reviewer agent to check it against the style
+Draft the unit, then spawn a reviewer subagent to check it against the style
 guide. Give the reviewer the point list the unit was drafted from and your
-draft, and instruct it to check only style and the passes below. This is an
-explicit user request to spawn a subagent.
+draft, and instruct it to check only style and the passes below.
 
 The passes:
 
@@ -216,7 +212,7 @@ Convert an approved, write-ready paragraph block from `plan.md` into technical L
 1. The directory-level `plan.md`, the author-readable content and structure authority; never `chapter_plan.md`.
 2. Its sibling `evidence.md`, the grounding and provenance authority.
 3. The target scope and `.tex` destination.
-4. `references/prose-style.md` and `references/thesis-style-guide.md`.
+4. `references/prose-style.md` and `references/figure-placeholder.md`.
 5. Existing author prose in `.tex` files and `author_reference/`.
 
 The shared contract is the `Thesis Writing Contract` block in the project's `AGENTS.md`, added by the `thesis-writer-init` skill. If the block is absent, stop and ask the author to run the initializer.
@@ -268,6 +264,8 @@ Keep the map through reviewer verification. It is an audit artifact, not a secon
 
 Before drafting a new scope, select three to five nearby author-written paragraphs with the same rhetorical function (background, methods, results, or discussion). Record a compact calibration block in the claim map: source locations, typical sentence-length range, active/passive and first-person usage, citation placement, transition form, and mathematical exposition. Do not copy distinctive phrases. If no suitable author sample exists, state that voice calibration is unavailable rather than substituting generic academic style.
 
+Calibrate terminology to the author's field: follow the terminology, notation, units, and near-synonym choices demonstrated in the approved evidence passages and the author's existing writing. Define abbreviations at first use and keep one term per concept. If the corpus lacks the needed authority, return the gap to planning; do not search externally.
+
 ## Drafting protocol
 
 Work one paragraph or author-approved paragraph group at a time.
@@ -277,19 +275,19 @@ Work one paragraph or author-approved paragraph group at a time.
 3. **Ledger check:** Compare every clause with the planned content and its matching `evidence.md` scope.
 4. **Deterministic lint:** Run `scripts/lint_prose.py` on the drafted `.tex` scope and resolve every finding or record the author's explicit exception in the claim map.
 5. **Trace check:** Confirm exact agreement among `.tex`, the sentence map, point IDs, and citation keys.
-6. **Review:** Send the reviewer agent the point list and the draft, and resolve every finding it returns before presenting.
+6. **Style review:** Spawn a style-check subagent with the point list, the draft, and the style passes only, and resolve every finding before presenting. The `reviewer` skill's full audit runs later in the chain.
 
 If a failure requires new content or changed emphasis, ask the author and return the affected point to planning/research rather than improvising. Ask when a derivation step or a project locator is incomplete.
 
 ## LaTeX requirements
 
-Use `\cite{}` only with keys approved on the mapped claim cards. Use the plan's approved figure placeholders without adding interpretive claims to captions.
+Use `\cite{}` only with keys approved on the mapped claim cards. Insert the plan's approved figure placeholders in the `references/figure-placeholder.md` format, without adding interpretive claims to captions.
 
 ## Output and handoff
 
 Write the approved prose to the specified `.tex` file and the synchronized trace to `<target-stem>.claim-map.md`. After each section, obtain author approval and append a terse authorship checkpoint to `authorship_log_draft.md` with scope, point IDs, wording decisions, revision cycles, and files written.
 
-Hand off to `formatter`, then `reviewer`. The reviewer must retain access to the exact `plan.md`, sibling `evidence.md`, `.tex`, and claim map used.
+Hand off to `figure-generator`, then `formatter`, then `reviewer`. The reviewer must retain access to the exact `plan.md`, sibling `evidence.md`, `.tex`, and claim map used.
 
 ## Prohibitions
 
