@@ -97,3 +97,9 @@ Two statuses exist, recorded only in `evidence.md`.
 - Only `write-ready` reaches the writer.
 - Rewording a promoted point returns it to `open`.
 - A point's wording stays within the scope its receipt supports. Narrowing is normal; broadening is a failure.
+
+## Authorship
+
+`authorship_log.md` is the only place authorship is recorded. No plan, ledger, or `.tex` file carries a field naming who proposed, edited, or accepted a point, and no mid-session authorship scratch file exists.
+
+Authorship is tallied once, at session end, by the `log-session` skill, as a session aggregate: points recorded, points adjusted by grounding, points agent-suggested and unchallenged, and points edited or added by the author. Per-point authorship is not tracked.

@@ -201,17 +201,11 @@ The planner and `zotero-research` must never fetch or import external sources th
 
 Background chapters usually contain more `CLAIM` points; methods and results usually contain more `PROJECT_FACT` and `DERIVATION` points. Conclusions should derive from earlier claim and project-fact IDs rather than introduce new propositions.
 
-## Authorship checkpoints
+## Authorship recording
 
-After the author approves a phase for a scope (structure, paragraph points, sentence points, or a grounded block), silently append a terse entry to `authorship_log_draft.md` containing:
+Record no authorship anywhere during planning. `plan.md` and `evidence.md` carry no field naming who proposed, edited, or accepted a point, and no mid-session authorship scratch file exists. Authorship is tallied once, at session end, by the `log-session` skill, from the session's conversation and the plan diff.
 
-- scope and phase;
-- author decisions and rejections;
-- for grounded scopes only: point IDs added, changed, removed, or retyped; provenance counts by point type; research request IDs; corpus gaps;
-- files written;
-- revision-cycle count.
-
-Ungrounded-phase checkpoints carry no per-type provenance. Do not checkpoint clarification or mechanical research calls. Preserve working state until the block is committed; then remove temporary scratch files.
+Do not create `authorship_log_draft.md`, do not append to `authorship_log.md`, and do not annotate a point with its origin. Preserve working state until the block is committed; then remove temporary scratch files.
 
 ## Integration and autonomy
 

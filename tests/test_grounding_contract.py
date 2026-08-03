@@ -241,6 +241,91 @@ def test_source_acquisition_is_a_separate_exact_approval_lane() -> None:
     assert "Then hand the claim IDs" in body
 
 
+def test_authorship_has_one_owner_and_no_mid_session_scratch_file() -> None:
+    log_session = text("src/skills/log-session/body.md")
+    planner = text("src/skills/document-planner/body.md")
+    writer = text("src/skills/writer/body.md")
+    template = text("src/templates/thesis-instructions.md")
+
+    assert "## Authorship" in template
+    assert "`authorship_log.md` is the only place authorship is recorded" in template
+    assert "no mid-session authorship scratch file exists" in template
+    assert "Per-point authorship is not tracked" in template
+
+    assert "`authorship_log.md` is the only place authorship is recorded" in log_session
+    assert "Do not read, write, or restore `authorship_log_draft.md`" in log_session
+    assert "Record no authorship anywhere during planning" in planner
+    assert "Do not create `authorship_log_draft.md`" in planner
+    assert "Record no authorship" in writer
+
+    # Only the two skills that prohibit the scratch file may name it at all.
+    for contract in (
+        "src/skills/writer/body.md",
+        "src/skills/reviewer/body.md",
+        "src/skills/figure-generator/body.md",
+        "src/skills/formatter/body.md",
+        "src/skills/zotero-research/body.md",
+        "src/skills/zotero-source-acquisition/body.md",
+        "src/templates/thesis-instructions.md",
+    ):
+        assert "authorship_log_draft" not in text(contract), contract
+
+    # No skill may instruct a mid-session authorship write, however phrased.
+    for contract in (
+        "src/skills/document-planner/body.md",
+        "src/skills/writer/body.md",
+        "src/skills/reviewer/body.md",
+        "src/skills/figure-generator/body.md",
+        "src/skills/formatter/body.md",
+        "src/skills/zotero-research/body.md",
+        "src/skills/zotero-source-acquisition/body.md",
+        "src/skills/log-session/body.md",
+        "src/templates/thesis-instructions.md",
+    ):
+        lowered = text(contract).lower()
+        assert "authorship checkpoint" not in lowered, contract
+        assert "## authorship checkpoints" not in lowered, contract
+        assert "append a terse entry" not in lowered, contract
+        assert "silently append" not in lowered, contract
+
+
+def test_authorship_tally_is_a_session_aggregate_derived_at_session_end() -> None:
+    log_session = text("src/skills/log-session/body.md")
+
+    for row in (
+        "| Points recorded |",
+        "| Adjusted by grounding |",
+        "| Agent-suggested, unchallenged |",
+        "| Edited or added by the author |",
+    ):
+        assert row in log_session
+
+    assert "The last two partition the recorded total" in log_session
+    assert "Grounding adjustments are orthogonal and overlap both" in log_session
+    assert "Do not track authorship per point" in log_session
+    assert "do not enumerate point IDs" in log_session
+    assert "Report the agent-suggested-unchallenged count even when it is unflattering" in log_session
+
+    # The tally needs a diff baseline, so log-session needs Bash on Claude.
+    import json
+
+    claude_tools = json.loads(text("vendors/claude/skills.json"))
+    assert "Bash" in claude_tools["log-session"]
+    assert "git diff <baseline> -- '*plan.md' '*evidence.md'" in log_session
+    assert "derive every count from conversation alone" in log_session
+
+    # Retired provenance metrics must not return.
+    for retired in (
+        "AI survival rate",
+        "Surviving verbatim",
+        "User-dictated content",
+        "user-directed",
+        "Initial AI generation",
+        "Content Provenance",
+    ):
+        assert retired not in log_session, retired
+
+
 def load_linter():
     path = SKILLS / "writer" / "scripts" / "lint_prose.py"
     spec = importlib.util.spec_from_file_location("lint_prose", path)
