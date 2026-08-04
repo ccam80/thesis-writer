@@ -191,9 +191,9 @@ Background chapters usually contain more `CLAIM` points; methods and results usu
 
 ## Authorship recording
 
-Record no authorship anywhere during planning. `plan.md` and `evidence.md` carry no field naming who proposed, edited, or accepted a point, and no mid-session authorship scratch file exists. Authorship is tallied once, at session end, by the `log-session` skill, from the session's conversation and the plan diff.
+Record no authorship during planning. `plan.md` and `evidence.md` carry no field naming who proposed, edited, or accepted a point. The `log-session` skill tallies authorship once, at session end, from the session's conversation and the plan diff.
 
-Do not create `authorship_log_draft.md`, do not append to `authorship_log.md`, and do not annotate a point with its origin. Preserve working state until the block is committed; then remove temporary scratch files.
+Write no authorship file, do not append to `authorship_log.md`, and do not annotate a point with its origin. Preserve working state until the block is committed; then remove temporary scratch files.
 
 ## Integration and autonomy
 

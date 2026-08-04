@@ -11,14 +11,14 @@ description: "Derives the session's authorship tally from the conversation and t
 
 This skill produces an auditable record of authorship for AI-assisted thesis writing sessions. At session end it derives the session's authorship tally from the conversation and the plan diff, presents an entry for author review, and appends the approved entry to the project's `authorship_log.md`.
 
-The log is a **defensible paper trail** demonstrating the author's intellectual direction of the work: a record of decisions, rejections, and domain contributions, not a mechanical transcript.
+The log records the author's decisions, rejections, and domain contributions. It is not a transcript.
 
-`authorship_log.md` is the only place authorship is recorded. `plan.md`, `evidence.md`, and drafted `.tex` files carry no authorship or approval-stage field, and no mid-session scratch file exists. Do not read, write, or restore `authorship_log_draft.md`; if one is present it is a stale artifact of a retired format, and its contents are plan bookkeeping rather than authorship evidence.
+`authorship_log.md` is the only place authorship is recorded. `plan.md`, `evidence.md`, and drafted `.tex` files carry no authorship or approval-stage field. Write no authorship file during the session.
 
 ## Inputs
 
-1. **Conversation context**: the session's exchanges, the primary source for who proposed, challenged, or edited each point
-2. **Plan diff**: `git diff` over the project's `plan.md` and `evidence.md` files, bounding the structural counts independently of recall
+1. **Conversation context**: the session's exchanges. Gives who proposed, challenged, or edited each point.
+2. **Plan diff**: `git diff` over the project's `plan.md` and `evidence.md` files. Gives the structural counts.
 3. **Existing log**: `authorship_log.md` in the thesis project root, for the cumulative summary
 
 ## Process
@@ -42,7 +42,7 @@ Count sentence points across the session's scope:
 
 The last two partition the recorded total. Grounding adjustments are orthogonal and overlap both.
 
-The diff bounds points recorded and the added or changed subtotals. The attribution split between the last two rows comes from the conversation, because a point the author accepted verbatim and a point the author dictated are identical in the file and differ only in the exchange.
+Take points recorded and the added or changed subtotals from the diff. Take the split between the last two rows from the conversation; the diff cannot separate them.
 
 The tally is a session aggregate. Do not track authorship per point, do not enumerate point IDs, and do not reconstruct a per-point history.
 
@@ -155,18 +155,15 @@ The log must be **accurate, not flattering**. Report the session as it happened,
 
 - If the author rejected most agent suggestions, report the rejections honestly.
 - If the agent's main contribution was organisational rather than substantive, say so.
-- If the author dictated nearly all content and the agent transcribed, that is valuable work but not agent authorship — characterise it accurately.
-- Attribute each point's substance to whoever introduced it: content generated from the author's stated narrative goal is the author's intellectual contribution; content the agent proposed unprompted is the agent's.
-- A count the session cannot support is reported as an estimate and marked as one. Do not compute ratios or percentages the counts do not contain.
-- Report the agent-suggested-unchallenged count even when it is unflattering. A point that reached the plan without author scrutiny is the single most important number in this log.
-
-The value of this log is its credibility — an honest record protects the author far better than a sanitised one.
+- If the author dictated nearly all content and the agent transcribed, record it as author content.
+- Attribute each point's substance to whoever introduced it. Content generated from the author's stated narrative goal is the author's; content the agent proposed unprompted is the agent's.
+- Mark any count the session cannot support as an estimate. Do not compute ratios or percentages the counts do not contain.
+- Report the agent-suggested-unchallenged count even when it is unflattering.
 
 ## Edge Cases
 
 - **No git baseline**: Derive all counts from conversation and state that the diff was unavailable.
-- **Session was purely formatting or review**: Note that no authorship-relevant decisions were made; formatting and review are mechanical. Omit the Authorship Tally.
-- **Session was purely writing, not planning**: Writing converts existing plans to prose. Note "Writing session — authorship established during planning." Do not double-count content.
-- **Very short session**: Still log it. A 10-minute correction session is worth recording.
-- **Mixed session, planning and writing**: Tally the planning scope only. Writing is mechanical conversion of already-attributed content.
-- **A stale `authorship_log_draft.md` exists**: Do not merge it into the entry. Report its presence to the author and let them decide whether to delete it.
+- **Session was purely formatting or review**: State that no authorship-relevant decisions were made. Omit the Authorship Tally.
+- **Session was purely writing, not planning**: State "Writing session — authorship established during planning." Do not tally the points again.
+- **Very short session**: Still log it.
+- **Mixed session, planning and writing**: Tally the planning scope only.

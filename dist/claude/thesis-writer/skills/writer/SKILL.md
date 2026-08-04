@@ -94,7 +94,7 @@ Use `\cite{}` only with keys approved on the mapped claim cards. Insert the plan
 
 ## Output and handoff
 
-Write the approved prose to the specified `.tex` file and the synchronized trace to `<target-stem>.claim-map.md`. Obtain author approval after each section. Record no authorship: the `.tex` file, the claim map, and the plan carry no field naming who wrote or edited a sentence, and no authorship scratch file is written. `log-session` tallies authorship once at session end.
+Write the approved prose to the specified `.tex` file and the synchronized trace to `<target-stem>.claim-map.md`. Obtain author approval after each section. Record no authorship: the `.tex` file, the claim map, and the plan carry no field naming who wrote or edited a sentence. Write no authorship file; `log-session` tallies authorship once at session end.
 
 Hand off to `figure-generator`, then `formatter`, then `reviewer`. The reviewer must retain access to the exact `plan.md`, sibling `evidence.md`, `.tex`, and claim map used.
 

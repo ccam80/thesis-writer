@@ -249,29 +249,16 @@ def test_authorship_has_one_owner_and_no_mid_session_scratch_file() -> None:
 
     assert "## Authorship" in template
     assert "`authorship_log.md` is the only place authorship is recorded" in template
-    assert "no mid-session authorship scratch file exists" in template
+    assert "Write no authorship file during a session" in template
     assert "Per-point authorship is not tracked" in template
 
     assert "`authorship_log.md` is the only place authorship is recorded" in log_session
-    assert "Do not read, write, or restore `authorship_log_draft.md`" in log_session
-    assert "Record no authorship anywhere during planning" in planner
-    assert "Do not create `authorship_log_draft.md`" in planner
-    assert "Record no authorship" in writer
+    assert "Write no authorship file during the session" in log_session
+    assert "Record no authorship during planning" in planner
+    assert "Write no authorship file" in planner
+    assert "Write no authorship file" in writer
 
-    # Only the two skills that prohibit the scratch file may name it at all.
-    for contract in (
-        "src/skills/writer/body.md",
-        "src/skills/reviewer/body.md",
-        "src/skills/figure-generator/body.md",
-        "src/skills/formatter/body.md",
-        "src/skills/zotero-research/body.md",
-        "src/skills/zotero-source-acquisition/body.md",
-        "src/templates/thesis-instructions.md",
-    ):
-        assert "authorship_log_draft" not in text(contract), contract
-
-    # No skill may instruct a mid-session authorship write, however phrased.
-    for contract in (
+    contracts = (
         "src/skills/document-planner/body.md",
         "src/skills/writer/body.md",
         "src/skills/reviewer/body.md",
@@ -281,10 +268,14 @@ def test_authorship_has_one_owner_and_no_mid_session_scratch_file() -> None:
         "src/skills/zotero-source-acquisition/body.md",
         "src/skills/log-session/body.md",
         "src/templates/thesis-instructions.md",
-    ):
+    )
+
+    # No skill may name the retired scratch file or instruct a mid-session
+    # authorship write, however phrased.
+    for contract in contracts:
         lowered = text(contract).lower()
+        assert "authorship_log_draft" not in lowered, contract
         assert "authorship checkpoint" not in lowered, contract
-        assert "## authorship checkpoints" not in lowered, contract
         assert "append a terse entry" not in lowered, contract
         assert "silently append" not in lowered, contract
 
@@ -304,7 +295,7 @@ def test_authorship_tally_is_a_session_aggregate_derived_at_session_end() -> Non
     assert "Grounding adjustments are orthogonal and overlap both" in log_session
     assert "Do not track authorship per point" in log_session
     assert "do not enumerate point IDs" in log_session
-    assert "Report the agent-suggested-unchallenged count even when it is unflattering" in log_session
+    assert "Report the agent-suggested-unchallenged count even when it is unflattering." in log_session
 
     # The tally needs a diff baseline, so log-session needs Bash on Claude.
     import json

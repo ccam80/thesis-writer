@@ -104,8 +104,8 @@ Two statuses exist, recorded only in `evidence.md`.
 
 ## Authorship
 
-`authorship_log.md` is the only place authorship is recorded. No plan, ledger, or `.tex` file carries a field naming who proposed, edited, or accepted a point, and no mid-session authorship scratch file exists.
+`authorship_log.md` is the only place authorship is recorded. No plan, ledger, or `.tex` file carries a field naming who proposed, edited, or accepted a point. Write no authorship file during a session.
 
-Authorship is tallied once, at session end, by the `log-session` skill, as a session aggregate: points recorded, points adjusted by grounding, points agent-suggested and unchallenged, and points edited or added by the author. Per-point authorship is not tracked.
+The `log-session` skill tallies authorship once, at session end, as a session aggregate: points recorded, points adjusted by grounding, points agent-suggested and unchallenged, and points edited or added by the author. Per-point authorship is not tracked.
 
 <!-- /thesis-writer:contract -->
