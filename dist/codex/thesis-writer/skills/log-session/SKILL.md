@@ -1,6 +1,6 @@
 ---
 name: log-session
-description: "Synthesises an authorship log entry from session checkpoints and conversation context. Presents draft for author approval before appending to the project's authorship_log.md."
+description: "Derives the session's authorship tally from the conversation and the plan diff at session end. Presents draft for author approval before appending to the project's authorship_log.md, the only place authorship is recorded."
 ---
 
 <!-- GENERATED FILE — edit src/ or vendors/, then run scripts/build_plugin.py -->
@@ -9,66 +9,74 @@ description: "Synthesises an authorship log entry from session checkpoints and c
 
 ## Overview
 
-This skill produces an auditable record of authorship for AI-assisted thesis writing sessions. It synthesises checkpoint notes (written silently by content-creating skills during the session) and any remaining conversation context into a structured log entry, then presents it for author review and approval before appending to the project's `authorship_log.md`.
+This skill produces an auditable record of authorship for AI-assisted thesis writing sessions. At session end it derives the session's authorship tally from the conversation and the plan diff, presents an entry for author review, and appends the approved entry to the project's `authorship_log.md`.
 
-The log is a **defensible paper trail** demonstrating the author's intellectual direction of the work: a record of decisions, rejections, and domain contributions, not a mechanical transcript.
+The log records the author's decisions, rejections, and domain contributions. It is not a transcript.
+
+`authorship_log.md` is the only place authorship is recorded. `plan.md`, `evidence.md`, and drafted `.tex` files carry no authorship or approval-stage field. Write no authorship file during the session.
 
 ## Inputs
 
-1. **Checkpoint scratch file**: `authorship_log_draft.md` in the thesis project root, written incrementally by `document-planner` and `writer` during the session
-2. **Conversation context**: whatever remains in the context window at invocation time
+1. **Conversation context**: the session's exchanges. Gives who proposed, challenged, or edited each point.
+2. **Plan diff**: `git diff` over the project's `plan.md` and `evidence.md` files. Gives the structural counts.
 3. **Existing log**: `authorship_log.md` in the thesis project root, for the cumulative summary
 
 ## Process
 
-### Step 1: Gather Material
+### Step 1: Establish the diff baseline
 
-1. Read `authorship_log_draft.md` if it exists
-2. Scan current conversation context for work done since the last checkpoint
-3. Read the current `authorship_log.md` cumulative summary, if it exists, to update running totals
+Determine the project root and confirm it is a git repository. Establish the session's baseline commit: the most recent commit made before this session's first edit, found with `git log` over the plan files. State the baseline explicitly in the entry.
 
-### Step 2: Analyse Checkpoints
+Collect the structural change with `git diff <baseline> -- '*plan.md' '*evidence.md'`. If the project is not a git repository, or the working tree was already dirty at session start so no clean baseline exists, say so in the entry and derive every count from conversation alone.
 
-Each checkpoint records scope and phase, author decisions and rejections, files written, and a revision-cycle count. Grounded-scope checkpoints add point IDs added, changed, removed, or retyped; provenance counts by point type; research request IDs; and corpus gaps. Ungrounded-phase checkpoints carry no per-type provenance.
+### Step 2: Derive the session tally
 
-Aggregate across checkpoints:
+Count sentence points across the session's scope:
 
-- author decisions and rejections, kept concrete;
-- point IDs touched and per-type provenance counts for grounded scopes;
-- research request IDs and corpus gaps;
-- files written and revision cycles.
+| Count | Definition |
+|---|---|
+| Points recorded | Sentence points written or rewritten in the scope this session |
+| Adjusted by grounding | Points whose text changed as a result of the grounding pass |
+| Agent-suggested, unchallenged | Points the agent proposed that entered the plan with no author edit or objection |
+| Edited or added by the author | Points the author dictated, added, reworded, or altered after an agent proposal |
 
-From checkpoint notes and conversation context, identify:
+The last two partition the recorded total. Grounding adjustments are orthogonal and overlap both.
 
-**Author direction** — instances where the author introduced a technical point, claim, or structural choice; rejected an agent suggestion (with brief reason if apparent); modified an agent suggestion before accepting; provided domain knowledge not available in the literature; or redirected emphasis, ordering, or scope.
+Take points recorded and the added or changed subtotals from the diff. Take the split between the last two rows from the conversation; the diff cannot separate them.
 
-**Agent contributions** — instances where the agent proposed structure or content that was accepted without significant modification, suggested references from Zotero that were accepted, or performed organisational work (sequencing, grouping, formatting).
+The tally is a session aggregate. Do not track authorship per point, do not enumerate point IDs, and do not reconstruct a per-point history.
+
+### Step 3: Identify the decision record
+
+From the conversation, identify:
+
+**Author direction** — where the author introduced a technical point, claim, or structural choice; rejected an agent suggestion, with brief reason if apparent; modified an agent suggestion before accepting; supplied domain knowledge not available in the literature; or redirected emphasis, ordering, or scope.
+
+**Agent contributions** — where the agent proposed structure or content accepted without significant modification, suggested Zotero references that were accepted, or performed organisational work such as sequencing, grouping, or formatting.
 
 **Iteration indicators** — scopes that required multiple revision cycles before approval, and the approximate exchange count.
 
-### Step 3: Draft Session Entry
+### Step 4: Draft the session entry
 
 ```markdown
 ## Session [DATE] — [Scope Description]
 
 **Exchanges**: ~[N] | **Skills used**: [list]
-**Checkpoints captured**: [N]
+**Diff baseline**: [commit | none, stated reason]
 
 ### Scope
 [1-2 sentences: what was worked on this session]
 
-### Content Provenance (grounded scopes only)
+### Authorship Tally
 
-| Metric | Value |
+| Count | Value |
 |--------|-------|
-| Grounded points in scope | [N] |
-| By type | CLAIM [N], PROJECT_FACT [N], DERIVATION [N], AUTHOR_ASSERTION [N], INFERENCE [N] |
-| Points added / changed / removed / retyped | [N] / [N] / [N] / [N] |
-| Research requests | [N] |
-| Corpus gaps | [N] |
-| Revision cycles | [N] |
+| Points recorded | [N] |
+| Adjusted by grounding | [N] |
+| Agent-suggested, unchallenged | [N] |
+| Edited or added by the author | [N] |
 
-**Summary**: [1-2 sentence plain-language interpretation of the session's authorship balance, grounded in the decision record]
+**Summary**: [1-2 sentence plain-language interpretation of the session's authorship balance]
 
 ### Author Direction
 - [Concrete decisions, rejections, and domain contributions — 3-8 bullet points]
@@ -87,7 +95,7 @@ From checkpoint notes and conversation context, identify:
 - [Files written or edited during the session]
 ```
 
-### Step 4: Present for Author Approval
+### Step 5: Present for author approval
 
 Present the draft entry as a complete block. The author will approve as-is, request specific corrections (misattributed decisions, missing context, inaccurate characterisation), or add points the log missed.
 
@@ -98,15 +106,14 @@ Handle corrections conversationally — update the draft and re-present until ap
 - Present the entry piecemeal
 - Skip this approval step
 
-### Step 5: Append to Log
+### Step 6: Append to log
 
 Once approved:
 
 1. **Append** the entry to `authorship_log.md` in the thesis project root
-2. **Update the cumulative summary** at the top of the file (create it if this is the first entry)
-3. **Delete** `authorship_log_draft.md` (the scratch file is consumed)
+2. **Update the cumulative summary** at the top of the file, creating it if this is the first entry
 
-### Cumulative Summary Format
+### Cumulative summary format
 
 The top of `authorship_log.md` contains a running summary updated each session:
 
@@ -122,12 +129,12 @@ The top of `authorship_log.md` contains a running summary updated each session:
   prose drafted via writer skill from approved plans. All citations from
   author's Zotero library. Author reviewed and approved all output.
 
-### Cumulative Provenance (grounded scopes only)
-| Metric | Total |
+### Cumulative Authorship Tally
+| Count | Total |
 |--------|-------|
-| Grounded points | [N] |
-| By type | CLAIM [N], PROJECT_FACT [N], DERIVATION [N], AUTHOR_ASSERTION [N], INFERENCE [N] |
-| Corpus gaps open / resolved | [N] / [N] |
+| Points recorded | [N] |
+| Agent-suggested, unchallenged | [N] |
+| Edited or added by the author | [N] |
 
 ---
 
@@ -136,29 +143,27 @@ The top of `authorship_log.md` contains a running summary updated each session:
 
 ## What This Skill Does NOT Do
 
-- Does not modify any thesis content (plans, .tex files, figures)
+- Does not modify any thesis content (plans, `.tex` files, figures)
+- Does not write authorship, origin, or approval-stage fields into any plan, ledger, or `.tex` file
 - Does not assess quality or correctness of the work
 - Does not fabricate or embellish the author's contributions
 - Does not include full conversation transcripts
 
 ## Honesty Policy
 
-The log must be **accurate, not flattering**. Report the checkpoint record as captured, not as the agent wishes it were.
+The log must be **accurate, not flattering**. Report the session as it happened, not as the agent wishes it had.
 
 - If the author rejected most agent suggestions, report the rejections honestly.
-- If the agent's main contribution was organisational (sequencing, formatting) rather than substantive content, say so.
-- If the author dictated nearly all content and the agent transcribed, that is valuable work but not agent authorship — characterise it accurately.
-- Attribute each point's substance to whoever introduced it: content generated from the author's stated narrative goal is the author's intellectual contribution; content the agent proposed unprompted is the agent's.
-- Report only counts the checkpoints actually recorded. Do not compute ratios or percentages from data the checkpoints do not contain.
-
-The value of this log is its credibility — an honest record protects the author far better than a sanitised one.
+- If the agent's main contribution was organisational rather than substantive, say so.
+- If the author dictated nearly all content and the agent transcribed, record it as author content.
+- Attribute each point's substance to whoever introduced it. Content generated from the author's stated narrative goal is the author's; content the agent proposed unprompted is the agent's.
+- Mark any count the session cannot support as an estimate. Do not compute ratios or percentages the counts do not contain.
+- Report the agent-suggested-unchallenged count even when it is unflattering.
 
 ## Edge Cases
 
-- **No checkpoints exist**: Analyse conversation context only. Note in the entry that no mid-session checkpoints were captured, and omit the Content Provenance table.
-- **Session was purely formatting/review**: Note that no authorship-relevant decisions were made — formatting and review are mechanical. Omit the Content Provenance section.
-- **Session was purely writing (not planning)**: Writing sessions convert existing plans to prose. Note "Writing session — provenance established during planning." Do not double-count content.
-- **Very short session**: Still log it. A 10-minute correction session is worth recording.
-- **Context heavily compacted**: Rely primarily on checkpoint notes. Note that context was compacted and detail may be limited.
-- **Mixed session (planning + writing)**: Count provenance only for the grounded planning scopes. Writing is mechanical conversion of already-attributed content.
-- **Only ungrounded-phase checkpoints (structure, paragraph, or sentence phases)**: Omit the Content Provenance table; the decision record still fills Author Direction and Agent Contributions.
+- **No git baseline**: Derive all counts from conversation and state that the diff was unavailable.
+- **Session was purely formatting or review**: State that no authorship-relevant decisions were made. Omit the Authorship Tally.
+- **Session was purely writing, not planning**: State "Writing session — authorship established during planning." Do not tally the points again.
+- **Very short session**: Still log it.
+- **Mixed session, planning and writing**: Tally the planning scope only.

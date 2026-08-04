@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 
 
@@ -239,6 +240,48 @@ def test_source_acquisition_is_a_separate_exact_approval_lane() -> None:
     assert "CAPTCHA" in body
     assert "Delete the created attachment first" in body
     assert "Then hand the claim IDs" in body
+
+
+def test_authorship_is_recorded_only_in_the_session_log() -> None:
+    log_session = text("src/skills/log-session/body.md")
+    planner = text("src/skills/document-planner/body.md")
+    writer = text("src/skills/writer/body.md")
+    template = text("src/templates/thesis-instructions.md")
+
+    assert "## Authorship" in template
+    assert "`authorship_log.md` is the only place authorship is recorded" in template
+    assert "Write no authorship file during a session" in template
+    assert "Per-point authorship is not tracked" in template
+
+    assert "`authorship_log.md` is the only place authorship is recorded" in log_session
+    assert "Write no authorship file during the session" in log_session
+    assert "Record no authorship during planning" in planner
+    assert "Write no authorship file" in planner
+    assert "Write no authorship file" in writer
+
+
+def test_authorship_tally_is_a_session_aggregate_derived_at_session_end() -> None:
+    log_session = text("src/skills/log-session/body.md")
+
+    for row in (
+        "| Points recorded |",
+        "| Adjusted by grounding |",
+        "| Agent-suggested, unchallenged |",
+        "| Edited or added by the author |",
+    ):
+        assert row in log_session
+
+    assert "The last two partition the recorded total" in log_session
+    assert "Grounding adjustments are orthogonal and overlap both" in log_session
+    assert "Do not track authorship per point" in log_session
+    assert "do not enumerate point IDs" in log_session
+    assert "Report the agent-suggested-unchallenged count even when it is unflattering." in log_session
+
+    # The tally needs a diff baseline, so log-session needs Bash on Claude.
+    claude_tools = json.loads(text("vendors/claude/skills.json"))
+    assert "Bash" in claude_tools["log-session"]
+    assert "git diff <baseline> -- '*plan.md' '*evidence.md'" in log_session
+    assert "derive every count from conversation alone" in log_session
 
 
 def load_linter():

@@ -102,4 +102,10 @@ Two statuses exist, recorded only in `evidence.md`.
 - Rewording a promoted point returns it to `open`.
 - A point's wording stays within the scope its receipt supports. Narrowing is normal; broadening is a failure.
 
+## Authorship
+
+`authorship_log.md` is the only place authorship is recorded. No plan, ledger, or `.tex` file carries a field naming who proposed, edited, or accepted a point. Write no authorship file during a session.
+
+The `log-session` skill tallies authorship once, at session end, as a session aggregate: points recorded, points adjusted by grounding, points agent-suggested and unchallenged, and points edited or added by the author. Per-point authorship is not tracked.
+
 <!-- /thesis-writer:contract -->
