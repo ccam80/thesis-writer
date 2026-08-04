@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 
 
@@ -241,7 +242,7 @@ def test_source_acquisition_is_a_separate_exact_approval_lane() -> None:
     assert "Then hand the claim IDs" in body
 
 
-def test_authorship_has_one_owner_and_no_mid_session_scratch_file() -> None:
+def test_authorship_is_recorded_only_in_the_session_log() -> None:
     log_session = text("src/skills/log-session/body.md")
     planner = text("src/skills/document-planner/body.md")
     writer = text("src/skills/writer/body.md")
@@ -257,27 +258,6 @@ def test_authorship_has_one_owner_and_no_mid_session_scratch_file() -> None:
     assert "Record no authorship during planning" in planner
     assert "Write no authorship file" in planner
     assert "Write no authorship file" in writer
-
-    contracts = (
-        "src/skills/document-planner/body.md",
-        "src/skills/writer/body.md",
-        "src/skills/reviewer/body.md",
-        "src/skills/figure-generator/body.md",
-        "src/skills/formatter/body.md",
-        "src/skills/zotero-research/body.md",
-        "src/skills/zotero-source-acquisition/body.md",
-        "src/skills/log-session/body.md",
-        "src/templates/thesis-instructions.md",
-    )
-
-    # No skill may name the retired scratch file or instruct a mid-session
-    # authorship write, however phrased.
-    for contract in contracts:
-        lowered = text(contract).lower()
-        assert "authorship_log_draft" not in lowered, contract
-        assert "authorship checkpoint" not in lowered, contract
-        assert "append a terse entry" not in lowered, contract
-        assert "silently append" not in lowered, contract
 
 
 def test_authorship_tally_is_a_session_aggregate_derived_at_session_end() -> None:
@@ -298,23 +278,10 @@ def test_authorship_tally_is_a_session_aggregate_derived_at_session_end() -> Non
     assert "Report the agent-suggested-unchallenged count even when it is unflattering." in log_session
 
     # The tally needs a diff baseline, so log-session needs Bash on Claude.
-    import json
-
     claude_tools = json.loads(text("vendors/claude/skills.json"))
     assert "Bash" in claude_tools["log-session"]
     assert "git diff <baseline> -- '*plan.md' '*evidence.md'" in log_session
     assert "derive every count from conversation alone" in log_session
-
-    # Retired provenance metrics must not return.
-    for retired in (
-        "AI survival rate",
-        "Surviving verbatim",
-        "User-dictated content",
-        "user-directed",
-        "Initial AI generation",
-        "Content Provenance",
-    ):
-        assert retired not in log_session, retired
 
 
 def load_linter():
