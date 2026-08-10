@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — edit src/ or vendors/, then run scripts/build_plugin.py -->
 
-<!-- thesis-writer:contract v0.6.1 -->
+<!-- thesis-writer:contract v0.7.0 -->
 
 # Thesis Writing Contract
 
