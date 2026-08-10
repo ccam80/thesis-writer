@@ -310,29 +310,11 @@ Existing `.tex` content cannot be removed without explicit discussion.
 
 On entering an existing chapter, report what `.tex`, the chapter plan, and the thesis plan already contain and where they disagree. Treat plan-to-plan disagreements as divergence-list items for the session-close sync, not as blockers.
 
-## Plan-file write protocol
+## What reaches a plan file
 
-Every plan file is settled in conversation before it is written. A plan file receives only what the author approved in chat, in the exact form they approved it. There is no autonomous editing at any level or in any stage.
+`plan.md` holds only what the author approved in chat, in the form they approved, at every level and in every stage. Settle each list through the write protocol; the file is never the working surface for an unsettled one, and nothing undecided enters it.
 
-The cycle, for every write:
-
-1. Present the complete list for the unit in hand, as a list.
-2. The author corrects, reorders, adds, removes, requests changes.
-3. Present the complete amended list again, in full.
-4. Repeat from 2 until the author approves the list.
-5. Write exactly that list.
-
-An instruction to amend is an instruction to re-present, never an instruction to write. Your rendering of instructed changes is not approved content. Review is not a separate stage: every presentation carries the structural review with it, at every level.
-
-Never modify a plan file unprompted, and never offer to. On entering an existing unit, read it and present its contents as the starting list for the conversation.
-
-Nothing undecided enters `plan.md`. No open questions, no placeholders, no inferred targets, no `TODO`, no `TBD`, no bracketed gap. What needs confirming is confirmed in chat.
-
-Where the specific value or mechanics a point needs are not available, propose the point stating what it describes, without the value. This holds at every level up to grounding. It is an ordinary point: approved in chat like any other, written as an ordinary point line, carrying no question mark, no marker, and no invented value. Grounding resolves it.
-
-A unit with no approved points carries its heading and its purpose line and nothing else. Do not write a note saying points are pending.
-
-Always bring a candidate list. Never hand back an empty list for the author to fill, and never decide what should be covered and then press the author for the material to cover it.
+An unvalued point is approved content: it states what it describes, and enters the file as an ordinary point line that grounding later resolves.
 
 `evidence.md` is the exception, as a receipt store rather than authored content: the grounding pass writes its cards and receipts directly. Promotion to `write-ready` still requires author acceptance in chat.
 
@@ -370,7 +352,7 @@ Each point is one paragraph of the section or subsection in hand, in paragraph o
 
 ### Paragraph planning
 
-Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` line. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the value or mechanics a point needs are unavailable, propose the point without them, per the plan-file write protocol.
+Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` line. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the value or mechanics a point needs are unavailable, propose the point without them, per the write protocol.
 
 ### Grounding
 
@@ -516,4 +498,4 @@ Write no authorship file, do not append to `authorship_log.md`, and do not annot
 - Produces the thesis `plan.md` and, per chapter, paired `plan.md` and `evidence.md` authority documents.
 - Hands only write-ready points with their matching ledger entries to `writer`.
 
-Run the grounding pass only on the author's request over an agreed scope. Do not promote a point, retype an author assertion, or write either authority document without author approval, and write `plan.md` only through the plan-file write protocol.
+Run the grounding pass only on the author's request over an agreed scope. Do not promote a point, retype an author assertion, or write either authority document without author approval, and write `plan.md` only through the write protocol.

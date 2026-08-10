@@ -21,32 +21,54 @@ def text(path: Path) -> str:
     return " ".join(path.read_text(encoding="utf-8").split())
 
 
-def test_plan_files_are_written_only_from_a_chat_approved_list() -> None:
-    planner = text(PLANNER)
+def test_the_style_owns_the_approval_cycle() -> None:
     style = text(STYLE)
 
-    for source in (planner, style):
-        assert "There is no autonomous editing at any level" in source
-        assert "Present the complete list for the unit in hand, as a list." in source
-        assert "Present the complete amended list again, in full." in source
-        assert "Write exactly that list." in source
-        assert (
-            "An instruction to amend is an instruction to re-present, never an "
-            "instruction to write." in source
-        )
-        assert "Your rendering of instructed changes is not approved content." in source
-        assert "Never modify a plan file unprompted, and never offer to." in source
+    assert "There is no autonomous editing at any level" in style
+    assert "Present the complete list for the unit in hand, as a list." in style
+    assert "Present the complete amended list again, in full." in style
+    assert "Write exactly that list." in style
+    assert (
+        "An instruction to amend is an instruction to re-present, never an "
+        "instruction to write." in style
+    )
+    assert "Your rendering of instructed changes is not approved content." in style
+    assert "Never modify a plan file unprompted, and never offer to." in style
+
+
+def test_the_skill_owns_what_reaches_the_artefacts() -> None:
+    planner = text(PLANNER)
+
+    assert (
+        "`plan.md` holds only what the author approved in chat, in the form they "
+        "approved, at every level and in every stage." in planner
+    )
+    assert "the file is never the working surface for an unsettled one" in planner
+    assert "nothing undecided enters it" in planner
+    assert "`evidence.md` is the exception, as a receipt store" in planner
+    assert "Promotion to `write-ready` still requires author acceptance in chat." in planner
+
+
+def test_the_style_and_the_skill_do_not_restate_each_other() -> None:
+    import re
+
+    def sentences(path: Path) -> set[str]:
+        return {
+            s.strip()
+            for s in re.split(r"(?<=[.:])\s+", text(path))
+            if len(s.strip()) > 25
+        }
+
+    assert sentences(STYLE) & sentences(PLANNER) == set()
 
 
 def test_nothing_undecided_reaches_the_plan_file() -> None:
-    planner = text(PLANNER)
     style = text(STYLE)
     template = text(TEMPLATE)
 
-    assert "Nothing undecided enters `plan.md`" in planner
     assert "Nothing undecided enters a plan file" in style
     assert "`plan.md` holds only content the author approved in chat" in template
-    for source in (planner, style, template):
+    for source in (style, template):
         assert "no placeholders" in source
         assert "TODO" in source
         assert "TBD" in source
@@ -57,13 +79,17 @@ def test_an_unavailable_value_becomes_an_unvalued_point_not_a_question() -> None
     style = text(STYLE)
     template = text(TEMPLATE)
 
-    for source in (planner, style):
-        assert (
-            "Where the specific value or mechanics a point needs are not available, "
-            "propose the point stating what it describes, without the value." in source
-        )
-        assert "carrying no question mark, no marker, and no invented value" in source
-        assert "This holds at every level up to grounding." in source
+    assert (
+        "Where the specific value or mechanics a point needs are not available, "
+        "propose the point stating what it describes, without the value." in style
+    )
+    assert "carrying no question mark, no marker, and no invented value" in style
+    assert "This holds at every level up to grounding." in style
+    assert (
+        "An unvalued point is approved content: it states what it describes, and "
+        "enters the file as an ordinary point line that grounding later resolves."
+        in planner
+    )
     assert (
         "A point whose value is not yet available states what it describes, without "
         "the value, and is approved like any other point." in template
@@ -71,17 +97,14 @@ def test_an_unavailable_value_becomes_an_unvalued_point_not_a_question() -> None
 
 
 def test_planner_never_hands_back_an_empty_list_for_the_author_to_fill() -> None:
-    planner = text(PLANNER)
     style = text(STYLE)
 
-    assert "Always bring a candidate list." in planner
     assert "You always bring a candidate list." in style
-    for source in (planner, style):
-        assert "empty list for the author to fill" in source
-        assert "press the author for the material to cover it" in source
+    assert "empty list for the author to fill" in style
+    assert "press the author for the material to cover it" in style
     assert (
         "A unit with no approved points carries its heading and its purpose line and "
-        "nothing else." in planner
+        "nothing else." in style
     )
 
 
@@ -124,13 +147,8 @@ def test_stages_carry_semantic_names_and_level_correspondence() -> None:
 
 
 def test_review_happens_on_every_presentation_rather_than_as_a_later_stage() -> None:
-    planner = text(PLANNER)
     style = text(STYLE)
 
-    assert (
-        "Review is not a separate stage: every presentation carries the structural "
-        "review with it" in planner
-    )
     assert "Every presentation carries its review with it." in style
     assert "Reviewing is not a later stage" in style
 
@@ -187,8 +205,8 @@ def test_both_distributions_carry_the_write_protocol() -> None:
     for built in DIST_PLANNERS:
         assert built.exists(), built
         content = text(built)
-        assert "## Plan-file write protocol" in content
-        assert "There is no autonomous editing at any level" in content
+        assert "## What reaches a plan file" in content
+        assert "nothing undecided enters it" in content
         assert "### Grounded review" in content
         assert "haggl" not in content.lower()
 
