@@ -19,6 +19,7 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 - A grounded ID appears exactly once in `plan.md` and once in `evidence.md`.
 - Only a grounded sentence point carries an ID.
 - Number no heading. File order is the order.
+- `plan.md` holds only content the author approved in chat, in the form they approved. Nothing undecided goes in it: no open questions, no placeholders, no inferred targets, no `TODO`, no `TBD`. A point whose value is not yet available states what it describes, without the value, and is approved like any other point.
 
 ## Plan grammar
 
@@ -27,7 +28,6 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 | Prose under a heading | Summary and purpose. Emits no sentence. |
 | `**¶ [label]** — [text]` | Paragraph point. |
 | Bullet nested under a `¶` line | Sentence point. The only groundable line. |
-| Loose bullet under a heading | Candidate point, not yet sorted into a paragraph. |
 | Sentence point with a bracketed ID | Grounded. |
 
 ```markdown
@@ -45,13 +45,13 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 
 **¶ [label]** — [paragraph point, not yet expanded]
 
-- [candidate point not yet sorted into a paragraph]
-
 → **Figure:** [descriptive label and specification]
 
 ## Unresolved points
 [Readable index of open point IDs and their bounded questions]
 ```
+
+`## Unresolved points` is written only by the grounding pass, generated from the `evidence.md` entries at status `open`. Every ID in it has both an approved point line in `plan.md` and a matching ledger entry.
 
 A grounded point line carries only its text, bracketed ID, and approved citation keys. The plan header carries the title only. Add no block-level or file-level status field.
 

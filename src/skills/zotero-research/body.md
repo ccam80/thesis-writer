@@ -39,7 +39,7 @@ Use when the author or existing thesis supplies a proposition:
 
 Treat the proposition as unverified. Search for support, qualification, and contradiction. Do not optimize the wording until a source appears to support it.
 
-Verify the proposition at the precision it states: it is supported when its wording is entailed, even where the passage is more specific. Recommend narrowing only when the recorded evidence cannot support the wording as stated. Never add, split, or widen propositions; note any finer finding on the card for the planner's haggling.
+Verify the proposition at the precision it states: it is supported when its wording is entailed, even where the passage is more specific. Recommend narrowing only when the recorded evidence cannot support the wording as stated. Never add, split, or widen propositions; note any finer finding on the card for the planner's grounded review.
 
 ### Citation verification
 
