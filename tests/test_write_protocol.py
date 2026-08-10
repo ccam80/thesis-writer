@@ -16,12 +16,7 @@ DIST_PLANNERS = (
 
 
 def text(path: Path) -> str:
-    """Read a source file with every whitespace run collapsed to one space.
-
-    The output styles are hard-wrapped, so a contract sentence spans line
-    breaks there and not in the skills. Contract assertions are about wording,
-    not wrapping.
-    """
+    """Read a source file with every whitespace run collapsed to one space."""
 
     return " ".join(path.read_text(encoding="utf-8").split())
 
@@ -199,11 +194,7 @@ def test_both_distributions_carry_the_write_protocol() -> None:
 
 
 def test_the_codex_build_does_not_repeat_a_section_heading() -> None:
-    """Codex inlines the output style ahead of the skill body.
-
-    The two must not collide on a heading, or the skill reads as though the
-    same rule were stated twice under one name.
-    """
+    """The inlined output style and the skill body must not share a heading."""
 
     built = ROOT / "dist" / "codex" / "thesis-writer" / "skills" / "document-planner" / "SKILL.md"
     headings = [

@@ -157,8 +157,7 @@ def test_writer_and_reviewer_require_complete_traceability() -> None:
     assert 'Sampling "critical" claims is prohibited' in reviewer
     assert "never `chapter_plan.md`" in writer
     assert "Never request `chapter_plan.md`" in reviewer
-    # The reviewer reports findings; it never leaves a TODO marker behind. The
-    # token is permitted only where the reviewer flags one as a blocking failure.
+    # TODO may appear only where the reviewer flags one, never as an instruction.
     for line in reviewer.splitlines():
         if "TODO" in line:
             assert "blocking failure" in line
