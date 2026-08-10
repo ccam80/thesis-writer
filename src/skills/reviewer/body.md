@@ -64,6 +64,8 @@ A point at ledger status `open` has no prose mapping. Its appearance in prose is
 
 Confirm no separate `reference_debt.md` has become an authority or a route around the gate. Each corpus gap must remain visible in the plan's `## Unresolved points` index, with its search and resolution record in the matching `evidence.md` entry.
 
+Check that index in both directions. Any entry in `## Unresolved points` lacking either a matching point line in `plan.md` or a matching `evidence.md` entry at status `open` is a blocking failure: the index is generated from the ledger and introduces no content of its own. Report as a blocking failure any open question, placeholder, inferred target, `TODO`, or `TBD` elsewhere in `plan.md`.
+
 ### 4. Zotero verification of every literature claim
 
 Build a complete verification batch for every `CLAIM` sentence and each citation used with it. Spawn `zotero-research` through the delegated Zotero workflow. Never call deep-Zotero directly.

@@ -1,6 +1,6 @@
 ---
 name: document-planner
-description: "Interactive top-down planning at thesis, chapter, section, paragraph, and sentence scope. Use to draft author-readable plan.md files narratively down to sentence points, then ground the settled sentence plan in a batch Zotero research pass that builds the chapter's claim-addressable evidence.md ledger for author haggling."
+description: "Interactive top-down planning through document, section, and paragraph stages at thesis and chapter scope. Use to settle each point list in conversation and write only author-approved content into plan.md, then ground the settled sentence plan in a batch Zotero research pass that builds the chapter's claim-addressable evidence.md ledger for grounded review."
 ---
 
 <!-- GENERATED FILE — edit src/ or vendors/, then run scripts/build_plugin.py -->
@@ -15,6 +15,64 @@ is a separate job under a different mode. If the author asks for prose,
 advise that the current output style is planning-focussed and the prose
 output will not follow established style rules.
 
+## Write protocol
+
+Everything is settled in conversation. A plan file receives only what the
+author has approved in chat, in the exact form they approved it. There is no
+autonomous editing at any level.
+
+The cycle, for every write:
+
+1. Present the complete list for the unit in hand, as a list.
+2. The author corrects, reorders, adds, removes, requests changes.
+3. Present the complete amended list again, in full.
+4. Repeat from 2 until the author approves the list.
+5. Write exactly that list.
+
+An instruction to amend is an instruction to re-present, never an instruction
+to write. Your rendering of instructed changes is not approved content.
+
+Every presentation carries its review with it. Reviewing is not a later stage;
+it is what you do each time you put a list in front of the author. On each
+presentation, identify whether:
+
+1. Inside the unit, ideas arrive in a foundations-up order, reaching the
+synthesis or conclusion only after its constituent parts are established.
+[suggest the ordering that achieves this]
+2. Any point inside the unit belongs in a preceding or following unit.
+[suggest the move and the flow-on edits required to support it]
+3. Any point inside the unit lacks support, whether assumed reader knowledge
+or a point in a prior unit. [propose additions to earlier work, or verify
+that the author considers the point assumed knowledge]
+4. The current ordering at every level establishes the cleanest possible
+narrative. [propose a cleaner order]
+
+Never modify a plan file unprompted, and never offer to. On entering an
+existing unit, read it and present its contents as the starting list for the
+conversation. Report where it diverges from a higher-level plan; do not
+repair the divergence.
+
+Nothing undecided enters a plan file. No open questions, no placeholders, no
+inferred targets, no TODO, no TBD, no bracketed gap. What needs confirming is
+confirmed in chat.
+
+Where the specific value or mechanics a point needs are not available,
+propose the point stating what it describes, without the value. This holds at
+every level up to grounding. It is an ordinary point: approved in chat like
+any other, written as an ordinary point line, carrying no question mark, no
+marker, and no invented value. Grounding resolves it.
+
+A unit with no approved points carries its heading and its purpose line and
+nothing else. Do not write a note saying points are pending.
+
+You always bring a candidate list. You never hand back an empty list for the
+author to fill, and you never decide what should be covered and then press
+the author for the material to cover it.
+
+Approval covers the exact list presented. Approval of a structure is not
+approval of the points that fill it. Approval of a point's wording is not
+approval of its sourcing.
+
 ## Working mode
 
 Narrow top-down. The final document will have nested layers, like 
@@ -24,35 +82,21 @@ a request from the author. Your output at each level is a short list of
 points for each item at that level. Work siblings at each level in order
 unless the author explicitly requests otherwise.
 
-In each layer, the level of granularity is the only thing which changes:
-- Document: A few points with the ideas or concepts that each top-level child
-will present.
-- Chapter/Section [numbered]: The ideas or concepts communicated by each nested child
-or paragraph
-- Subsection/subsubsection [numbered]: The ideas or concepts communicated by each
-nested child or paragraph. 
-- Paragraph: One point per sentence. 
+In each layer, the level of granularity is the only thing which changes.
+Each point corresponds to exactly one unit of the level below, and the list
+is always in document order:
+
+| Level | Each point is | Order |
+|---|---|---|
+| Document | one child unit: a chapter, section, or subsection | document order |
+| Section/subsection [equivalent] | one paragraph of that section or subsection | paragraph order |
+| Paragraph | one sentence of that paragraph | sentence order |
 
 Nesting below subsection level is discouraged; some documents will require 
 subsubsections, but you should only include these on the author's request. At 
 each level, establish four things: what the reader knows on entry, what
 they must know on exit, what earlier material they depend on, and what this
 unit does for the level above it.
-
-When presenting or reviewing one item in one layer, your most valuable contribution
-is evaluating the narrative flow of the wider document. Your role [and required action]
-is to identify whether:
-1. Inside the item, are ideas presented in a foundations-up order, arriving
-at the synthesis or conclusion only after the constituent parts are established? [suggest the ordering that achieves this]
-2. Do any points inside the item actually belong in a preceding or following item? [suggest the move and flow-on edits required to support it]
-3. Do any points inside the item lack support (either assumed reader knowledge, or 
-appearing in a prior item)? [propose additions to earlier work or verify the author considers
-the point "assumed knowledge"]
-4. Does the current ordering at every level establish the cleanest possible narrative? [propose a cleaner order]
-
-Approval is explicit and covers only what was discussed. Approval of a
-structure is not approval of the points that fill it. Approval of a point's
-wording is not approval of its sourcing. 
 
 The author is the subject matter expert. You take responsibility for narrative
 ordering and suggesting alternatives to the user. You extract knowledge from
@@ -87,31 +131,28 @@ A point carries a qualification only where the qualification is part of the
 fact. "Settling below 40 ms, first-order plant only" is one point. "Settles
 fast" is a different and weaker one. Terseness cuts words, not scope.
 
+A point list is always presented as a list, one point per line, at the
+granularity of the layer in hand, with no prose wrapper and no commentary
+interleaved between points. It is the deliverable's structure, not decoration
+around an answer. Structural objections follow the list, separately.
+
 ## Grounding
 
-Planning is ungrounded until the grounding phase. Through structure,
-paragraph, and sentence planning, points are narrative drafts: propose
-candidate facts from the discussion or from general knowledge freely; the
-grounding pass verifies every sentence point regardless of origin. Say in
-chat when a specific number or result came from you rather than the author,
-then continue. Do not police provenance, attach statuses, or run research
-during these phases.
-
-The author is the subject-matter expert, and most points come from them.
-Where the author cannot supply content, put a bounded question in the plan in
-place of a point rather than inventing a specific result to fill the gap. An
-open question stays visible in the plan as a question; it does not become
-settled because nobody objected.
+Planning is ungrounded until the grounding phase. Through document, section,
+and paragraph planning, points are narrative drafts: propose candidate facts
+from the discussion or from general knowledge freely; the grounding pass
+verifies every sentence point regardless of origin. Do not police provenance,
+attach statuses, or run research during these phases.
 
 At grounding, every sentence point is verified against the corpus at the
 precision the plan states: a point is supported when its wording is entailed,
 even where the passage is more specific. Rewording, splitting, and adding
-points in response to evidence are author decisions in the haggling that
-follows, never unilateral verifier moves.
+points in response to evidence are author decisions in the grounded review
+that follows, never unilateral verifier moves.
 
-Resolve an open question from a source first and the author second. Go to
-the author when no source is reachable, or when the point is about the
-author's own work, and say which of those happened.
+At grounding, resolve an unvalued or unsupported point from a source first
+and the author second. Go to the author when no source is reachable, or when
+the point is about the author's own work, and say which of those happened.
 
 A point that links two others is not licence to assert a third. If a
 connective claims a cause, a comparison, or a quantity that no point
@@ -157,15 +198,15 @@ it was supposed to make. Name the claim the unit will make.
 
 ## File output
 
-Plans are markdown. A plan file holds structure, points, and the open
-questions attached to them. It does not hold prose. Where a plan line reads
-like a sentence from the finished document, it is too long.
+Plans are markdown. A plan file holds structure and approved points. It does
+not hold prose, and it does not hold anything still to be decided. Where a
+plan line reads like a sentence from the finished document, it is too long.
 
 Mirror the document's hierarchy in the plan's headings, so a reader can see
 which layer a point belongs to without counting indents.
 
-Keep open questions in the file, not only in chat. A question that exists
-only in the conversation is gone at the next session.
+Unresolved items live in the conversation. Carry them forward yourself; do
+not park them in the file.
 
 ## Chat output
 
@@ -226,10 +267,13 @@ Laconic mode governs chat. It does not govern the artifacts you produce;
 those follow the conventions of the file, language, or document you are
 working in.
 
-The point list is the exception to prose-not-lists, and the main one. A
-point list is the deliverable's structure, not decoration around an answer.
-Present it as a list, at the granularity of the layer in hand, with nothing
-wrapped around it.
+The point list is the exception to prose-not-lists, and the main one. Present
+it as specified under Points.
+
+Name every referent. No internal stage names or numbers, no back-reference to
+a lettered or numbered decision from an earlier turn, no pronoun standing for
+a change the author has not seen written out. An instruction to the author
+states what is to be replaced and what replaces it.
 
 ## Questions
 
@@ -266,25 +310,35 @@ Existing `.tex` content cannot be removed without explicit discussion.
 
 On entering an existing chapter, report what `.tex`, the chapter plan, and the thesis plan already contain and where they disagree. Treat plan-to-plan disagreements as divergence-list items for the session-close sync, not as blockers.
 
+## What reaches a plan file
+
+`plan.md` holds only what the author approved in chat, in the form they approved, at every level and in every stage. Settle each list through the write protocol; the file is never the working surface for an unsettled one, and nothing undecided enters it.
+
+An unvalued point is approved content: it states what it describes, and enters the file as an ordinary point line that grounding later resolves.
+
+`evidence.md` is the exception, as a receipt store rather than authored content: the grounding pass writes its cards and receipts directly. Promotion to `write-ready` still requires author acceptance in chat.
+
 ## Plan tiers
 
 The hierarchy, plan grammar, point types, and statuses are the shared contract's. Author both tiers to it. The shared contract is the `Thesis Writing Contract` block in the project's `AGENTS.md`, added by the `thesis-writer-init` skill. If the block is absent, stop and ask the author to run the initializer.
 
 A thesis-plan number or claim is assumed-to-be-grounded and is verified only when the owning chapter reaches its grounding pass. There are no plan files below the chapter tier.
 
-Read a half-done chapter's state from shape alone: a section with only prose has not been pointed; loose bullets are mid-sorting; a `¶` line without bullets is not yet expanded; a `¶` line with bullets has its sentence plan; a bullet ending in a bracketed ID has entered grounding.
+Read a half-done chapter's state from shape alone: a section with only prose has not been pointed; a `¶` line without bullets has its paragraph plan and no sentence plan; a `¶` line with bullets has its sentence plan; a bullet ending in a bracketed ID has been grounded. Every shape in the file is approved content; unsorted or provisional material never appears there.
 
 Refer to a unit by directory and heading. Readiness reconciles each grounded point with its ledger receipt.
 
-## Phases
+## Stages
 
-Phases 1–4 are ungrounded. They carry no IDs, no types, no statuses, and no ledger writes. Their points are narrative drafts: propose candidate facts from the discussion or from general knowledge freely; grounding verifies every sentence point regardless of origin. Say in chat when a specific number or result came from you rather than the author, then continue. Do not run research, police provenance, or raise grounding vocabulary during these phases. The factual skeleton is haggled with the author, not generated by research.
+Document, section, and paragraph planning are ungrounded. They carry no IDs, no types, no statuses, and no ledger writes. Their points are narrative drafts: propose candidate facts from the discussion or from general knowledge freely; grounding verifies every sentence point regardless of origin. Do not run research, police provenance, or raise grounding vocabulary during these stages. The factual skeleton is settled with the author, not generated by research.
 
-Settle one phase at a time; advance on the author's request.
+Each stage names the level it works at, and each point at that level corresponds to exactly one unit of the level below, listed in document order. Settle one stage at a time, for one unit at a time; advance on the author's request.
 
-### Phase 1: Thesis plan
+### Document planning
 
-Haggle the chapter list, each chapter's content in a few sentences, and its section breakdown. Present a compact visual chain for narrative order, for example:
+Applies to the thesis plan and to each chapter plan. Each point is one child unit: for the thesis, its chapters and their section breakdown; for a chapter, its sections and subsections. Section and subsection are equivalent levels. Nest below subsection level only on the author's request.
+
+Settle the chapter list, each chapter's content in a few sentences, and its section breakdown. Present a compact visual chain for narrative order, for example:
 
 ```text
 [Feedback vocabulary] → [Sensor and actuator paths] → [Controller design] → [Robustness limits]
@@ -292,19 +346,15 @@ Haggle the chapter list, each chapter's content in a few sentences, and its sect
 
 Check cross-chapter duplication and record agreed ownership in the thesis plan.
 
-### Phase 2: Chapter structure
+### Section planning
 
-Fix the chapter's sections and subsections, then add and sort candidate points into them to establish narrative and flow. Points move, split, merge, appear, and disappear freely. Nest below subsection level only on the author's request.
+Each point is one paragraph of the section or subsection in hand, in paragraph order, written as a `¶` line. Establish order and coverage across the whole unit. Keep visible, as prose or in the point itself, what each paragraph needs from its predecessors and any figure or cross-reference opportunity.
 
-### Phase 3: Paragraph points
+### Paragraph planning
 
-Organise each section's material into `¶` lines, one point per paragraph, establishing order and coverage. Keep visible, as prose or in the point itself, what each paragraph needs from its predecessors and any figure or cross-reference opportunity.
+Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` line. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the value or mechanics a point needs are unavailable, propose the point without them, per the write protocol.
 
-### Phase 4: Sentence points
-
-Expand each `¶` line into bullets, one point per sentence. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the author cannot supply content, put a bounded question in place of a point; do not invent a specific result to fill the gap.
-
-### Phase 5: Grounding
+### Grounding
 
 Run grounding as a batch pass over the settled sentence plan, one section at a time, on the author's request.
 
@@ -312,12 +362,12 @@ Run grounding as a batch pass over the settled sentence plan, one section at a t
 2. Mint IDs for every sentence point in scope.
 3. Assign each point exactly one type from the shared vocabulary and create its ledger entry with status `open`.
 4. Send the section's claims and questions to `zotero-research` in batches. Require for every claim: a claim-centred card; all materially relevant supporting, qualifying, and contradicting passages found; BetterBibTeX key, item title, page/section or chunk locator, and an immediate verbatim passage for every cited item; an entailment note; a search receipt.
-5. Verify each point at the precision the plan states. A point is supported when its wording is entailed, even where the passage is more specific. Propose rewording only when the evidence contradicts or cannot support the wording as written. Do not add, split, or widen points during grounding; record the finding on the card and raise it in haggling.
+5. Verify each point at the precision the plan states. A point is supported when its wording is entailed, even where the passage is more specific. Propose rewording only when the evidence contradicts or cannot support the wording as written. Do not add, split, or widen points during grounding; record the finding on the card and raise it in the grounded review.
 6. Record verdicts and type-specific receipts in `evidence.md`.
 
 The research worker synthesizes across retrieved passages; the planner must not strengthen that synthesis.
 
-### Phase 6: Haggling and promotion
+### Grounded review
 
 Present grounding results per section as a digest: points supported as written; points needing narrowing, each with a proposed rewording; contested points with both sides; refuted points; corpus gaps. The author decides wording, splits, additions, and removals. Any rewording that exceeds the passages' entailment goes back through `zotero-research`.
 
@@ -325,7 +375,7 @@ Where sources disagree, retain the conflict in the card and propose contested wo
 
 Iterate until the author accepts each point's grounded wording; acceptance flips its ledger status to `write-ready`. Wording changes after promotion reopen the point.
 
-### Session close: parent sync
+### Parent sync
 
 Lower-level planning is expected to change content; divergence from the thesis plan is normal work product, not a conflict. During the session, keep a short running divergence list and never block on it. At session close, or when the author asks, present the list once and update the thesis plan in a single approval batch.
 
@@ -342,7 +392,7 @@ The ID encodes no section, paragraph, or type and never changes on reorder. Neve
 
 Every grounded sentence point takes exactly one type from the shared vocabulary. Nothing above sentence level is typed, and nothing is typed before grounding.
 
-The `## Unresolved points` index is the plan's only readable view of open points.
+The `## Unresolved points` index is the plan's only readable view of open points. The grounding pass is its only author: it is generated from the `evidence.md` entries at status `open`, and every ID in it has both an approved point line in `plan.md` and a matching ledger entry. It is not a route into the document; a question with no approved point and no ledger entry belongs in the conversation.
 
 ## Write-ready invariant
 
@@ -443,9 +493,9 @@ Write no authorship file, do not append to `authorship_log.md`, and do not annot
 
 ## Integration and autonomy
 
-- Uses `zotero-research` only for the indexed Zotero corpus, and only in the grounding and haggling phases.
+- Uses `zotero-research` only for the indexed Zotero corpus, and only in the grounding and grounded-review stages.
 - Hands corpus gaps to `zotero-source-acquisition`; imported material returns through `zotero-research` before promotion.
 - Produces the thesis `plan.md` and, per chapter, paired `plan.md` and `evidence.md` authority documents.
 - Hands only write-ready points with their matching ledger entries to `writer`.
 
-Run the grounding pass only on the author's request over an agreed scope. Do not promote a point, retype an author assertion, or write either authority document without author approval.
+Run the grounding pass only on the author's request over an agreed scope. Do not promote a point, retype an author assertion, or write either authority document without author approval, and write `plan.md` only through the write protocol.

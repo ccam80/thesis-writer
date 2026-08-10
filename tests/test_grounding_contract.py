@@ -18,7 +18,7 @@ def test_planner_grounds_in_a_batch_pass_and_fails_closed() -> None:
     assert "Every grounded sentence point takes exactly one type from the shared vocabulary" in planner
     assert "Nothing above sentence level is typed, and nothing is typed before grounding" in planner
     assert "Mint IDs at grounding, never earlier" in planner
-    assert "Phases 1–4 are ungrounded" in planner
+    assert "Document, section, and paragraph planning are ungrounded" in planner
     assert "grounding verifies every sentence point regardless of origin" in planner
     assert "Run grounding as a batch pass over the settled sentence plan" in planner
     assert "Do not create or append to `reference_debt.md`" in planner
@@ -157,7 +157,10 @@ def test_writer_and_reviewer_require_complete_traceability() -> None:
     assert 'Sampling "critical" claims is prohibited' in reviewer
     assert "never `chapter_plan.md`" in writer
     assert "Never request `chapter_plan.md`" in reviewer
-    assert "TODO" not in reviewer
+    # TODO may appear only where the reviewer flags one, never as an instruction.
+    for line in reviewer.splitlines():
+        if "TODO" in line:
+            assert "blocking failure" in line
 
 
 def test_plan_is_author_readable_and_provenance_lives_in_evidence_ledger() -> None:
