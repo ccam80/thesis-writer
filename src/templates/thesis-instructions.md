@@ -29,6 +29,7 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 | `**¶ [label]** — [text]` | Paragraph point. |
 | Bullet nested under a `¶` line | Sentence point. The only groundable line. |
 | Sentence point with a bracketed ID | Grounded. |
+| `→ **[Element]:** [specification]` | Figure, table, list, equation, or derivation. |
 
 ```markdown
 # Plan: [Title]
@@ -43,9 +44,9 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 - [sentence point]
 - [sentence point] [PHYS-041] \cite{keyA,keyB}
 
-**¶ [label]** — [paragraph point, not yet expanded]
-
 → **Figure:** [descriptive label and specification]
+
+**¶ [label]** — [paragraph point, not yet expanded]
 
 ## Unresolved points
 [Readable index of open point IDs and their bounded questions]

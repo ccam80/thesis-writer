@@ -58,7 +58,7 @@ Check cross-chapter duplication and record agreed ownership in the thesis plan.
 
 ### Section planning
 
-Each point is one paragraph of the section or subsection in hand, in paragraph order, written as a `¶` line. Establish order and coverage across the whole unit. Keep visible, as prose or in the point itself, what each paragraph needs from its predecessors and any figure or cross-reference opportunity.
+Each point is one paragraph of the section or subsection in hand, in paragraph order, written as a `¶` line, with elements interleaved. Establish order and coverage across the whole unit.
 
 ### Paragraph planning
 

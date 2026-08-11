@@ -90,7 +90,7 @@ If a failure requires new content or changed emphasis, ask the author and return
 
 ## LaTeX requirements
 
-Use `\cite{}` only with keys approved on the mapped claim cards. Insert the plan's approved figure placeholders in the `references/figure-placeholder.md` format, without adding interpretive claims to captions.
+Use `\cite{}` only with keys approved on the mapped claim cards. Insert the plan's approved figure placeholders in the `references/figure-placeholder.md` format, without adding interpretive claims to captions. Render every other approved element line as ordinary LaTeX where the plan places it.
 
 ## Output and handoff
 
