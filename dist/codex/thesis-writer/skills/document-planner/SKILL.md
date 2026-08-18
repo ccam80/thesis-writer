@@ -52,15 +52,17 @@ existing unit, read it and present its contents as the starting list for the
 conversation. Report where it diverges from a higher-level plan; do not
 repair the divergence.
 
-Nothing undecided enters a plan file. No open questions, no placeholders, no
-inferred targets, no TODO, no TBD, no bracketed gap. What needs confirming is
-confirmed in chat.
+Nothing undecided enters a plan file. No open questions, no inferred targets,
+no TODO, no TBD. What needs confirming is confirmed in chat.
 
-Where the specific value or mechanics a point needs are not available,
-propose the point stating what it describes, without the value. This holds at
-every level up to grounding. It is an ordinary point: approved in chat like
-any other, written as an ordinary point line, carrying no question mark, no
-marker, and no invented value. Grounding resolves it.
+A value the author has decided to supply later is decided content: write it as
+a deferral, [[what they will supply]], where the value belongs, approved in
+chat like any other line. Grounding resolves it; until then no point carrying
+one is write-ready.
+
+The deferral is the author's. Where you cannot state what a point asserts,
+ask; a vague line, an unsourceable attribution, or a deferral covering your
+own gap is not a point.
 
 A unit with no approved points carries its heading and its purpose line and
 nothing else. Do not write a note saying points are pending.
@@ -150,7 +152,7 @@ even where the passage is more specific. Rewording, splitting, and adding
 points in response to evidence are author decisions in the grounded review
 that follows, never unilateral verifier moves.
 
-At grounding, resolve an unvalued or unsupported point from a source first
+At grounding, resolve a deferral or an unsupported point from a source first
 and the author second. Go to the author when no source is reachable, or when
 the point is about the author's own work, and say which of those happened.
 
@@ -194,7 +196,8 @@ then resplit. Merge the material into one block first so the ordering
 argument is about content rather than about existing headings.
 
 Use concrete labels. "Discuss X" is not a plan item, it defers the decision
-it was supposed to make. Name the claim the unit will make.
+it was supposed to make. Name the claim the unit will make; a deferral
+withholds a value, never the decision.
 
 ## File output
 
@@ -205,8 +208,8 @@ plan line reads like a sentence from the finished document, it is too long.
 Mirror the document's hierarchy in the plan's headings, so a reader can see
 which layer a point belongs to without counting indents.
 
-Unresolved items live in the conversation. Carry them forward yourself; do
-not park them in the file.
+An unresolved question lives in the conversation. Carry it forward yourself;
+do not park it in the file. A deferred value is not a question.
 
 ## Chat output
 
@@ -314,7 +317,7 @@ On entering an existing chapter, report what `.tex`, the chapter plan, and the t
 
 `plan.md` holds only what the author approved in chat, in the form they approved, at every level and in every stage. Settle each list through the write protocol; the file is never the working surface for an unsettled one, and nothing undecided enters it.
 
-An unvalued point is approved content: it states what it describes, and enters the file as an ordinary point line that grounding later resolves.
+A deferral is approved content: the author has decided the line and will supply its value later. Its substance is the author's; a point you cannot state stays a chat question.
 
 `evidence.md` is the exception, as a receipt store rather than authored content: the grounding pass writes its cards and receipts directly. Promotion to `write-ready` still requires author acceptance in chat.
 
@@ -324,7 +327,7 @@ The hierarchy, plan grammar, point types, and statuses are the shared contract's
 
 A thesis-plan number or claim is assumed-to-be-grounded and is verified only when the owning chapter reaches its grounding pass. There are no plan files below the chapter tier.
 
-Read a half-done chapter's state from shape alone: a section with only prose has not been pointed; a `¶` line without bullets has its paragraph plan and no sentence plan; a `¶` line with bullets has its sentence plan; a bullet ending in a bracketed ID has been grounded. Every shape in the file is approved content; unsorted or provisional material never appears there.
+Read a half-done chapter's state from shape alone: a section with only prose has not been pointed; a `¶` line without bullets has its paragraph plan and no sentence plan; a `¶` line with bullets has its sentence plan; a bullet ending in a bracketed ID has been grounded; a line holding a `[[deferral]]` awaits its value. Every shape in the file is approved content; unsorted or provisional material never appears there.
 
 Refer to a unit by directory and heading. Readiness reconciles each grounded point with its ledger receipt.
 
@@ -352,13 +355,13 @@ Each point is one paragraph of the section or subsection in hand, in paragraph o
 
 ### Paragraph planning
 
-Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` line. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the value or mechanics a point needs are unavailable, propose the point without them, per the write protocol.
+Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` line. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the author defers a value, write the point with a deferral in place of it, per the write protocol.
 
 ### Grounding
 
 Run grounding as a batch pass over the settled sentence plan, one section at a time, on the author's request.
 
-1. Pull down into a sentence bullet any factual content in prose or a `¶` line that must survive into the written paragraph. Grounding covers only sentence bullets.
+1. Pull down into a sentence bullet any factual content in prose or a `¶` line that must survive into the written paragraph, including any deferral it carries. Grounding covers only sentence bullets.
 2. Mint IDs for every sentence point in scope.
 3. Assign each point exactly one type from the shared vocabulary and create its ledger entry with status `open`.
 4. Send the section's claims and questions to `zotero-research` in batches. Require for every claim: a claim-centred card; all materially relevant supporting, qualifying, and contradicting passages found; BetterBibTeX key, item title, page/section or chunk locator, and an immediate verbatim passage for every cited item; an entailment note; a search receipt.
@@ -398,6 +401,7 @@ The `## Unresolved points` index is the plan's only readable view of open points
 
 A point becomes `write-ready` only when:
 
+- Its line holds no deferral.
 - Its ledger entry carries the complete receipt its type requires.
 - Contradicting and qualifying evidence remains attached and is reflected in the point wording.
 - The wording does not exceed the scope its evidence supports.
