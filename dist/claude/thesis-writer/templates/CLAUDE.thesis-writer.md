@@ -30,8 +30,8 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 | Shape | Meaning |
 |---|---|
 | Prose under a heading | Summary and purpose. Emits no sentence. |
-| `**¶ [label]**` | Paragraph label. Names the paragraph and fixes its place in the order. Carries no content. |
-| Bullet nested under a `¶` label | Content point, in prose order. Refined to one sentence each before grounding. The only groundable line. |
+| `**¶ [label]**` | Paragraph label, in paragraph order. Carries no content. |
+| Bullet nested under a `¶` label | Content point, in prose order. One point per sentence once settled. The only groundable line. |
 | Sentence point with a bracketed ID | Grounded. |
 | `→ **[Element]:** [specification]` | Figure, table, list, equation, or derivation. |
 | `[[what the author will supply]]` in any line | Deferral. The line is approved; the value is outstanding. |
@@ -58,7 +58,7 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 [Readable index of open point IDs and their bounded questions]
 ```
 
-A `¶` label with no bullets holds its place in the paragraph order and has no points yet. The label is settled once and stays as written while points collect under it, so a paragraph's content lives only in those points and is never also stated one granularity up.
+A `¶` label with no bullets has no points yet. The label does not change as points collect under it. A paragraph's content is stated only in its points.
 
 `## Unresolved points` is written only by the grounding pass, generated from the `evidence.md` entries at status `open`. Every ID in it has both an approved point line in `plan.md` and a matching ledger entry.
 

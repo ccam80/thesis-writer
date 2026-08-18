@@ -231,19 +231,14 @@ def test_a_paragraph_line_is_a_bare_label_that_carries_no_content() -> None:
     agents = text(AGENTS)
 
     assert (
-        "| `**¶ [label]**` | Paragraph label. Names the paragraph and fixes its place "
-        "in the order. Carries no content. |" in template
+        "| `**¶ [label]**` | Paragraph label, in paragraph order. Carries no content. |"
+        in template
     )
-    assert (
-        "A `¶` label with no bullets holds its place in the paragraph order and has no "
-        "points yet." in template
-    )
+    assert "A `¶` label with no bullets has no points yet." in template
     assert "written as a bare `¶` label" in planner
-    assert "At the section layer the point is a paragraph label" in style
-    assert (
-        "A `¶` line is a bare label that fixes paragraph order and carries no content"
-        in agents
-    )
+    assert "At the section layer a point is a paragraph label" in style
+    assert "A label states none of the paragraph's content." in style
+    assert "A `¶` line is a bare label carrying no content." in agents
 
     # The paragraph line has no text slot at all: no em-dash form anywhere.
     for source in (template, planner, style, agents):
@@ -260,26 +255,27 @@ def test_paragraph_content_is_stated_once_in_the_points_beneath_the_label() -> N
     agents = text(AGENTS)
 
     assert (
-        "| Bullet nested under a `¶` label | Content point, in prose order. Refined to "
-        "one sentence each before grounding. The only groundable line. |" in template
+        "| Bullet nested under a `¶` label | Content point, in prose order. One point "
+        "per sentence once settled. The only groundable line. |" in template
+    )
+    assert "The label does not change as points collect under it." in template
+    assert "A paragraph's content is stated only in its points." in template
+    assert (
+        "a coarse point splits and gains specificity until the list reads one point "
+        "per sentence, and only that settled list goes to grounding" in planner
     )
     assert (
-        "a paragraph's content lives only in those points and is never also stated one "
-        "granularity up" in template
+        "Working the next layer down adds points beneath the ones already settled."
+        in style
     )
-    assert (
-        "a coarse point splits and gains specificity across presentations until the "
-        "list reads one point per sentence, and only that settled list goes to "
-        "grounding" in planner
-    )
-    assert "Points at a layer accumulate rather than replace" in style
     assert (
         "A label that reads like a summary of the points beneath it is content in the "
         "wrong place." in style
     )
     assert (
-        "a paragraph's content is stated once, in those points, never also one "
-        "granularity up" in agents
+        "Points collect under a `¶` label in prose order and gain specificity until "
+        "the list reads one point per sentence. Only that settled list is grounded."
+        in agents
     )
 
 

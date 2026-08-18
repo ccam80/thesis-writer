@@ -62,7 +62,7 @@ Each point is one paragraph of the section or subsection in hand, in paragraph o
 
 ### Paragraph planning
 
-Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` label. Points accumulate in prose order: a coarse point splits and gains specificity across presentations until the list reads one point per sentence, and only that settled list goes to grounding. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the author defers a value, write the point with a deferral in place of it, per the write protocol.
+Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` label. Points accumulate in prose order: a coarse point splits and gains specificity until the list reads one point per sentence, and only that settled list goes to grounding. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the author defers a value, write the point with a deferral in place of it, per the write protocol.
 
 ### Grounding
 

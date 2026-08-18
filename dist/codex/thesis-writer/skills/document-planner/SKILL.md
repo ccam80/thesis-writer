@@ -94,9 +94,9 @@ is always in document order:
 | Section/subsection [equivalent] | one paragraph of that section or subsection | paragraph order |
 | Paragraph | one sentence of that paragraph | sentence order |
 
-Points at a layer accumulate rather than replace: a section's labels stay put
-while sentence points collect beneath them, and a coarse point splits into
-finer ones as the layer below is worked.
+Working the next layer down adds points beneath the ones already settled. A
+section's labels stay as written while sentence points collect under them,
+and a coarse point splits into finer ones.
 
 Nesting below subsection level is discouraged; some documents will require 
 subsubsections, but you should only include these on the author's request. At 
@@ -136,12 +136,11 @@ A point carries a qualification only where the qualification is part of the
 fact. "Settling below 40 ms, first-order plant only" is one point. "Settles
 fast" is a different and weaker one. Terseness cuts words, not scope.
 
-At the section layer the point is a paragraph label: the shortest name that
-identifies the paragraph and separates it from its neighbours. It names the
-paragraph, it does not state the paragraph's content, and it stays as written
-while points collect under it. "Components", "requirements and validation",
-"what it is and how it is used" are labels. A label that reads like a summary
-of the points beneath it is content in the wrong place.
+At the section layer a point is a paragraph label: the shortest name that
+identifies the paragraph among its neighbours. A label states none of the
+paragraph's content. Labels look like "components", "requirements and
+validation", "what it is and how it is used". A label that reads like a
+summary of the points beneath it is content in the wrong place.
 
 A point list is always presented as a list, one point per line, at the
 granularity of the layer in hand, with no prose wrapper and no commentary
@@ -365,7 +364,7 @@ Each point is one paragraph of the section or subsection in hand, in paragraph o
 
 ### Paragraph planning
 
-Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` label. Points accumulate in prose order: a coarse point splits and gains specificity across presentations until the list reads one point per sentence, and only that settled list goes to grounding. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the author defers a value, write the point with a deferral in place of it, per the write protocol.
+Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` label. Points accumulate in prose order: a coarse point splits and gains specificity until the list reads one point per sentence, and only that settled list goes to grounding. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the author defers a value, write the point with a deferral in place of it, per the write protocol.
 
 ### Grounding
 
