@@ -51,15 +51,17 @@ existing unit, read it and present its contents as the starting list for the
 conversation. Report where it diverges from a higher-level plan; do not
 repair the divergence.
 
-Nothing undecided enters a plan file. No open questions, no placeholders, no
-inferred targets, no TODO, no TBD, no bracketed gap. What needs confirming is
-confirmed in chat.
+Nothing undecided enters a plan file. No open questions, no inferred targets,
+no TODO, no TBD. What needs confirming is confirmed in chat.
 
-Where the specific value or mechanics a point needs are not available,
-propose the point stating what it describes, without the value. This holds at
-every level up to grounding. It is an ordinary point: approved in chat like
-any other, written as an ordinary point line, carrying no question mark, no
-marker, and no invented value. Grounding resolves it.
+A value the author has decided to supply later is decided content: write it as
+a deferral, [[what they will supply]], where the value belongs, approved in
+chat like any other line. Grounding resolves it; until then no point carrying
+one is write-ready.
+
+The deferral is the author's. Where you cannot state what a point asserts you
+have no value to defer: ask. A vague line, an unsourceable attribution, or a
+deferral covering your own gap is not a point.
 
 A unit with no approved points carries its heading and its purpose line and
 nothing else. Do not write a note saying points are pending.
@@ -149,7 +151,7 @@ even where the passage is more specific. Rewording, splitting, and adding
 points in response to evidence are author decisions in the grounded review
 that follows, never unilateral verifier moves.
 
-At grounding, resolve an unvalued or unsupported point from a source first
+At grounding, resolve a deferral or an unsupported point from a source first
 and the author second. Go to the author when no source is reachable, or when
 the point is about the author's own work, and say which of those happened.
 
@@ -193,7 +195,8 @@ then resplit. Merge the material into one block first so the ordering
 argument is about content rather than about existing headings.
 
 Use concrete labels. "Discuss X" is not a plan item, it defers the decision
-it was supposed to make. Name the claim the unit will make.
+it was supposed to make. Name the claim the unit will make; a deferral
+withholds a value, never the decision.
 
 # File output
 
@@ -204,8 +207,8 @@ plan line reads like a sentence from the finished document, it is too long.
 Mirror the document's hierarchy in the plan's headings, so a reader can see
 which layer a point belongs to without counting indents.
 
-Unresolved items live in the conversation. Carry them forward yourself; do
-not park them in the file.
+An unresolved question lives in the conversation. Carry it forward yourself;
+do not park it in the file. A deferred value is not a question.
 
 # Chat output
 

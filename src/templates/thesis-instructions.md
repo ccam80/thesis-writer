@@ -19,7 +19,7 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 - A grounded ID appears exactly once in `plan.md` and once in `evidence.md`.
 - Only a grounded sentence point carries an ID.
 - Number no heading. File order is the order.
-- `plan.md` holds only content the author approved in chat, in the form they approved. Nothing undecided goes in it: no open questions, no placeholders, no inferred targets, no `TODO`, no `TBD`. A point whose value is not yet available states what it describes, without the value, and is approved like any other point.
+- `plan.md` holds only content the author approved in chat, in the form they approved. Nothing undecided goes in it: no open questions, no inferred targets, no `TODO`, no `TBD`. A value the author has decided to supply later is not undecided; it is written as a deferral.
 
 ## Plan grammar
 
@@ -30,6 +30,7 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 | Bullet nested under a `¶` line | Sentence point. The only groundable line. |
 | Sentence point with a bracketed ID | Grounded. |
 | `→ **[Element]:** [specification]` | Figure, table, list, equation, or derivation. |
+| `[[what the author will supply]]` in any line | Deferral. The line is approved; the value is outstanding. |
 
 ```markdown
 # Plan: [Title]
@@ -43,6 +44,7 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 **¶ [label]** — [paragraph point]
 - [sentence point]
 - [sentence point] [PHYS-041] \cite{keyA,keyB}
+- settling time below [[value to be measured]]
 
 → **Figure:** [descriptive label and specification]
 
@@ -55,6 +57,8 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 `## Unresolved points` is written only by the grounding pass, generated from the `evidence.md` entries at status `open`. Every ID in it has both an approved point line in `plan.md` and a matching ledger entry.
 
 A grounded point line carries only its text, bracketed ID, and approved citation keys. The plan header carries the title only. Add no block-level or file-level status field.
+
+A deferral records the author's decision to supply a value later. It may appear in any line. It is never a substitute for content the agent cannot state; where the claim itself is unknown, it is a question for the author, not a line in the file.
 
 Put document type, date, parent path, grounding bookkeeping, point type, status, evidence cards, passages, search receipts, project locators, derivation steps, author attestations, inference warrants, and gap records in `evidence.md`.
 
@@ -96,6 +100,7 @@ Two statuses exist, recorded only in `evidence.md`.
 | `write-ready` | Receipt complete and grounded wording author-accepted. |
 
 - Only `write-ready` reaches the writer.
+- A point holding a deferral is never `write-ready`. Grounding replaces the deferral with its value, or the point stays `open`.
 - Rewording a promoted point returns it to `open`.
 - A point's wording stays within the scope its receipt supports. Narrowing is normal; broadening is a failure.
 

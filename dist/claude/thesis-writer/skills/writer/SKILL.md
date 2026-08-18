@@ -32,6 +32,7 @@ Before drafting, reconcile the two authorities. Refuse the block and return the 
 - a plan point has no exactly matching `evidence.md` entry;
 - `evidence.md` contains an orphan ID absent from `plan.md`;
 - a point's ledger status is not `write-ready`;
+- a sentence point or element line in the block holds a deferral;
 - a point lacks its complete type-specific receipt;
 - the ledger's grounded scope, qualifications, or limits do not semantically match the planned content.
 

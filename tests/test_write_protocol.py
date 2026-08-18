@@ -9,6 +9,8 @@ PLANNER = ROOT / "src" / "skills" / "document-planner" / "body.md"
 STYLE = ROOT / "src" / "output-styles" / "writing-planner.md"
 TEMPLATE = ROOT / "src" / "templates" / "thesis-instructions.md"
 REVIEWER = ROOT / "src" / "skills" / "reviewer" / "body.md"
+WRITER = ROOT / "src" / "skills" / "writer" / "body.md"
+AGENTS = ROOT / "AGENTS.md"
 DIST_PLANNERS = (
     ROOT / "dist" / "claude" / "thesis-writer" / "skills" / "document-planner" / "SKILL.md",
     ROOT / "dist" / "codex" / "thesis-writer" / "skills" / "document-planner" / "SKILL.md",
@@ -69,30 +71,110 @@ def test_nothing_undecided_reaches_the_plan_file() -> None:
     assert "Nothing undecided enters a plan file" in style
     assert "`plan.md` holds only content the author approved in chat" in template
     for source in (style, template):
-        assert "no placeholders" in source
+        assert "no open questions" in source.lower()
+        assert "no inferred targets" in source
         assert "TODO" in source
         assert "TBD" in source
 
 
-def test_an_unavailable_value_becomes_an_unvalued_point_not_a_question() -> None:
+def test_a_deferred_value_has_a_grammar_shape_legal_in_any_plan_line() -> None:
     planner = text(PLANNER)
     style = text(STYLE)
     template = text(TEMPLATE)
 
     assert (
-        "Where the specific value or mechanics a point needs are not available, "
-        "propose the point stating what it describes, without the value." in style
+        "| `[[what the author will supply]]` in any line | Deferral. The line is "
+        "approved; the value is outstanding. |" in template
     )
-    assert "carrying no question mark, no marker, and no invented value" in style
-    assert "This holds at every level up to grounding." in style
+    assert "- settling time below [[value to be measured]]" in template
     assert (
-        "An unvalued point is approved content: it states what it describes, and "
-        "enters the file as an ordinary point line that grounding later resolves."
+        "A deferral records the author's decision to supply a value later. It may "
+        "appear in any line." in template
+    )
+    assert (
+        "A value the author has decided to supply later is not undecided; it is "
+        "written as a deferral." in template
+    )
+    assert (
+        "A value the author has decided to supply later is decided content: write it "
+        "as a deferral, [[what they will supply]], where the value belongs, approved "
+        "in chat like any other line." in style
+    )
+    assert (
+        "A deferral is approved content: the author has decided the line and will "
+        "supply its value later, and grounding resolves it." in planner
+    )
+    assert "a line holding a `[[deferral]]` awaits its value" in planner
+    assert (
+        "Where the author defers a value, write the point with a deferral in place "
+        "of it, per the write protocol." in planner
+    )
+    # The old ban on any bracketed gap is what forced the agent to invent one.
+    assert "no bracketed gap" not in style
+    assert "unvalued" not in style
+    assert "unvalued" not in planner
+
+
+def test_a_deferral_never_reaches_prose() -> None:
+    planner = text(PLANNER)
+    template = text(TEMPLATE)
+    writer = text(WRITER)
+    reviewer = text(REVIEWER)
+    style = text(STYLE)
+
+    assert (
+        "A point holding a deferral is never `write-ready`. Grounding replaces the "
+        "deferral with its value, or the point stays `open`." in template
+    )
+    assert "Its line holds no deferral." in planner
+    assert (
+        "including any deferral it carries" in planner
+    )
+    assert "Grounding resolves it; until then no point carrying one is write-ready." in style
+    assert "a sentence point or element line in the block holds a deferral;" in writer
+    assert (
+        "any deferral in a `write-ready` point or in `.tex`" in reviewer
+    )
+    assert "A deferral in an `open` point is normal." in reviewer
+
+
+def test_a_missing_claim_is_a_question_not_a_deferral() -> None:
+    planner = text(PLANNER)
+    style = text(STYLE)
+    template = text(TEMPLATE)
+
+    assert "The deferral is the author's." in style
+    assert (
+        "Where you cannot state what a point asserts you have no value to defer: ask."
+        in style
+    )
+    assert (
+        "A vague line, an unsourceable attribution, or a deferral covering your own "
+        "gap is not a point." in style
+    )
+    assert (
+        "Its substance is the author's; a point you cannot state stays a chat question."
         in planner
     )
     assert (
-        "A point whose value is not yet available states what it describes, without "
-        "the value, and is approved like any other point." in template
+        "It is never a substitute for content the agent cannot state; where the claim "
+        "itself is unknown, it is a question for the author, not a line in the file."
+        in template
+    )
+    assert "a deferral withholds a value, never the decision" in style
+    assert "A deferred value is not a question." in style
+
+
+def test_the_repository_contract_records_the_deferral_boundary() -> None:
+    agents = text(AGENTS)
+
+    assert (
+        "`plan.md` carries no machine field beyond bracketed IDs, citation keys, and "
+        "author deferrals" in agents
+    )
+    assert (
+        "never originated by the agent to cover content it cannot state, and never "
+        "`write-ready`" in agents
     )
 
 
@@ -209,6 +291,9 @@ def test_both_distributions_carry_the_write_protocol() -> None:
         assert "nothing undecided enters it" in content
         assert "### Grounded review" in content
         assert "haggl" not in content.lower()
+        assert "A deferral is approved content" in content
+        assert "Its line holds no deferral." in content
+        assert "unvalued" not in content
 
 
 def test_the_codex_build_does_not_repeat_a_section_heading() -> None:
