@@ -109,7 +109,7 @@ def test_a_deferred_value_has_a_grammar_shape_legal_in_any_plan_line() -> None:
         "Where the author defers a value, write the point with a deferral in place "
         "of it, per the write protocol." in planner
     )
-    # The old ban on any bracketed gap is what forced the agent to invent one.
+    # Nothing in the protocol bans the deferral shape or names it "unvalued".
     assert "no bracketed gap" not in style
     assert "unvalued" not in style
     assert "unvalued" not in planner
