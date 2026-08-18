@@ -39,7 +39,7 @@ Enumerate every prose sentence and identify unplanned content. Confirm that chan
 
 Reconcile `plan.md` and `evidence.md` before reviewing prose. Report as blocking failures every sentence point without an ID, missing ledger entry, orphan ledger ID, ledger status below `write-ready`, incomplete type-specific receipt, and semantic mismatch between planned content and the ledger's grounded scope. Reject any content introduced only by `evidence.md`; the ledger cannot expand or replace the plan.
 
-Flag any technical sentence sourced only from plan prose or a `¶` paragraph line; only grounded sentence points are prose-eligible.
+Flag any technical sentence sourced only from plan prose or a `¶` label; only grounded sentence points are prose-eligible.
 
 Use `plan.md` consistently. Never request `chapter_plan.md`.
 

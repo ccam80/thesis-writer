@@ -104,7 +104,8 @@ The plugin organizes the author's knowledge; it does not invent research. Change
 - Only sentence points are ever typed, IDed, or statused, and only from the grounding pass onward.
 - Type carries proposition kind and lives in `evidence.md`: `CLAIM`, `PROJECT_FACT`, `DERIVATION`, `AUTHOR_ASSERTION`, `INFERENCE`.
 - Status lives only in `evidence.md` with two values, `open` and `write-ready`; a grounded plan line carries only its text, bracketed ID, and approved citation keys. Only `write-ready` reaches the writer.
-- Plan prose and `¶` paragraph lines are untyped and never writer input; factual content in them that must survive into prose is pulled down into a sentence point at grounding.
+- A `¶` line is a bare label that fixes paragraph order and carries no content; plan prose is untyped and never writer input, and factual content in it that must survive into prose is pulled down into a sentence point at grounding.
+- Points collect under a `¶` label in prose order and gain specificity until the list reads one point per sentence; a paragraph's content is stated once, in those points, never also one granularity up.
 - An unsupported proposition stays `open` in the ledger, visible in the plan's `## Unresolved points` index, and never becomes writer input.
 - `plan.md` carries no machine field beyond bracketed IDs, citation keys, and author deferrals, and no block-level or file-level status; readiness reconciles each grounded point with its ledger receipt.
 - A deferral, `[[what the author will supply]]`, records a value the author will supply later. It is legal in any plan line, never originated by the agent, and never `write-ready`; grounding resolves it before promotion and the writer refuses a block whose sentence points or element lines carry one.

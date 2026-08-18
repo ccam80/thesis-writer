@@ -46,7 +46,7 @@ The hierarchy, plan grammar, point types, and statuses are the shared contract's
 
 A thesis-plan number or claim is assumed-to-be-grounded and is verified only when the owning chapter reaches its grounding pass. There are no plan files below the chapter tier.
 
-Read a half-done chapter's state from shape alone: a section with only prose has not been pointed; a `¶` line without bullets has its paragraph plan and no sentence plan; a `¶` line with bullets has its sentence plan; a bullet ending in a bracketed ID has been grounded; a line holding a `[[deferral]]` awaits its value. Every shape in the file is approved content; unsorted or provisional material never appears there.
+Read a half-done chapter's state from shape alone: a section with only prose has no paragraph order yet; a `¶` label without bullets holds its place in that order and has no points; bullets under a label are its points at the granularity they have so far reached; a bullet ending in a bracketed ID has been grounded; a line holding a `[[deferral]]` awaits its value. Every shape in the file is approved content; unsorted or provisional material never appears there.
 
 Refer to a unit by directory and heading. Readiness reconciles each grounded point with its ledger receipt.
 
@@ -70,17 +70,17 @@ Check cross-chapter duplication and record agreed ownership in the thesis plan.
 
 ### Section planning
 
-Each point is one paragraph of the section or subsection in hand, in paragraph order, written as a `¶` line, with elements interleaved. Establish order and coverage across the whole unit.
+Each point is one paragraph of the section or subsection in hand, in paragraph order, written as a bare `¶` label, with elements interleaved. Establish order and coverage across the whole unit.
 
 ### Paragraph planning
 
-Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` line. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the author defers a value, write the point with a deferral in place of it, per the write protocol.
+Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` label. Points accumulate in prose order: a coarse point splits and gains specificity across presentations until the list reads one point per sentence, and only that settled list goes to grounding. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the author defers a value, write the point with a deferral in place of it, per the write protocol.
 
 ### Grounding
 
 Run grounding as a batch pass over the settled sentence plan, one section at a time, on the author's request.
 
-1. Pull down into a sentence bullet any factual content in prose or a `¶` line that must survive into the written paragraph, including any deferral it carries. Grounding covers only sentence bullets.
+1. Pull down into a sentence bullet any factual content in section prose that must survive into the written paragraph, including any deferral it carries. Grounding covers only sentence bullets.
 2. Mint IDs for every sentence point in scope.
 3. Assign each point exactly one type from the shared vocabulary and create its ledger entry with status `open`.
 4. Send the section's claims and questions to `zotero-research` in batches. Require for every claim: a claim-centred card; all materially relevant supporting, qualifying, and contradicting passages found; BetterBibTeX key, item title, page/section or chunk locator, and an immediate verbatim passage for every cited item; an entailment note; a search receipt.
