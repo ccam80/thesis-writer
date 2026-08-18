@@ -88,8 +88,8 @@ def test_a_deferred_value_has_a_grammar_shape_legal_in_any_plan_line() -> None:
     )
     assert "- settling time below [[value to be measured]]" in template
     assert (
-        "A deferral records the author's decision to supply a value later. It may "
-        "appear in any line." in template
+        "A deferral records a value the author will supply later and may appear in "
+        "any line." in template
     )
     assert (
         "A value the author has decided to supply later is not undecided; it is "
@@ -102,7 +102,7 @@ def test_a_deferred_value_has_a_grammar_shape_legal_in_any_plan_line() -> None:
     )
     assert (
         "A deferral is approved content: the author has decided the line and will "
-        "supply its value later, and grounding resolves it." in planner
+        "supply its value later." in planner
     )
     assert "a line holding a `[[deferral]]` awaits its value" in planner
     assert (
@@ -145,21 +145,17 @@ def test_a_missing_claim_is_a_question_not_a_deferral() -> None:
 
     assert "The deferral is the author's." in style
     assert (
-        "Where you cannot state what a point asserts you have no value to defer: ask."
-        in style
-    )
-    assert (
-        "A vague line, an unsourceable attribution, or a deferral covering your own "
-        "gap is not a point." in style
+        "Where you cannot state what a point asserts, ask; a vague line, an "
+        "unsourceable attribution, or a deferral covering your own gap is not a "
+        "point." in style
     )
     assert (
         "Its substance is the author's; a point you cannot state stays a chat question."
         in planner
     )
     assert (
-        "It is never a substitute for content the agent cannot state; where the claim "
-        "itself is unknown, it is a question for the author, not a line in the file."
-        in template
+        "Where the claim itself is unknown, it is a question for the author, not a "
+        "line in the file." in template
     )
     assert "a deferral withholds a value, never the decision" in style
     assert "A deferred value is not a question." in style
@@ -173,7 +169,7 @@ def test_the_repository_contract_records_the_deferral_boundary() -> None:
         "author deferrals" in agents
     )
     assert (
-        "never originated by the agent to cover content it cannot state, and never "
+        "legal in any plan line, never originated by the agent, and never "
         "`write-ready`" in agents
     )
 

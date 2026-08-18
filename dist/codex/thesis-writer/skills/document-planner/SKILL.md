@@ -60,9 +60,9 @@ a deferral, [[what they will supply]], where the value belongs, approved in
 chat like any other line. Grounding resolves it; until then no point carrying
 one is write-ready.
 
-The deferral is the author's. Where you cannot state what a point asserts you
-have no value to defer: ask. A vague line, an unsourceable attribution, or a
-deferral covering your own gap is not a point.
+The deferral is the author's. Where you cannot state what a point asserts,
+ask; a vague line, an unsourceable attribution, or a deferral covering your
+own gap is not a point.
 
 A unit with no approved points carries its heading and its purpose line and
 nothing else. Do not write a note saying points are pending.
@@ -317,7 +317,7 @@ On entering an existing chapter, report what `.tex`, the chapter plan, and the t
 
 `plan.md` holds only what the author approved in chat, in the form they approved, at every level and in every stage. Settle each list through the write protocol; the file is never the working surface for an unsettled one, and nothing undecided enters it.
 
-A deferral is approved content: the author has decided the line and will supply its value later, and grounding resolves it. Its substance is the author's; a point you cannot state stays a chat question.
+A deferral is approved content: the author has decided the line and will supply its value later. Its substance is the author's; a point you cannot state stays a chat question.
 
 `evidence.md` is the exception, as a receipt store rather than authored content: the grounding pass writes its cards and receipts directly. Promotion to `write-ready` still requires author acceptance in chat.
 

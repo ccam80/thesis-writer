@@ -59,9 +59,9 @@ a deferral, [[what they will supply]], where the value belongs, approved in
 chat like any other line. Grounding resolves it; until then no point carrying
 one is write-ready.
 
-The deferral is the author's. Where you cannot state what a point asserts you
-have no value to defer: ask. A vague line, an unsourceable attribution, or a
-deferral covering your own gap is not a point.
+The deferral is the author's. Where you cannot state what a point asserts,
+ask; a vague line, an unsourceable attribution, or a deferral covering your
+own gap is not a point.
 
 A unit with no approved points carries its heading and its purpose line and
 nothing else. Do not write a note saying points are pending.

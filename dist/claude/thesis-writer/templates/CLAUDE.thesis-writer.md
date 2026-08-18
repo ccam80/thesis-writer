@@ -62,7 +62,7 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 
 A grounded point line carries only its text, bracketed ID, and approved citation keys. The plan header carries the title only. Add no block-level or file-level status field.
 
-A deferral records the author's decision to supply a value later. It may appear in any line. It is never a substitute for content the agent cannot state; where the claim itself is unknown, it is a question for the author, not a line in the file.
+A deferral records a value the author will supply later and may appear in any line. Where the claim itself is unknown, it is a question for the author, not a line in the file.
 
 Put document type, date, parent path, grounding bookkeeping, point type, status, evidence cards, passages, search receipts, project locators, derivation steps, author attestations, inference warrants, and gap records in `evidence.md`.
 
