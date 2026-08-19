@@ -26,8 +26,8 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 | Shape | Meaning |
 |---|---|
 | Prose under a heading | Summary and purpose. Emits no sentence. |
-| `**¶ [label]** — [text]` | Paragraph point. |
-| Bullet nested under a `¶` line | Sentence point. The only groundable line. |
+| `**¶ [label]**` | Paragraph label, in paragraph order. Carries no content. |
+| Bullet nested under a `¶` label | Content point, in prose order. One point per sentence once settled. The only groundable line. |
 | Sentence point with a bracketed ID | Grounded. |
 | `→ **[Element]:** [specification]` | Figure, table, list, equation, or derivation. |
 | `[[what the author will supply]]` in any line | Deferral. The line is approved; the value is outstanding. |
@@ -41,18 +41,20 @@ Organise the author's knowledge into planned, grounded prose. The author is the 
 ## [Section title]
 [One or two prose sentences: what the section covers and does.]
 
-**¶ [label]** — [paragraph point]
-- [sentence point]
+**¶ [label]**
+- [content point]
 - [sentence point] [PHYS-041] \cite{keyA,keyB}
 - settling time below [[value to be measured]]
 
 → **Figure:** [descriptive label and specification]
 
-**¶ [label]** — [paragraph point, not yet expanded]
+**¶ [label]**
 
 ## Unresolved points
 [Readable index of open point IDs and their bounded questions]
 ```
+
+A `¶` label with no bullets has no points yet. The label does not change as points collect under it. A paragraph's content is stated only in its points.
 
 `## Unresolved points` is written only by the grounding pass, generated from the `evidence.md` entries at status `open`. Every ID in it has both an approved point line in `plan.md` and a matching ledger entry.
 

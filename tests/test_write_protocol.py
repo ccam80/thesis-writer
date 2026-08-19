@@ -224,6 +224,80 @@ def test_stages_carry_semantic_names_and_level_correspondence() -> None:
     assert "| Paragraph | one sentence of that paragraph | sentence order |" in style
 
 
+def test_a_paragraph_line_is_a_bare_label_that_carries_no_content() -> None:
+    template = text(TEMPLATE)
+    planner = text(PLANNER)
+    style = text(STYLE)
+    agents = text(AGENTS)
+
+    assert (
+        "| `**¶ [label]**` | Paragraph label, in paragraph order. Carries no content. |"
+        in template
+    )
+    assert "A `¶` label with no bullets has no points yet." in template
+    assert "written as a bare `¶` label" in planner
+    assert "At the section layer a point is a paragraph label" in style
+    assert "A label states none of the paragraph's content." in style
+    assert "A `¶` line is a bare label carrying no content." in agents
+
+    # The paragraph line has no text slot at all: no em-dash form anywhere.
+    for source in (template, planner, style, agents):
+        assert "**¶ [label]** —" not in source
+        assert "¶ line with bullets" not in source
+    assert "[paragraph point]" not in template
+    assert "| Paragraph point. |" not in template
+
+
+def test_paragraph_content_is_stated_once_in_the_points_beneath_the_label() -> None:
+    template = text(TEMPLATE)
+    planner = text(PLANNER)
+    style = text(STYLE)
+    agents = text(AGENTS)
+
+    assert (
+        "| Bullet nested under a `¶` label | Content point, in prose order. One point "
+        "per sentence once settled. The only groundable line. |" in template
+    )
+    assert "The label does not change as points collect under it." in template
+    assert "A paragraph's content is stated only in its points." in template
+    assert (
+        "a coarse point splits and gains specificity until the list reads one point "
+        "per sentence, and only that settled list goes to grounding" in planner
+    )
+    assert (
+        "Working the next layer down adds points beneath the ones already settled."
+        in style
+    )
+    assert (
+        "A label that reads like a summary of the points beneath it is content in the "
+        "wrong place." in style
+    )
+    assert (
+        "Points collect under a `¶` label in prose order and gain specificity until "
+        "the list reads one point per sentence. Only that settled list is grounded."
+        in agents
+    )
+
+
+def test_grounding_pulls_content_down_from_plan_prose_only() -> None:
+    planner = text(PLANNER)
+    reviewer = text(REVIEWER)
+
+    assert (
+        "Pull down into a sentence bullet any factual content in section prose that "
+        "must survive into the written paragraph" in planner
+    )
+    assert "in prose or a `¶` line" not in planner
+    assert "sourced only from plan prose or a `¶` label" in reviewer
+
+
+def test_no_point_is_justified_by_what_it_does_for_the_level_above() -> None:
+    for path in (STYLE, PLANNER, TEMPLATE, REVIEWER, WRITER, AGENTS):
+        source = text(path)
+        assert "level above" not in source, path
+        assert "unit above" not in source, path
+
+
 def test_review_happens_on_every_presentation_rather_than_as_a_later_stage() -> None:
     style = text(STYLE)
 

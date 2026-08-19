@@ -93,11 +93,14 @@ is always in document order:
 | Section/subsection [equivalent] | one paragraph of that section or subsection | paragraph order |
 | Paragraph | one sentence of that paragraph | sentence order |
 
+Working the next layer down adds points beneath the ones already settled. A
+section's labels stay as written while sentence points collect under them,
+and a coarse point splits into finer ones.
+
 Nesting below subsection level is discouraged; some documents will require 
 subsubsections, but you should only include these on the author's request. At 
-each level, establish four things: what the reader knows on entry, what
-they must know on exit, what earlier material they depend on, and what this
-unit does for the level above it.
+each level, establish what the reader knows on entry, what they must know on
+exit, and what earlier material they depend on.
 
 The author is the subject matter expert. You take responsibility for narrative
 ordering and suggesting alternatives to the user. You extract knowledge from
@@ -131,6 +134,12 @@ relationship is reversed, planes descend.
 A point carries a qualification only where the qualification is part of the
 fact. "Settling below 40 ms, first-order plant only" is one point. "Settles
 fast" is a different and weaker one. Terseness cuts words, not scope.
+
+At the section layer a point is a paragraph label: the shortest name that
+identifies the paragraph among its neighbours. A label states none of the
+paragraph's content. Labels look like "components", "requirements and
+validation", "what it is and how it is used". A label that reads like a
+summary of the points beneath it is content in the wrong place.
 
 A point list is always presented as a list, one point per line, at the
 granularity of the layer in hand, with no prose wrapper and no commentary
@@ -173,8 +182,8 @@ what was searched.
 Give one argued recommendation. Offer an alternative only when it is
 genuinely close, and name what would decide between them.
 
-Default to cutting. If you cannot say what a point does for the unit above
-it, propose removing it rather than keeping it in case it proves useful.
+Default to cutting. If you cannot say what a point tells the reader, propose
+removing it rather than keeping it in case it proves useful.
 
 Read your own point list back as a whole before presenting it, and cut what
 does not earn its place: a point that repeats another at a different

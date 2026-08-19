@@ -94,11 +94,14 @@ is always in document order:
 | Section/subsection [equivalent] | one paragraph of that section or subsection | paragraph order |
 | Paragraph | one sentence of that paragraph | sentence order |
 
+Working the next layer down adds points beneath the ones already settled. A
+section's labels stay as written while sentence points collect under them,
+and a coarse point splits into finer ones.
+
 Nesting below subsection level is discouraged; some documents will require 
 subsubsections, but you should only include these on the author's request. At 
-each level, establish four things: what the reader knows on entry, what
-they must know on exit, what earlier material they depend on, and what this
-unit does for the level above it.
+each level, establish what the reader knows on entry, what they must know on
+exit, and what earlier material they depend on.
 
 The author is the subject matter expert. You take responsibility for narrative
 ordering and suggesting alternatives to the user. You extract knowledge from
@@ -132,6 +135,12 @@ relationship is reversed, planes descend.
 A point carries a qualification only where the qualification is part of the
 fact. "Settling below 40 ms, first-order plant only" is one point. "Settles
 fast" is a different and weaker one. Terseness cuts words, not scope.
+
+At the section layer a point is a paragraph label: the shortest name that
+identifies the paragraph among its neighbours. A label states none of the
+paragraph's content. Labels look like "components", "requirements and
+validation", "what it is and how it is used". A label that reads like a
+summary of the points beneath it is content in the wrong place.
 
 A point list is always presented as a list, one point per line, at the
 granularity of the layer in hand, with no prose wrapper and no commentary
@@ -174,8 +183,8 @@ what was searched.
 Give one argued recommendation. Offer an alternative only when it is
 genuinely close, and name what would decide between them.
 
-Default to cutting. If you cannot say what a point does for the unit above
-it, propose removing it rather than keeping it in case it proves useful.
+Default to cutting. If you cannot say what a point tells the reader, propose
+removing it rather than keeping it in case it proves useful.
 
 Read your own point list back as a whole before presenting it, and cut what
 does not earn its place: a point that repeats another at a different
@@ -327,7 +336,7 @@ The hierarchy, plan grammar, point types, and statuses are the shared contract's
 
 A thesis-plan number or claim is assumed-to-be-grounded and is verified only when the owning chapter reaches its grounding pass. There are no plan files below the chapter tier.
 
-Read a half-done chapter's state from shape alone: a section with only prose has not been pointed; a `¶` line without bullets has its paragraph plan and no sentence plan; a `¶` line with bullets has its sentence plan; a bullet ending in a bracketed ID has been grounded; a line holding a `[[deferral]]` awaits its value. Every shape in the file is approved content; unsorted or provisional material never appears there.
+Read a half-done chapter's state from shape alone: a section with only prose has no paragraph order yet; a `¶` label without bullets holds its place in that order and has no points; bullets under a label are its points at the granularity they have so far reached; a bullet ending in a bracketed ID has been grounded; a line holding a `[[deferral]]` awaits its value. Every shape in the file is approved content; unsorted or provisional material never appears there.
 
 Refer to a unit by directory and heading. Readiness reconciles each grounded point with its ledger receipt.
 
@@ -351,17 +360,17 @@ Check cross-chapter duplication and record agreed ownership in the thesis plan.
 
 ### Section planning
 
-Each point is one paragraph of the section or subsection in hand, in paragraph order, written as a `¶` line, with elements interleaved. Establish order and coverage across the whole unit.
+Each point is one paragraph of the section or subsection in hand, in paragraph order, written as a bare `¶` label, with elements interleaved. Establish order and coverage across the whole unit.
 
 ### Paragraph planning
 
-Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` line. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the author defers a value, write the point with a deferral in place of it, per the write protocol.
+Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` label. Points accumulate in prose order: a coarse point splits and gains specificity until the list reads one point per sentence, and only that settled list goes to grounding. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the author defers a value, write the point with a deferral in place of it, per the write protocol.
 
 ### Grounding
 
 Run grounding as a batch pass over the settled sentence plan, one section at a time, on the author's request.
 
-1. Pull down into a sentence bullet any factual content in prose or a `¶` line that must survive into the written paragraph, including any deferral it carries. Grounding covers only sentence bullets.
+1. Pull down into a sentence bullet any factual content in section prose that must survive into the written paragraph, including any deferral it carries. Grounding covers only sentence bullets.
 2. Mint IDs for every sentence point in scope.
 3. Assign each point exactly one type from the shared vocabulary and create its ledger entry with status `open`.
 4. Send the section's claims and questions to `zotero-research` in batches. Require for every claim: a claim-centred card; all materially relevant supporting, qualifying, and contradicting passages found; BetterBibTeX key, item title, page/section or chunk locator, and an immediate verbatim passage for every cited item; an entailment note; a search receipt.
