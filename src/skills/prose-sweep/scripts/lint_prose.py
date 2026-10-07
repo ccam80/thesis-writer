@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Flag thesis-prose patterns banned by report-guidelines.md and prose-style.md.
+"""Flag thesis-prose patterns that report-guidelines.md and prose-style.md ban.
 
-Every finding is a candidate for the sweep to judge in context, not a verdict.
+The sweep judges each finding in context, because a flagged word is sometimes
+the right one.
 """
 
 from __future__ import annotations
@@ -13,9 +14,20 @@ from pathlib import Path
 
 
 def words(*items: str) -> str:
-    """Join phrases into one alternation that matches whole words only.
+    """Build a pattern that matches any of the phrases as whole words.
 
-    Hyphens count as word characters, so "many" does not match "many-core".
+    We count hyphens as word characters so that "many" does not match
+    "many-core".
+
+    Parameters
+    ----------
+    *items
+        The phrases to match.
+
+    Returns
+    -------
+    str
+        A regular expression matching any phrase as whole words.
     """
     body = "|".join(re.escape(item).replace(r"\ ", r"\s+") for item in items)
     return rf"(?<![\w-])(?:{body})(?![\w-])"
@@ -99,10 +111,9 @@ def finding(line: int, column: int, rule: str, text: str, suggestion: str | None
 
 def lint_text(text: str) -> list[dict[str, object]]:
     findings: list[dict[str, object]] = []
-    # A paragraph starts at the top of the file and after a blank line or a
-    # structural command line such as \section{...} or \end{figure}. We skip
-    # structural lines entirely; other lines that open with a command, such as
-    # \Cref{...} shows, are prose.
+    # Treat the top of the file, a blank line, and a structural command such as
+    # \section{...} as paragraph starts. We skip structural lines, but lint a
+    # line that opens with an inline command such as \Cref, because it is prose.
     paragraph_start = True
     for line_number, raw in enumerate(text.splitlines(), 1):
         line = COMMENT.sub("", raw)

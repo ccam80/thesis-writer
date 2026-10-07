@@ -197,10 +197,26 @@ def load_batch(batch: Mapping[str, Any]) -> tuple[Mapping[str, Any], list[Mappin
 def select_candidates(
     candidates: list[Mapping[str, Any]], approved: str
 ) -> list[Mapping[str, Any]]:
-    """Return the candidates named by the approval, in batch order.
+    """Return the candidates the author approved, in batch order.
 
-    ``approved`` is ``all`` or a comma-separated list of candidate IDs. Naming an
-    ID the batch does not hold is an error, so a typo never imports nothing quietly.
+    Parameters
+    ----------
+    candidates
+        The batch's candidate records.
+    approved
+        ``all``, or a comma-separated list of candidate IDs.
+
+    Returns
+    -------
+    list
+        The approved candidate records.
+
+    Raises
+    ------
+    ImportFailure
+        If the approval names no IDs, or names an ID the batch does not hold.
+        We refuse an unknown ID so that a typo stops the import instead of
+        quietly importing less than the author approved.
     """
     if approved.strip().lower() == "all":
         return list(candidates)
@@ -353,11 +369,23 @@ def _title_tokens(value: Any) -> set[str]:
 
 
 def similar_titles(first: Any, second: Any) -> bool:
-    """Return whether two titles name the same work, allowing for edition or version words.
+    """Return whether two titles name the same work.
 
-    Titles match when one title's significant words all appear in the other and
-    the shorter title has at least three of them, or when the two titles share at
-    least four fifths of their words.
+    We compare the titles' significant words. The titles match when every word
+    of the shorter title appears in the longer one and the shorter title has at
+    least three words, so a title with a version or edition suffix still
+    matches. They also match when they share at least four fifths of their
+    words.
+
+    Parameters
+    ----------
+    first, second
+        The titles to compare.
+
+    Returns
+    -------
+    bool
+        True when the titles name the same work.
     """
     a, b = _title_tokens(first), _title_tokens(second)
     if not a or not b:
@@ -462,11 +490,24 @@ class ZoteroApiClient:
             )
 
     def find_duplicate(self, metadata: Mapping[str, Any], *, allow_similar: bool = False) -> str | None:
-        """Return the key of a library item that already holds this work, or None.
+        """Find a library item that already holds this work.
 
-        A matching DOI or URL is always a duplicate. A matching or similar title is
-        a duplicate unless ``allow_similar`` is set, which the author does when they
-        want a different version of a work the library already holds.
+        We treat a matching DOI or URL as a duplicate in every case, and a
+        similar title as a duplicate unless the author asked for a different
+        version of a work the library holds.
+
+        Parameters
+        ----------
+        metadata
+            The candidate's Zotero metadata.
+        allow_similar
+            Set when the author wants this version even though the library
+            holds a work with a similar title.
+
+        Returns
+        -------
+        str or None
+            The key of the existing item, or None when the work is new.
         """
         doi = _norm_doi(metadata.get("DOI"))
         url = _norm_url(metadata.get("url"))
@@ -717,7 +758,17 @@ def import_candidate(
     client: ZoteroClientLike,
     journal_path: Path,
 ) -> dict[str, Any]:
-    """Import one candidate and return its outcome; never raise for a Zotero failure."""
+    """Import one candidate as its own transaction.
+
+    We skip a candidate the library already holds. When a stage fails after
+    the parent item exists, we roll back what this candidate created.
+
+    Returns
+    -------
+    dict
+        The candidate's outcome. A Zotero failure is reported here rather than
+        raised, so the caller can move on to the next candidate.
+    """
     journal = AtomicJournal(journal_path, candidate, target)
     try:
         duplicate = client.find_duplicate(candidate.metadata, allow_similar=candidate.allow_similar)
@@ -848,11 +899,17 @@ def run_batch(
     transport: HttpTransport | None = None,
     api_url: str = "https://api.zotero.org",
 ) -> list[dict[str, Any]]:
-    """Import the approved candidates and return one outcome per candidate.
+    """Import the approved candidates.
 
-    Every approved candidate is validated before anything is written, so a bad
-    record stops the batch with the library untouched. A candidate whose rollback
-    cannot be confirmed stops the batch, and the rest are reported as not attempted.
+    We validate every approved candidate before writing anything, so a bad
+    record stops the batch with the library untouched. When a rollback cannot
+    be confirmed we stop, because the library is in an unknown state, and
+    report the remaining candidates as not attempted.
+
+    Returns
+    -------
+    list of dict
+        One outcome per approved candidate.
     """
     target, records = load_batch(batch)
     selected = [validate_candidate(record) for record in select_candidates(records, approved)]
