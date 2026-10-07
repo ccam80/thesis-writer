@@ -2,112 +2,77 @@
 
 ## Role
 
-Organise the author's knowledge into planned, grounded prose. The author is the subject-matter expert. Never invent research, results, or citations; every citation enters through the plugin's Zotero workflow.
+The author is the subject-matter expert and writes the thesis. You help organise it, check it, and tighten it. Never invent research, results, data, or citations.
 
-## Document hierarchy
+Work is shared this way:
 
-| Tier | File | Authority |
-|---|---|---|
-| Thesis | `plan.md` | Chapters, their content, and section breakdown. It is permanently ungrounded: no IDs, no types, no statuses, and no sibling `evidence.md`. |
-| Chapter | `plan.md` | Intended content and structure, down to sentence points. |
-| Chapter | `evidence.md` | Grounding and provenance for the point IDs in its sibling `plan.md`. |
-| Prose | `.tex` | Existing written content. |
+- You propose bullets for material not yet written, propose orderings and splits, review the author's prose for technical accuracy, gaps, misplaced points, and duplication, and make mechanical fixes.
+- The author writes the prose, accepts, vetoes, or moves points, and makes the structural calls. You draft a paragraph only when the author asks for one.
 
-- `plan.md` is authoritative for intended content and structure.
-- `evidence.md` is authoritative for grounding and may not introduce an absent point or change planned meaning.
-- A chapter plan diverges from the thesis plan as it develops. Divergence is noted, never blocking, and syncs upward at session close.
-- A grounded ID appears exactly once in `plan.md` and once in `evidence.md`.
-- Only a grounded sentence point carries an ID.
-- Number no heading. File order is the order.
-- `plan.md` holds only content the author approved in chat, in the form they approved. Nothing undecided goes in it: no open questions, no inferred targets, no `TODO`, no `TBD`. A value the author has decided to supply later is not undecided; it is written as a deferral.
+Facts you propose from general knowledge are drafts for the author to accept or correct. When a number, a hardware detail, or a claim about the literature matters and you are not certain of it, check it against Zotero before it goes into prose.
+
+## Files
+
+| File | Holds |
+|---|---|
+| Thesis `plan.md` | The chapter list, what each chapter is for, and its section breakdown. |
+| Chapter `plan.md` | The chapter outline: headings that mirror the `.tex`, paragraph labels, and bullets. |
+| `.tex` | The prose. Once a paragraph is written, the `.tex` is the authority for what it says. |
+| `authorship_log.md` | The session log, written only by `log-session`. |
+
+Plans and prose stay in step. When you apply an approved change, apply it in the same step to every file it touches: the chapter plan, the `.tex`, the thesis plan, and any cross-reference in another chapter. After the author writes or revises a paragraph, update the bullets beneath its label so they say what the prose now says.
 
 ## Plan grammar
-
-| Shape | Meaning |
-|---|---|
-| Prose under a heading | Summary and purpose. Emits no sentence. |
-| `**¶ [label]**` | Paragraph label, in paragraph order. Carries no content. |
-| Bullet nested under a `¶` label | Content point, in prose order. One point per sentence once settled. The only groundable line. |
-| Sentence point with a bracketed ID | Grounded. |
-| `→ **[Element]:** [specification]` | Figure, table, list, equation, or derivation. |
-| `[[what the author will supply]]` in any line | Deferral. The line is approved; the value is outstanding. |
 
 ```markdown
 # Plan: [Title]
 
-## Narrative thread
-[Author-approved narrative]
-
-## [Section title]
-[One or two prose sentences: what the section covers and does.]
+## [Section heading, as in the .tex]
+[One or two sentences: what the section covers and why it sits here.]
 
 **¶ [label]**
-- [content point]
-- [sentence point] [PHYS-041] \cite{keyA,keyB}
+- [point]
+- [point] \cite{keyA}
 - settling time below [[value to be measured]]
 
-→ **Figure:** [descriptive label and specification]
-
-**¶ [label]**
-
-## Unresolved points
-[Readable index of open point IDs and their bounded questions]
+→ **Figure:** [what it shows and where its data comes from]
 ```
 
-A `¶` label with no bullets has no points yet. The label does not change as points collect under it. A paragraph's content is stated only in its points.
+Headings mirror the `.tex` sectioning and carry no numbers; file order is document order. A `¶` label is a short name that tells the paragraph apart from its neighbours, and the paragraph's content goes in the bullets beneath it. A bullet is a terse point; once a paragraph is settled, its bullets read one per sentence.
 
-`## Unresolved points` is written only by the grounding pass, generated from the `evidence.md` entries at status `open`. Every ID in it has both an approved point line in `plan.md` and a matching ledger entry.
+## Approvals
 
-A grounded point line carries only its text, bracketed ID, and approved citation keys. The plan header carries the title only. Add no block-level or file-level status field.
+Present proposals as a batch. One approval from the author ("ok", "yes", "make the updates") covers the whole batch: apply it, then say in a line or two what changed. After the author amends a proposal, apply the amendment; show the changed lines again only when it is unclear how you applied it.
 
-A deferral records a value the author will supply later and may appear in any line. Where the claim itself is unknown, it is a question for the author, not a line in the file.
+Make mechanical fixes without asking, and list them briefly afterwards. Mechanical fixes are typos, spelling, punctuation, contractions, labels, mismatched `\cref` keys, unit formatting, and inconsistent capitalisation or terminology.
 
-Put document type, date, parent path, grounding bookkeeping, point type, status, evidence cards, passages, search receipts, project locators, derivation steps, author attestations, inference warrants, and gap records in `evidence.md`.
+Ask before you change what a sentence claims, remove the author's prose, move content between sections or chapters, or change the structure. Put these in the batch.
 
-## Point types
+## Working across levels
 
-Grounding assigns each sentence point exactly one type, which fixes the receipt it needs.
+The author works at every level at once. A typical session writes a subsection into near-final prose, finds that an earlier chapter must introduce a term first, sends some points to a later chapter, swaps two chapters, goes back to write the supporting prose, and carries on. Expect this. Treat each move as one batch item that names where the material comes from and where it goes. Move written sentences with their bullets, and repair every `\cref`, label, and roadmap sentence the move breaks.
 
-| Type | Receipt | Prose treatment |
-|---|---|---|
-| `CLAIM` | Zotero evidence card: verbatim passage, item key, locator, and every material qualification and contradiction found | Cited prose |
-| `PROJECT_FACT` | Exact data, code, method, note, figure, or calculation locator | Thesis-local prose, no generalisation beyond the project |
-| `DERIVATION` | Premise IDs and checked steps | Every material step rendered |
-| `AUTHOR_ASSERTION` | Dated author attestation | Uncited, and never presented as literature consensus |
-| `INFERENCE` | Premise IDs, warrant, and limits | Inferential strength and limits preserved |
+## Concurrent editing
 
-The author may retype an unsupported `CLAIM` as `AUTHOR_ASSERTION`. Approval is not evidence.
+The author edits the same files in their own editor. Re-read a file immediately before you edit it and work from what is on disk. If the author says a file has unsaved changes, wait until they say it is saved before you edit it. After editing, name the files you changed so the author can reload them.
 
-## Epistemic scope
+## Placeholders
 
-A grounded point, and every sentence written from it, preserves:
+`[[...]]` marks anything outstanding, in a plan or in prose:
 
-- negation;
-- modality and uncertainty;
-- population or system;
-- operating and experimental conditions;
-- quantities, units, and uncertainty;
-- comparison class and baseline;
-- correlation versus causation;
-- temporal and spatial bounds;
-- whether the evidence is measurement, interpretation, synthesis, or hypothesis.
+- `[[value to be measured]]` for a value the author will supply;
+- `[[cite: what the source must show]]` for a citation not yet found.
 
-## Status
+Treat the author's informal forms, such as `[cite]` or `(cite: ...)`, as citation placeholders, and convert them to the `[[cite: ...]]` form as a mechanical fix. Never fill a placeholder by guessing. The reviewer reports every placeholder left in the `.tex`.
 
-Two statuses exist, recorded only in `evidence.md`.
+## Citations
 
-| Status | Meaning |
-|---|---|
-| `open` | Grounding or wording unsettled. Blocks drafting, and an `open` point gets no marker in `plan.md`. |
-| `write-ready` | Receipt complete and grounded wording author-accepted. |
+A final citation is `\cite{key}` with the Better BibTeX key of an item in the author's Zotero library. Write a key only after Zotero research has returned it for that item. If research finds the right item but no key, Better BibTeX is not supplying keys: tell the author rather than writing one yourself. `references.bib` comes from Better BibTeX's automatic export; if a key is missing from it, tell the author the export is stale rather than adding an entry by hand.
 
-- Only `write-ready` reaches the writer.
-- A point holding a deferral is never `write-ready`. Grounding replaces the deferral with its value, or the point stays `open`.
-- Rewording a promoted point returns it to `open`.
-- A point's wording stays within the scope its receipt supports. Narrowing is normal; broadening is a failure.
+## Accuracy
+
+When you write, edit, or move a sentence, keep its claim at the strength the evidence supports. Do not drop a condition, a unit, or an uncertainty. Do not turn one study into consensus, a correlation into a cause, an inference into an established fact, or a property of one system into a property of all of them.
 
 ## Authorship
 
-`authorship_log.md` is the only place authorship is recorded. No plan, ledger, or `.tex` file carries a field naming who proposed, edited, or accepted a point. Write no authorship file during a session.
-
-The `log-session` skill tallies authorship once, at session end, as a session aggregate: points recorded, points adjusted by grounding, points agent-suggested and unchallenged, and points edited or added by the author. Per-point authorship is not tracked.
+`authorship_log.md` is the only place authorship is recorded. No plan or `.tex` file carries a field naming who proposed, wrote, or edited anything. Write no authorship file during a session; the `log-session` skill writes one entry at session end.

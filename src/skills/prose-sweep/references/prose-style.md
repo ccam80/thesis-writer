@@ -1,14 +1,17 @@
 # Thesis Prose Style — Binding
 
-This file is the prose voice authority for all generated thesis text. The
-`writer` skill reads it before drafting and runs an explicit pass against it
-before presenting any prose. The `reviewer` skill audits against it. Plan
-files are exempt (plan statements are terse notes, not prose), but plan stub
-*labels* follow the vocabulary rules.
+This file is the prose voice reference for the thesis. The `prose-sweep`
+skill checks prose against it, any prose drafted on the author's request is
+checked against it before it is presented, and the `reviewer` skill audits
+against it. Plan files are exempt (plan statements are terse notes, not
+prose), but paragraph *labels* follow the vocabulary rules.
 
-The author's own writing is the ultimate voice reference: existing chapter
-`.tex` files and papers in `author_reference/`. Where this file and the
-author's demonstrated style differ, the author's style wins — flag the
+`report-guidelines.md` takes precedence over this file. In particular, it
+sets person, voice, and tense.
+
+The author's own writing is the voice reference for everything both files
+leave open: existing chapter `.tex` files and papers in `author_reference/`.
+Where this file and the author's demonstrated style differ, flag the
 difference rather than silently choosing.
 
 Rules cannot fully specify voice. An agent can obey every rule below and
@@ -16,10 +19,9 @@ still produce prose that reads as machine-generated. The failure is always
 the same: writing *about* the content (framing, emphasising, dramatising)
 instead of *stating* the content. When in doubt, state the fact and stop.
 
-Groundedness precedes style. Every technical sentence maps to stable point
-IDs in the approved `plan.md`. No improvement in rhythm, flow, or elegance
-permits a new premise, stronger causal relation, broader population, removed
-qualification, or unapproved citation.
+Accuracy precedes style. No improvement in rhythm, flow, or elegance permits
+a new premise, a stronger causal relation, a broader population, a removed
+qualification, or a new citation.
 
 ---
 
@@ -126,11 +128,11 @@ A single em-dash is occasionally correct; a pair almost never is.
 
 ## 5. Register
 
-- **Active voice preferred.** "We filtered the signal at \SI{50}{\hertz}"
-  over "the signal was filtered". Passive is acceptable in methods where the
-  actor is obvious and the object is the topic.
-- **"We" for the author's actions and decisions**; no conversational "let's",
-  no imperative addressed to the reader.
+- **Active voice preferred.** "The filter removes mains interference" over
+  "mains interference is removed by the filter". Person, voice, and the
+  exception for experimental procedure follow `report-guidelines.md`
+  (W-3 to W-5). No conversational "let's", and no imperative addressed to
+  the reader.
 - **Declarative, not narrating.** State the current claim; do not retrace
   how the chapter reached it.
 - **Established results are stated as facts**, once, without re-derivation:
@@ -142,9 +144,10 @@ A single em-dash is occasionally correct; a pair almost never is.
 - **Flowing sentences over chopped ones.** When clauses form one chain of
   reasoning, join with comma + "and"/"so". Reserve sentence breaks for
   independent statements. Reserve semicolons for genuinely paired claims.
-- **Tense:** past for methods and results ("the signal was sampled"),
-  present for established facts and interpretations ("these results
-  suggest"), past for literature ("Smith et al. demonstrated").
+- **Tense** follows `report-guidelines.md` (W-1, W-2): present by default,
+  past for experimental results and for what a cited study did ("Smith et al.
+  measured"). Tense does not change scope: a single study's observation does
+  not become a timeless fact because the present tense reads more smoothly.
 
 ## 6. Paragraph flow
 
@@ -182,8 +185,9 @@ followed during drafting — density failures survive rule-following.
 
 ## 9. Claim fidelity and source voice
 
-- Preserve every dimension of the contract's epistemic scope from the mapped
-  plan point.
+- Keep negation, modality, conditions, quantities and their uncertainty, the
+  comparison class, and the population or system exactly as the evidence
+  states them.
 - Do not turn correlation into causation, a study result into field-wide
   consensus, a bounded observation into a general law, or an inference into
   an established fact.
@@ -192,8 +196,8 @@ followed during drafting — density failures survive rule-following.
   paragraph.
 - Do not imitate wording or cadence from quoted source passages. Use sources
   for evidence and field terminology; use the author's `.tex` for voice.
-- A smooth transition cannot hide an ungrounded proposition. If the prose
-  needs a new relationship, return it to planning.
+- A smooth transition cannot hide an unsupported proposition. If the prose
+  needs a new relationship, ask the author for it.
 
 ---
 
@@ -209,13 +213,12 @@ explanation; this is the fast pass.
       rhetorical questions, tricolons, sentence-adverb openers, filler
       moves, kill-list vocabulary, anthropomorphism, meta-narration.
 - [ ] No `---` em-dash pairs; each single `---` justified per §4.
-- [ ] Register: active where possible, "we" not "let's", plain verbs, no
-      elevated phrasing, tenses per §5.
+- [ ] Register: active where possible, plain verbs, no elevated phrasing;
+      person, voice, and tense per `report-guidelines.md`.
 - [ ] Paragraphs open on problem/requirement, not anatomy or announcement.
 - [ ] Captions identify, they do not teach.
 - [ ] Sentence-level information test run; cuts applied.
-- [ ] Every sentence maps to plan point IDs; every technical clause is covered.
-- [ ] Negation, modality, conditions, quantities, comparison, population,
-      and causal status match the mapped plan points and their `evidence.md` entries.
-- [ ] Citations are adjacent to supported clauses and use only approved keys.
+- [ ] No edit changed negation, modality, conditions, quantities,
+      comparison, population, or causal status.
+- [ ] Citations are adjacent to the clauses they support.
 - [ ] Voice matches the author's existing .tex prose, not this file's.

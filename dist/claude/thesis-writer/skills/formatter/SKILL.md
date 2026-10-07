@@ -10,7 +10,7 @@ allowed-tools: [Read, Write, Edit, Bash]
 
 ## Overview
 
-This skill checks and corrects LaTeX formatting in thesis documents. It applies the formatting rules defined in the thesis conventions without changing the content or meaning of the text.
+This skill checks and corrects LaTeX formatting in thesis documents. It applies the formatting rules below and the presentation rules in `../prose-sweep/references/report-guidelines.md` without changing the content or meaning of the text. Re-read each file immediately before editing it, because the author edits the same files.
 
 ## Formatting Rules
 
@@ -40,7 +40,7 @@ Multi-line equations must align on the equals sign using `align` (never `eqnarra
 \end{align}
 ```
 
-Every equation is numbered, with its variables defined immediately after ("where $x_i$ is the $i$th sample").
+Every equation is numbered, punctuated as part of its sentence, and followed by the definitions of its variables ("where $x_i$ is the $i$th sample"). Never use `*` for multiplication. Set operators, differentials, and words in subscripts upright: `\cos`, `\mathrm{d}x`, `V_\mathrm{rms}`.
 
 Use `\left` and `\right` for scalable delimiters:
 
@@ -61,7 +61,7 @@ All units must use siunitx:
 
 ### Citations
 
-IEEE numeric style: single [1]; multiple [1], [4], [7]; range [1]-[3]; with author, "Smith et al. [5] showed...".
+Use the project's citation style consistently. Leave `[[cite: ...]]` placeholders in place; resolving them is not formatting.
 
 ### Cross-References with cleveref
 
@@ -131,7 +131,8 @@ Before completing:
 - [ ] All figures use `[tb]` placement
 - [ ] All floats appear near their first reference
 - [ ] Multi-line equations use `align` and align on `=`
-- [ ] Every equation numbered and its variables defined immediately after
+- [ ] Every equation numbered, punctuated, and its variables defined immediately after
+- [ ] Captions end with a full stop, and every figure and table is referenced by number
 - [ ] Delimiters use `\left` and `\right` where appropriate
 - [ ] No font size reductions in tables or figures
 - [ ] All units use `\SI{}{}` or `\si{}`
@@ -203,6 +204,5 @@ The thesis uses a custom or institutional document class. Chapter files use `sub
 
 ## Integration
 
-- **Receives from**: `figure-generator` skill (LaTeX prose with generated figures placed)
+- **Runs on**: any `.tex` scope the author names
 - **Produces**: Formatted LaTeX files
-- **Hands off to**: `reviewer` skill for content and reference verification

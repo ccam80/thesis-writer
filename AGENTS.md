@@ -95,27 +95,23 @@ When adding or changing a skill:
 
 Use `plugin-creator` guidance for manifest, marketplace, cachebuster, or local-installation changes. Do not hand-edit an installed Codex marketplace or plugin cache.
 
-## Grounding contracts that must be preserved
+## Workflow contracts that must be preserved
 
-The plugin organizes the author's knowledge; it does not invent research. Changes must preserve these boundaries:
+The plugin helps the author write; it does not invent research. Changes must preserve these boundaries:
 
-- Top-down narrowing from thesis to chapter, section, paragraph, and sentence remains author-controlled.
-- Planning is ungrounded through the structure, paragraph, and sentence phases; grounding is a batch pass over a settled sentence plan, run on the author's request.
-- Only sentence points are ever typed, IDed, or statused, and only from the grounding pass onward.
-- Type carries proposition kind and lives in `evidence.md`: `CLAIM`, `PROJECT_FACT`, `DERIVATION`, `AUTHOR_ASSERTION`, `INFERENCE`.
-- Status lives only in `evidence.md` with two values, `open` and `write-ready`; a grounded plan line carries only its text, bracketed ID, and approved citation keys. Only `write-ready` reaches the writer.
-- A `¶` line is a bare label carrying no content. Plan prose is untyped and never writer input; factual content in it that must survive into prose is pulled down into a sentence point at grounding.
-- Points collect under a `¶` label in prose order and gain specificity until the list reads one point per sentence. Only that settled list is grounded.
-- An unsupported proposition stays `open` in the ledger, visible in the plan's `## Unresolved points` index, and never becomes writer input.
-- `plan.md` carries no machine field beyond bracketed IDs, citation keys, and author deferrals, and no block-level or file-level status; readiness reconciles each grounded point with its ledger receipt.
-- A deferral, `[[what the author will supply]]`, records a value the author will supply later. It is legal in any plan line, never originated by the agent, and never `write-ready`; grounding resolves it before promotion and the writer refuses a block whose sentence points or element lines carry one.
-- The thesis `plan.md` is permanently ungrounded with no sibling ledger; chapter-plan divergence from it is normal work product, synced upward in one author-approved batch at session close.
-- `zotero-research` is read-only and isolated. It searches the whole indexed library, filtering only when the request supplies a filter, and reports claim-centred evidence cards with immediate passages and all material supporting, qualifying, and contradicting sources found.
+- The author writes the prose and makes the structural calls. Agents propose bullets, orderings, moves, and corrections, and draft prose only on request.
+- Proposals go in batches, and one author approval covers a batch. Mechanical fixes need no approval. Changing what a sentence claims, removing author prose, or moving or restructuring content needs approval.
+- An approved change is applied in one step to every file it touches, so chapter plans, the thesis plan, and the `.tex` never drift apart. Once a paragraph is written, the `.tex` is authoritative for what it says.
+- Agents re-read a file immediately before editing it, because the author edits the same files.
+- `[[...]]` marks outstanding content in plans and prose. No agent fills one by guessing, and the reviewer reports every one left in the `.tex`.
+- A `\cite` key enters prose only after `zotero-research` has returned it for that item. An item without a Better BibTeX key is reported, never given a constructed key.
+- Fact checks against Zotero run on demand at any stage and need no identifiers or ledger.
+- `zotero-research` is read-only and isolated. It searches the whole indexed library, filtering only when the request supplies a filter, and returns every passage it cites verbatim, with any qualifying or contradicting passage it found.
 - External discovery and Zotero mutation belong only to `zotero-source-acquisition`.
-- Source acquisition requires visible user review, exact candidate-ID approval, matching metadata and PDF identity, access preflight, atomic journalling, verified Zotero fetchback, and attachment-first rollback.
+- Source acquisition checks the library for duplicates before presenting candidates, imports nothing without the author's approval, requires matching metadata and PDF identity, and keeps access preflight, atomic journalling, verified Zotero fetchback, and attachment-first rollback.
 - Imported items are not evidence until indexing completes and a new Zotero research pass verifies them.
-- Writer output maps technical sentences to grounded point IDs, preserves epistemic scope, calibrates to author prose, and passes deterministic prose linting.
-- Reviewer coverage is exhaustive rather than sampled.
+- No edit by an agent, including a prose-sweep fix, may strengthen or broaden a claim.
+- Reviewer coverage is exhaustive rather than sampled, and every citation is verified against Zotero.
 
 Any relaxation of these contracts is an architectural change and requires explicit author approval plus adversarial tests.
 

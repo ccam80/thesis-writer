@@ -24,7 +24,7 @@ from validate_all import assert_generated_tree_matches
 
 STYLED_SKILLS = {
     "document-planner": "writing-planner",
-    "writer": "technical-writing",
+    "prose-sweep": "writing-planner",
     "figure-generator": "image-output",
 }
 
@@ -42,8 +42,8 @@ def write_style(directory: Path, name: str, token: str, body: str = "# Role\n\nB
 def test_both_vendors_build_with_expected_frontmatter() -> None:
     claude = build("claude")
     codex = build("codex")
-    claude_skill = (claude / "skills" / "writer" / "SKILL.md").read_text(encoding="utf-8")
-    codex_skill = (codex / "skills" / "writer" / "SKILL.md").read_text(encoding="utf-8")
+    claude_skill = (claude / "skills" / "document-planner" / "SKILL.md").read_text(encoding="utf-8")
+    codex_skill = (codex / "skills" / "document-planner" / "SKILL.md").read_text(encoding="utf-8")
     assert "allowed-tools:" in claude_skill
     assert "allowed-tools:" not in codex_skill
     assert "AskUserQuestion" not in codex_skill

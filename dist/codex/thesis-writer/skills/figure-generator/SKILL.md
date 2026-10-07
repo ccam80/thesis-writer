@@ -1,6 +1,6 @@
 ---
 name: figure-generator
-description: "Generates figures from placeholders in .tex files. Creates Python matplotlib scripts for data figures, TikZ/Python schematics for diagrams. Maintains a shared plot_defaults.py for consistent styling. Flags complex figures for the user. Runs after the writer skill."
+description: "Generates figures from placeholders in .tex files. Creates Python matplotlib scripts for data figures, TikZ/Python schematics for diagrams. Maintains a shared plot_defaults.py for consistent styling. Flags complex figures for the user."
 ---
 
 <!-- GENERATED FILE — edit src/ or vendors/, then run scripts/build_plugin.py -->
@@ -243,7 +243,7 @@ out of scope on your own authority.
 
 ## Overview
 
-This skill runs after the `writer` skill has produced LaTeX prose. It reads .tex files, finds figure placeholder blocks in the `../writer/references/figure-placeholder.md` format, and generates actual figures where possible. It replaces each placeholder with `\includegraphics{...}` pointing to generated output.
+This skill reads .tex files, finds figure placeholder blocks in the `references/figure-placeholder.md` format, and generates actual figures where possible. It replaces each placeholder with `\includegraphics{...}` pointing to generated output.
 
 ## Plot Defaults File
 
@@ -461,8 +461,7 @@ Replace the placeholder `\fbox{\parbox{...}}` contents of the `figure` environme
 
 ## Integration
 
-- **Receives from**: `writer` skill (.tex files with figure placeholders)
+- **Receives**: .tex files with figure placeholders, written by the author or drafted on request
 - **Reads**: Data files referenced in placeholders, source code for data generation
 - **Maintains**: `plot_defaults.py`, `tikz_defaults.tex`, and `build_figures.py` at the project root
 - **Produces**: Per-figure directories with `render.py` or `render.tex`, outputs in each chapter's `fig/` directory, updated .tex files
-- **Hands off to**: `formatter` skill for final LaTeX polish

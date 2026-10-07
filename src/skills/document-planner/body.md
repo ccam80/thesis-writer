@@ -2,211 +2,68 @@
 
 <!-- style:writing-planner -->
 
-## Inputs and authority
+## Contract and inputs
 
-Plan thesis documents from thesis scope down to sentence scope, keeping every `plan.md` readable and editable as a document. Structure, reader-state transitions, purposes, research questions, and placement are yours to propose. The facts are the author's or the corpus's.
+The files, plan grammar, approval rules, placeholders, and citation rules are the shared contract's. <!-- vendor:contract-location -->
 
 <!-- vendor:zotero-delegation -->
 
-Read, in this order:
+When you enter a chapter or section, read:
 
-1. The target `.tex` file. Existing prose is authoritative for existing content.
-2. The chapter `plan.md`. This is the author-readable content and structure authority.
-3. The sibling `evidence.md`, once grounding has begun. This is the grounding and provenance authority for the point IDs in the chapter plan.
-4. The thesis `plan.md`. It sets narrative goals and scope.
-5. Existing project evidence named by the author: data, code, laboratory notes, methods records, figures, or calculations.
+1. the target `.tex` file, which is the authority for everything already written;
+2. the chapter `plan.md`;
+3. the thesis `plan.md`;
+4. any project evidence the author names: data, code, notes, figures, or calculations.
 
-Existing `.tex` content cannot be removed without explicit discussion.
+Say in a few lines what already exists and where the plan and the `.tex` disagree. Where the `.tex` has moved on from the plan, bring the plan into line with the prose as a mechanical fix and report it. Where the plan holds material the `.tex` lacks, that material is simply not written yet.
 
-On entering an existing chapter, report what `.tex`, the chapter plan, and the thesis plan already contain and where they disagree. Treat plan-to-plan disagreements as divergence-list items for the session-close sync, not as blockers.
+## Levels
 
-## What reaches a plan file
+The thesis plan lists the chapters, what each is for, and each chapter's sections. A chapter plan lists its sections and subsections, each section's paragraph labels, and each paragraph's points. Nest below subsection level only when the author asks.
 
-`plan.md` holds only what the author approved in chat, in the form they approved, at every level and in every stage. Settle each list through the write protocol; the file is never the working surface for an unsettled one, and nothing undecided enters it.
+Each level refines the one above: a section's paragraph labels stay as they are while points collect beneath them, and a coarse point splits into finer ones until the paragraph reads one point per sentence. The author moves between levels whenever the work calls for it; follow them there and keep every level consistent with the prose.
 
-A deferral is approved content: the author has decided the line and will supply its value later. Its substance is the author's; a point you cannot state stays a chat question.
+## Ordering
 
-`evidence.md` is the exception, as a receipt store rather than authored content: the grounding pass writes its cards and receipts directly. Promotion to `write-ready` still requires author acceptance in chat.
+Apply these rules at the thesis level and again inside every chapter and section, and check each new ordering against them:
 
-## Plan tiers
+- Go top-down and outside-in: the system before its components, the interface before its internals, the top-level concepts before the detail.
+- Where a topic has an abstract model and a physical realisation, such as a programming model and the hardware that runs it, give each its own subsection and put the model first.
+- Background chapters explain mechanisms. The choice between mechanisms, and its trade-offs, belongs in the method chapter. Material about the author's own design moves out of the background and into the chapter that presents the design.
+- Present each fact where the reader first needs it. Define scope terms when they first appear; for example, state what "modern" covers before using it.
+- Reference detail goes at the end of the chapter or in an appendix: tables of generations or parameters, detailed results, software listings, and full schematics.
+- A worked example is minimal and figure-led, and sits where its concept is introduced rather than at the end of the chapter.
+- The introduction ends with a roadmap of the chapters. Use no more than three heading levels, and put text between every heading and its first subheading.
 
-The hierarchy, plan grammar, point types, and statuses are the shared contract's. Author both tiers to it. <!-- vendor:contract-location -->
+## Moves and reorders
 
-A thesis-plan number or claim is assumed-to-be-grounded and is verified only when the owning chapter reaches its grounding pass. There are no plan files below the chapter tier.
+When a point belongs elsewhere, propose the move as one batch item that names the source and the destination. On approval:
 
-Read a half-done chapter's state from shape alone: a section with only prose has no paragraph order yet; a `¶` label without bullets holds its place in that order and has no points; bullets under a label are its points at the granularity they have so far reached; a bullet ending in a bracketed ID has been grounded; a line holding a `[[deferral]]` awaits its value. Every shape in the file is approved content; unsorted or provisional material never appears there.
+1. Move the bullet to the destination plan, and move the written sentence with it if one exists.
+2. If the destination paragraph is already written and the moved sentence does not fit it as it stands, place the sentence where it belongs and tell the author it needs joining in.
+3. Repair the `\cref` targets, labels, and roadmap sentences that the move breaks, and update the thesis plan when a chapter's content or order changes.
 
-Refer to a unit by directory and heading. Readiness reconciles each grounded point with its ledger receipt.
+Swapping chapters or sections follows the same steps: reorder the `\include` or `\subfile` lines, the thesis plan, and the roadmap, then check that every term each moved unit uses is still defined before it.
 
-## Stages
+## Checking facts
 
-Document, section, and paragraph planning are ungrounded. They carry no IDs, no types, no statuses, and no ledger writes. Their points are narrative drafts: propose candidate facts from the discussion or from general knowledge freely; grounding verifies every sentence point regardless of origin. Do not run research, police provenance, or raise grounding vocabulary during these stages. The factual skeleton is settled with the author, not generated by research.
+Check a fact whenever it is uncertain, as the work reaches it. Do not wait for a section to settle. Send `zotero-research` a quick-check batch: each item is one fact as the plan or prose states it. Each answer returns a verdict, the value at the source's precision, the citation key, the locator, and the passage.
 
-Each stage names the level it works at, and each point at that level corresponds to exactly one unit of the level below, listed in document order. Settle one stage at a time, for one unit at a time; advance on the author's request.
+Report the answers as a batch of corrections. Where a fact is confirmed, propose replacing its citation placeholder with `\cite{key}`. Where the source says something different, propose the corrected wording. Where research finds nothing, say what was searched and leave the placeholder.
 
-### Document planning
+## Resolving citations
 
-Applies to the thesis plan and to each chapter plan. Each point is one child unit: for the thesis, its chapters and their section breakdown; for a chapter, its sections and subsections. Section and subsection are equivalent levels. Nest below subsection level only on the author's request.
+When the author asks, resolve the citation placeholders in a scope. Collect every `[[cite: ...]]` and informal citation marker, send them to `zotero-research` as one quick-check batch, and present one proposed key per placeholder. On approval, replace each placeholder with `\cite{key}`. Report any placeholder with no supporting source, any item that came back without a Better BibTeX key, and any key absent from `references.bib`.
 
-Settle the chapter list, each chapter's content in a few sentences, and its section breakdown. Present a compact visual chain for narrative order, for example:
+## Missing sources
 
-```text
-[Feedback vocabulary] → [Sensor and actuator paths] → [Controller design] → [Robustness limits]
-```
+When research reports that the library has no source for a fact, offer the author three options: hand it to `zotero-source-acquisition`, supply the value from the author's own work, or rephrase the sentence so it needs no source. For acquisition, pass a short description of what the source must show, along with every item research has already found, so acquisition does not propose items the library already holds.
 
-Check cross-chapter duplication and record agreed ownership in the thesis plan.
+A candidate the acquisition agent finds is not evidence. Use it only after it is imported, indexed, and confirmed by a new quick check.
 
-### Section planning
+## Integration
 
-Each point is one paragraph of the section or subsection in hand, in paragraph order, written as a bare `¶` label, with elements interleaved. Establish order and coverage across the whole unit.
-
-### Paragraph planning
-
-Each point is one sentence of the paragraph in hand, in sentence order, written as a bullet under its `¶` label. Points accumulate in prose order: a coarse point splits and gains specificity until the list reads one point per sentence, and only that settled list goes to grounding. Terseness cuts words, not scope: a qualification that is part of the fact stays in the point. Where the author defers a value, write the point with a deferral in place of it, per the write protocol.
-
-### Grounding
-
-Run grounding as a batch pass over the settled sentence plan, one section at a time, on the author's request.
-
-1. Pull down into a sentence bullet any factual content in section prose that must survive into the written paragraph, including any deferral it carries. Grounding covers only sentence bullets.
-2. Mint IDs for every sentence point in scope.
-3. Assign each point exactly one type from the shared vocabulary and create its ledger entry with status `open`.
-4. Send the section's claims and questions to `zotero-research` in batches. Require for every claim: a claim-centred card; all materially relevant supporting, qualifying, and contradicting passages found; BetterBibTeX key, item title, page/section or chunk locator, and an immediate verbatim passage for every cited item; an entailment note; a search receipt.
-5. Verify each point at the precision the plan states. A point is supported when its wording is entailed, even where the passage is more specific. Propose rewording only when the evidence contradicts or cannot support the wording as written. Do not add, split, or widen points during grounding; record the finding on the card and raise it in the grounded review.
-6. Record verdicts and type-specific receipts in `evidence.md`.
-
-The research worker synthesizes across retrieved passages; the planner must not strengthen that synthesis.
-
-### Grounded review
-
-Present grounding results per section as a digest: points supported as written; points needing narrowing, each with a proposed rewording; contested points with both sides; refuted points; corpus gaps. The author decides wording, splits, additions, and removals. Any rewording that exceeds the passages' entailment goes back through `zotero-research`.
-
-Where sources disagree, retain the conflict in the card and propose contested wording. Never select only the convenient side. A reworded point preserves every dimension of the contract's epistemic scope.
-
-Iterate until the author accepts each point's grounded wording; acceptance flips its ledger status to `write-ready`. Wording changes after promotion reopen the point.
-
-### Parent sync
-
-Lower-level planning is expected to change content; divergence from the thesis plan is normal work product, not a conflict. During the session, keep a short running divergence list and never block on it. At session close, or when the author asks, present the list once and update the thesis plan in a single approval batch.
-
-## Stable IDs
-
-Mint IDs at grounding, never earlier. Use the chapter directory's slug plus an opaque serial:
-
-- `PHYS-041`
-- `CUBIE-007`
-
-The ID encodes no section, paragraph, or type and never changes on reorder. Never reuse an ID. When one point splits, the surviving proposition keeps the ID and additional propositions get new IDs. When points merge, retain all contributing IDs as aliases. IDs persist from grounded plan through prose and review.
-
-## Types and statuses
-
-Every grounded sentence point takes exactly one type from the shared vocabulary. Nothing above sentence level is typed, and nothing is typed before grounding.
-
-The `## Unresolved points` index is the plan's only readable view of open points. The grounding pass is its only author: it is generated from the `evidence.md` entries at status `open`, and every ID in it has both an approved point line in `plan.md` and a matching ledger entry. It is not a route into the document; a question with no approved point and no ledger entry belongs in the conversation.
-
-## Write-ready invariant
-
-A point becomes `write-ready` only when:
-
-- Its line holds no deferral.
-- Its ledger entry carries the complete receipt its type requires.
-- Contradicting and qualifying evidence remains attached and is reflected in the point wording.
-- The wording does not exceed the scope its evidence supports.
-- The author has accepted the grounded wording.
-
-Fail closed. A structurally settled plan is not a grounded one. No point below `write-ready` is included in writer input.
-
-## Evidence-ledger format
-
-Keep all provenance in the sibling `evidence.md`. This is the single grounding authority, not a second content plan and not a `reference_debt.md` replacement. Entries are keyed by IDs already present in `plan.md`.
-
-```markdown
-# Evidence: [Title]
-Plan: [sibling plan path]
-Document type: [background|research|conclusions|future-work]
-Recorded: [YYYY-MM-DD]
-Parent plan: [thesis plan path]
-
-## PHYS-041
-
-**Type:** CLAIM
-**Status:** open | write-ready
-**Research request:** [request ID]
-**Grounded scope:** [single bounded synthesis matching, without broadening, the planned content]
-
-#### Supporting evidence
-- `keyA` — [item title], p. 42, [section/chunk]
-  > "[shortest complete verbatim supporting passage]"
-  Entailment: [supported content and limits]
-- `keyB` — [item title], p. 118, [section/chunk]
-  > "[verbatim passage]"
-  Entailment: [supported content and limits]
-
-#### Qualifying evidence
-- `keyC` — [item title], p. 9, [section/chunk]
-  > "[verbatim passage]"
-  Qualification: [how the claim must be narrowed]
-
-#### Contradicting evidence
-- `keyD` — [item title], p. 27, [section/chunk]
-  > "[verbatim passage]"
-  Conflict: [opposing result and differing conditions]
-
-**Search receipt:** [tools, queries, retrieval depth, results inspected]
-```
-
-List `None found` under an empty evidence class. "All" means all materially relevant results the recorded searches returned.
-
-Use the same entry envelope for every point type. `PROJECT_FACT`, `DERIVATION`, `AUTHOR_ASSERTION`, and `INFERENCE` entries contain their type-specific locators, steps, attestations, premises, warrants, and limits. Every entry carries a receipt. Do not put these fields, evidence-card bodies, quotations, research-request details, search receipts, premise bookkeeping, or attestations in `plan.md`.
-
-```markdown
-## [point ID]
-**Type:** PROJECT_FACT | DERIVATION | AUTHOR_ASSERTION | INFERENCE
-**Status:** open | write-ready
-**Grounded scope:** [scope that semantically matches the plan item]
-**Receipt:** [exact project locator | premise IDs and checked steps | dated author attestation | premise IDs, warrant, and limits]
-```
-
-## Corpus gaps and non-Zotero facts
-
-Keep an unresolved point visible and readable: its plan line stays in place unmarked, and its ID and bounded question appear in the `## Unresolved points` index. Keep its full gap record in the matching `evidence.md` entry:
-
-```markdown
-## PHYS-043
-**Type:** CLAIM
-**Status:** open
-**Scope:** [scope that semantically matches the plan item]
-**Zotero search receipt:** [...]
-**Missing evidence:** [...]
-**Resolution:** project evidence | author attestation | source acquisition | revision | removal
-```
-
-Do not create or append to `reference_debt.md`. A derived summary of unresolved IDs is allowed only as a generated view; `plan.md` remains the content authority and `evidence.md` remains the grounding authority.
-
-Resolution lanes:
-
-1. Attach exact project evidence and retype as `PROJECT_FACT`.
-2. Obtain explicit author attestation and retype as `AUTHOR_ASSERTION`.
-3. Hand off to the separate `zotero-source-acquisition` skill to locate candidate primary sources, obtain user approval, and import approved sources with PDFs into Zotero. After import and indexing, send the claim back to `zotero-research`.
-4. Narrow or remove the point.
-
-The planner and `zotero-research` must never fetch or import external sources themselves. A source-acquisition recommendation is not evidence and does not make a point write-ready.
-
-## Citation density
-
-Background chapters usually contain more `CLAIM` points; methods and results usually contain more `PROJECT_FACT` and `DERIVATION` points. Conclusions should derive from earlier claim and project-fact IDs rather than introduce new propositions.
-
-## Authorship recording
-
-Record no authorship during planning. `plan.md` and `evidence.md` carry no field naming who proposed, edited, or accepted a point. The `log-session` skill tallies authorship once, at session end, from the session's conversation and the plan diff.
-
-Write no authorship file, do not append to `authorship_log.md`, and do not annotate a point with its origin. Preserve working state until the block is committed; then remove temporary scratch files.
-
-## Integration and autonomy
-
-- Uses `zotero-research` only for the indexed Zotero corpus, and only in the grounding and grounded-review stages.
-- Hands corpus gaps to `zotero-source-acquisition`; imported material returns through `zotero-research` before promotion.
-- Produces the thesis `plan.md` and, per chapter, paired `plan.md` and `evidence.md` authority documents.
-- Hands only write-ready points with their matching ledger entries to `writer`.
-
-Run the grounding pass only on the author's request over an agreed scope. Do not promote a point, retype an author assertion, or write either authority document without author approval, and write `plan.md` only through the write protocol.
+- Uses `zotero-research` for every library search, at any stage.
+- Hands sources the library lacks to `zotero-source-acquisition`.
+- The author runs `prose-sweep` when a section is ready for a style pass, and `reviewer` before submission.
+- Records no authorship; `log-session` does that at session end.

@@ -1,2 +1,2 @@
 name: "log-session"
-description: "Derives the session's authorship tally from the conversation and the plan diff at session end. Presents draft for author approval before appending to the project's authorship_log.md, the only place authorship is recorded."
+description: "Derives the session's authorship tally from the conversation and the diff of plans and prose at session end. Presents a draft for author approval before appending to the project's authorship_log.md, the only place authorship is recorded."

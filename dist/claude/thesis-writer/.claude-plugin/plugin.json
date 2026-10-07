@@ -1,7 +1,7 @@
 {
   "name": "thesis-writer",
   "version": "0.10.0",
-  "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
+  "description": "Co-drafting for doctoral theses in LaTeX, with Zotero research and citations.",
   "author": {
     "name": "Chris Cameron"
   },

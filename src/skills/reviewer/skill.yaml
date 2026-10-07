@@ -1,2 +1,2 @@
 name: "reviewer"
-description: "Unflinching academic reviewer. Use after writing and formatting to verify 100% plan coverage, plan.md/evidence.md reconciliation, sentence-to-claim mappings, Zotero evidence fidelity, epistemic scope, technical accuracy, and prose quality."
+description: "Pre-submission academic reviewer. Audits every sentence for technical accuracy, verifies every citation against the Zotero library, lists outstanding placeholders, and checks structure, plan coverage, report-guideline compliance, prose, and formatting. Writes review_report.md and edits nothing else."
