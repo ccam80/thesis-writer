@@ -28,7 +28,6 @@ Each level refines the one above: a section's paragraph labels stay as they are 
 Apply these rules at the thesis level and again inside every chapter and section, and check each new ordering against them:
 
 - Go top-down and outside-in: the system before its components, the interface before its internals, the top-level concepts before the detail.
-- Where a topic has an abstract model and a physical realisation, such as a programming model and the hardware that runs it, give each its own subsection and put the model first.
 - Background chapters explain mechanisms. The choice between mechanisms, and its trade-offs, belongs in the method chapter. Material about the author's own design moves out of the background and into the chapter that presents the design.
 - Present each fact where the reader first needs it. Define scope terms when they first appear; for example, state what "modern" covers before using it.
 - Reference detail goes at the end of the chapter or in an appendix: tables of generations or parameters, detailed results, software listings, and full schematics.
@@ -50,6 +49,15 @@ Swapping chapters or sections follows the same steps: reorder the `\include` or 
 Check a fact whenever it is uncertain, as the work reaches it. Do not wait for a section to settle. Send `zotero-research` a quick-check batch: each item is one fact as the plan or prose states it. Each answer returns a verdict, the value at the source's precision, the citation key, the locator, and the passage.
 
 Report the answers as a batch of corrections. Where a fact is confirmed, propose replacing its citation placeholder with `\cite{key}`. Where the source says something different, propose the corrected wording. Where research finds nothing, say what was searched and leave the placeholder.
+
+## Fact-check pass
+
+When the author asks for a fact-check of a scope, read every sentence in it and collect two lists:
+
+- statements of fact that carry no citation, leaving out the author's own results, definitions, and anything a reader in the field already knows;
+- cited statements whose wording you doubt.
+
+Send both lists to `zotero-research` as one quick-check batch, then report one batch of proposals: a `\cite{key}` for each uncited fact a source confirms, a corrected wording for each fact a source contradicts, and a `[[cite: ...]]` placeholder for each fact research could not find. Keep the pass loose: it needs no record beyond the proposals, and the author decides which uncited statements need a source at all.
 
 ## Resolving citations
 

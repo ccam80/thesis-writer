@@ -43,7 +43,7 @@ Do not search for or import missing sources. Report a missing source as a gap fo
 ### 3. Structure and coverage
 
 - Compare the prose with its plan. Flag plan points the prose omits and prose the plan does not carry, so the author can decide which is current.
-- Check the order of chapters, sections, and paragraphs against the document planner's ordering rules: top-down and outside-in, models before their realisation, mechanisms in background and design choices in method, facts introduced where first needed, and reference detail at the end or in an appendix.
+- Check the order of chapters, sections, and paragraphs against the document planner's ordering rules: top-down and outside-in, mechanisms in background and design choices in method, facts introduced where first needed, and reference detail at the end or in an appendix.
 - Flag duplicated content, content placed before what it depends on, and terms used before they are defined.
 - Check the structure rules in the report guidelines: numbered sections, the introduction's roadmap, the conclusion, the references, appendix placement, heading depth, and text under every heading.
 
