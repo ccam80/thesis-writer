@@ -1,8 +1,8 @@
 {
   "name": "thesis-writer",
   "version": "0.10.0",
-  "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
-  "longDescription": "A dual-vendor thesis writing plugin with collaborative planning, Zotero-grounded research, LaTeX authoring, figures, formatting, review, and authorship logging.",
+  "description": "Co-drafting for doctoral theses in LaTeX, with Zotero research and citations.",
+  "longDescription": "A dual-vendor thesis writing plugin: the author writes, and agents propose structure, review for accuracy, check facts against Zotero, sweep prose against the report guidelines, generate figures, format, review, and log authorship.",
   "author": {
     "name": "Chris Cameron"
   },

@@ -188,9 +188,9 @@ def build_manifest(vendor: str, plugin_root: Path, metadata: dict[str, object]) 
                 "capabilities": ["Interactive", "Write", "Research"],
                 "websiteURL": metadata["homepage"],
                 "defaultPrompt": [
-                    "Plan a thesis chapter with Zotero evidence.",
-                    "Write an approved thesis section in LaTeX.",
-                    "Review a chapter against its approved plan."
+                    "Help me plan and draft a thesis chapter.",
+                    "Sweep a thesis section for weasel words and report-guideline issues.",
+                    "Review a chapter before submission."
                 ]
             }
         }

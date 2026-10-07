@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Import one explicitly approved source and verified PDF into Zotero.
+"""Import approved sources and their PDFs into Zotero.
+
+A batch file lists staged candidates. ``--check`` reports which candidates the
+library already holds, so they are never presented for approval. Import mode
+takes the candidate IDs the author approved, or ``all``, and imports each one as
+its own transaction: a candidate the library already holds is skipped, and a
+failure after creation rolls back what that candidate created.
 
 The module exposes pure validation functions, a replaceable HTTP transport, and a
 replaceable Zotero client so tests can exercise every stage without network access.
@@ -87,7 +93,9 @@ class UrllibTransport:
 
 class ZoteroClientLike(Protocol):
     def verify_access(self) -> None: ...
-    def find_duplicate(self, metadata: Mapping[str, Any]) -> str | None: ...
+    def find_duplicate(
+        self, metadata: Mapping[str, Any], *, allow_similar: bool = False
+    ) -> str | None: ...
     def create_parent(self, metadata: Mapping[str, Any], collection_key: str | None) -> str: ...
     def create_attachment(self, parent_key: str, filename: str) -> str: ...
     def upload_pdf(
@@ -115,20 +123,6 @@ def _canonical_json(value: Any) -> bytes:
     ).encode("utf-8")
 
 
-def compute_record_sha256(candidate: Mapping[str, Any]) -> str:
-    """Hash the approved identity; exclude mutable workflow timestamps/state."""
-    frozen = {
-        "candidate_id": candidate.get("candidate_id"),
-        "claim_ids": candidate.get("claim_ids"),
-        "metadata": candidate.get("metadata"),
-        "target": candidate.get("target"),
-        "pdf_sha256": (candidate.get("pdf") or {}).get("sha256"),
-        "pdf_filename": (candidate.get("pdf") or {}).get("filename"),
-        "pdf_identity": candidate.get("pdf_identity"),
-    }
-    return hashlib.sha256(_canonical_json(frozen)).hexdigest()
-
-
 def hash_pdf(path: Path) -> tuple[str, str, int]:
     sha256 = hashlib.sha256()
     md5 = hashlib.md5()  # Zotero's upload protocol requires MD5.
@@ -149,8 +143,23 @@ def hash_pdf(path: Path) -> tuple[str, str, int]:
     return sha256.hexdigest(), md5.hexdigest(), size
 
 
-def read_frozen_pdf(candidate: "FrozenCandidate") -> bytes:
-    """Read once for upload and close the validation-to-upload race."""
+BATCH_SCHEMA = "zotero-source-batch/v2"
+
+
+@dataclass(frozen=True)
+class Candidate:
+    candidate_id: str
+    pdf_path: Path
+    pdf_sha256: str
+    pdf_md5: str
+    pdf_size: int
+    filename: str
+    metadata: Mapping[str, Any]
+    allow_similar: bool
+
+
+def read_pdf(candidate: Candidate) -> bytes:
+    """Read the PDF once for upload, and refuse it if it changed since validation."""
     try:
         content = candidate.pdf_path.read_bytes()
     except OSError as exc:
@@ -162,102 +171,107 @@ def read_frozen_pdf(candidate: "FrozenCandidate") -> bytes:
     return content
 
 
-_APPROVAL_RE = re.compile(r"\s*Approve import:\s*([A-Za-z0-9_-]+(?:\s*,\s*[A-Za-z0-9_-]+)*)\s*\Z")
-
-
-@dataclass(frozen=True)
-class FrozenCandidate:
-    candidate_id: str
-    record_sha256: str
-    pdf_path: Path
-    pdf_sha256: str
-    pdf_md5: str
-    pdf_size: int
-    filename: str
-    metadata: Mapping[str, Any]
-    target: Mapping[str, Any]
-
-
-def validate_and_freeze(
-    candidate: Mapping[str, Any], approval: Mapping[str, Any]
-) -> FrozenCandidate:
-    if candidate.get("schema") != "zotero-source-candidate/v1":
-        raise ImportFailure("validate-record", "unsupported candidate schema")
-    if approval.get("schema") != "zotero-source-approval/v1":
-        raise ImportFailure("validate-approval", "unsupported approval schema")
-    candidate_id = candidate.get("candidate_id")
-    if not isinstance(candidate_id, str) or not candidate_id:
-        raise ImportFailure("validate-record", "candidate_id is required")
-    approved_ids = approval.get("approved_candidate_ids")
-    if not isinstance(approved_ids, list) or not all(isinstance(v, str) for v in approved_ids):
-        raise ImportFailure("validate-approval", "approved_candidate_ids must be a string list")
-    approval_match = _APPROVAL_RE.fullmatch(str(approval.get("approval_text", "")))
-    if not approval_match:
-        raise ImportFailure("validate-approval", "approval_text must name exact candidate IDs")
-    text_ids = [value.strip() for value in approval_match.group(1).split(",")]
-    if len(set(approved_ids)) != len(approved_ids) or set(text_ids) != set(approved_ids):
-        raise ImportFailure("validate-approval", "approval text and approved ID list differ")
-    if candidate_id not in approved_ids:
-        raise ImportFailure("validate-approval", f"candidate {candidate_id} was not approved")
-    identity = candidate.get("pdf_identity") or {}
-    if identity.get("verdict") != "match":
-        raise ImportFailure("validate-identity", "PDF identity verdict must be match")
-
-    pdf = candidate.get("pdf") or {}
-    pdf_path = Path(str(pdf.get("local_path", ""))).expanduser().resolve()
-    if not pdf_path.is_file():
-        raise ImportFailure("validate-pdf", "staged PDF is missing")
-    actual_sha256, actual_md5, actual_size = hash_pdf(pdf_path)
-    if actual_sha256 != str(pdf.get("sha256", "")).lower():
-        raise ImportFailure("validate-pdf", "staged PDF SHA-256 changed")
-    if actual_size != pdf.get("byte_count"):
-        raise ImportFailure("validate-pdf", "staged PDF byte count changed")
-
-    actual_record_hash = compute_record_sha256(candidate)
-    if actual_record_hash != str(candidate.get("record_sha256", "")).lower():
-        raise ImportFailure("validate-record", "candidate record hash is absent or changed")
-    approved_hashes = approval.get("approved_record_sha256") or {}
-    if approved_hashes.get(candidate_id) != actual_record_hash:
-        raise ImportFailure("validate-approval", "approval does not freeze this candidate record")
-    metadata = candidate.get("metadata")
-    target = candidate.get("target")
-    if not isinstance(metadata, dict) or not metadata.get("itemType") or not metadata.get("title"):
-        raise ImportFailure("validate-record", "metadata itemType and title are required")
+def load_batch(batch: Mapping[str, Any]) -> tuple[Mapping[str, Any], list[Mapping[str, Any]]]:
+    """Return the batch's target library and its candidate records."""
+    if batch.get("schema") != BATCH_SCHEMA:
+        raise ImportFailure("validate-batch", "unsupported batch schema")
+    target = batch.get("target")
     if not isinstance(target, dict) or target.get("library_type") not in {"user", "group"}:
-        raise ImportFailure("validate-record", "target library_type is invalid")
+        raise ImportFailure("validate-batch", "target library_type is invalid")
     if not str(target.get("library_id", "")):
-        raise ImportFailure("validate-record", "target library_id is required")
+        raise ImportFailure("validate-batch", "target library_id is required")
+    candidates = batch.get("candidates")
+    if not isinstance(candidates, list) or not candidates:
+        raise ImportFailure("validate-batch", "batch has no candidates")
+    seen: set[str] = set()
+    for record in candidates:
+        candidate_id = record.get("candidate_id") if isinstance(record, dict) else None
+        if not isinstance(candidate_id, str) or not candidate_id:
+            raise ImportFailure("validate-batch", "every candidate needs a candidate_id")
+        if candidate_id in seen:
+            raise ImportFailure("validate-batch", f"candidate {candidate_id} appears twice")
+        seen.add(candidate_id)
+    return target, candidates
+
+
+def select_candidates(
+    candidates: list[Mapping[str, Any]], approved: str
+) -> list[Mapping[str, Any]]:
+    """Return the candidates the author approved, in batch order.
+
+    Parameters
+    ----------
+    candidates
+        The batch's candidate records.
+    approved
+        ``all``, or a comma-separated list of candidate IDs.
+
+    Returns
+    -------
+    list
+        The approved candidate records.
+
+    Raises
+    ------
+    ImportFailure
+        If the approval names no IDs, or names an ID the batch does not hold.
+        We refuse an unknown ID so that a typo stops the import instead of
+        quietly importing less than the author approved.
+    """
+    if approved.strip().lower() == "all":
+        return list(candidates)
+    wanted = [value.strip() for value in approved.split(",") if value.strip()]
+    if not wanted:
+        raise ImportFailure("validate-approval", "no candidate IDs were approved")
+    known = {record["candidate_id"] for record in candidates}
+    unknown = sorted(set(wanted) - known)
+    if unknown:
+        raise ImportFailure("validate-approval", f"approval names unknown candidates: {', '.join(unknown)}")
+    return [record for record in candidates if record["candidate_id"] in set(wanted)]
+
+
+def validate_candidate(record: Mapping[str, Any]) -> Candidate:
+    candidate_id = str(record.get("candidate_id"))
+    identity = record.get("pdf_identity") or {}
+    if identity.get("verdict") != "match":
+        raise ImportFailure("validate-identity", f"{candidate_id}: PDF identity verdict must be match")
+    metadata = record.get("metadata")
+    if not isinstance(metadata, dict) or not metadata.get("itemType") or not metadata.get("title"):
+        raise ImportFailure("validate-record", f"{candidate_id}: metadata itemType and title are required")
+    pdf = record.get("pdf") or {}
     filename = str(pdf.get("filename", ""))
     if not filename.lower().endswith(".pdf") or Path(filename).name != filename:
-        raise ImportFailure("validate-record", "PDF filename must be a basename ending in .pdf")
-    return FrozenCandidate(
+        raise ImportFailure("validate-record", f"{candidate_id}: PDF filename must be a basename ending in .pdf")
+    pdf_path = Path(str(pdf.get("local_path", ""))).expanduser().resolve()
+    if not pdf_path.is_file():
+        raise ImportFailure("validate-pdf", f"{candidate_id}: staged PDF is missing")
+    sha256, md5, size = hash_pdf(pdf_path)
+    return Candidate(
         candidate_id=candidate_id,
-        record_sha256=actual_record_hash,
         pdf_path=pdf_path,
-        pdf_sha256=actual_sha256,
-        pdf_md5=actual_md5,
-        pdf_size=actual_size,
+        pdf_sha256=sha256,
+        pdf_md5=md5,
+        pdf_size=size,
         filename=filename,
         metadata=metadata,
-        target=target,
+        allow_similar=record.get("allow_similar") is True,
     )
 
 
 class AtomicJournal:
-    def __init__(self, path: Path, candidate: FrozenCandidate):
+    def __init__(self, path: Path, candidate: Candidate, target: Mapping[str, Any]):
         self.path = path.resolve()
         self.data: dict[str, Any] = {
-            "schema": "zotero-source-import/v1",
+            "schema": "zotero-source-import/v2",
             "candidate_id": candidate.candidate_id,
-            "approved_record_sha256": candidate.record_sha256,
+            "pdf_sha256": candidate.pdf_sha256,
             "state": "approved-for-import",
             "target": {
-                "library_type": candidate.target["library_type"],
-                "library_id": str(candidate.target["library_id"]),
+                "library_type": target["library_type"],
+                "library_id": str(target["library_id"]),
             },
-            "zotero": {"parent_item_key": None, "attachment_key": None},
+            "zotero": {"parent_item_key": None, "attachment_key": None, "existing_item_key": None},
             "stages": {
-                "access_preflight": "pending",
                 "deduplicate": "pending",
                 "parent_create": "pending",
                 "attachment_create": "pending",
@@ -337,6 +351,58 @@ def _first_creator_surname(data: Mapping[str, Any]) -> str:
         return ""
     creator = creators[0]
     return _norm_text(creator.get("lastName") or creator.get("name"))
+
+
+def _norm_url(value: Any) -> str:
+    url = str(value or "").strip().lower()
+    url = re.sub(r"^https?://(?:www\.)?", "", url)
+    return url.split("#", 1)[0].rstrip("/")
+
+
+_TITLE_STOPWORDS = frozenset(
+    "a an and as at by for from in into of on or the to with".split()
+)
+
+
+def _title_tokens(value: Any) -> set[str]:
+    return {token for token in _norm_text(value).split() if token not in _TITLE_STOPWORDS}
+
+
+def similar_titles(first: Any, second: Any) -> bool:
+    """Return whether two titles name the same work.
+
+    We compare the titles' significant words. The titles match when every word
+    of the shorter title appears in the longer one and the shorter title has at
+    least three words, so a title with a version or edition suffix still
+    matches. They also match when they share at least four fifths of their
+    words.
+
+    Parameters
+    ----------
+    first, second
+        The titles to compare.
+
+    Returns
+    -------
+    bool
+        True when the titles name the same work.
+    """
+    a, b = _title_tokens(first), _title_tokens(second)
+    if not a or not b:
+        return False
+    if a == b:
+        return True
+    shorter, longer = sorted((a, b), key=len)
+    if len(shorter) >= 3 and shorter <= longer:
+        return True
+    return len(a & b) / len(a | b) >= 0.8
+
+
+def _search_terms(title: str) -> str:
+    # We search on the longest words so that a title with an added version or
+    # edition suffix still returns the library's copy.
+    tokens = sorted(_title_tokens(title), key=lambda token: (-len(token), token))
+    return " ".join(tokens[:4])
 
 
 class ZoteroApiClient:
@@ -423,14 +489,35 @@ class ZoteroApiClient:
                 "access-preflight", "API key lacks target library write/file access"
             )
 
-    def find_duplicate(self, metadata: Mapping[str, Any]) -> str | None:
+    def find_duplicate(self, metadata: Mapping[str, Any], *, allow_similar: bool = False) -> str | None:
+        """Find a library item that already holds this work.
+
+        We treat a matching DOI or URL as a duplicate in every case, and a
+        similar title as a duplicate unless the author asked for a different
+        version of a work the library holds.
+
+        Parameters
+        ----------
+        metadata
+            The candidate's Zotero metadata.
+        allow_similar
+            Set when the author wants this version even though the library
+            holds a work with a similar title.
+
+        Returns
+        -------
+        str or None
+            The key of the existing item, or None when the work is new.
+        """
         doi = _norm_doi(metadata.get("DOI"))
-        title = _norm_text(metadata.get("title"))
-        creator = _first_creator_surname(metadata)
-        year = _year(metadata.get("date"))
+        url = _norm_url(metadata.get("url"))
+        title = str(metadata.get("title") or "")
         queries = [doi] if doi else []
         if title:
-            queries.append(str(metadata.get("title")))
+            queries.append(title)
+            short = _search_terms(title)
+            if short and short != _norm_text(title):
+                queries.append(short)
         seen: set[str] = set()
         for query in queries:
             for item in self._list_items(query):
@@ -441,10 +528,9 @@ class ZoteroApiClient:
                 data = item.get("data") or item
                 if doi and _norm_doi(data.get("DOI")) == doi:
                     return key
-                same_title = title and _norm_text(data.get("title")) == title
-                same_creator = creator and _first_creator_surname(data) == creator
-                same_year = year and _year(data.get("date")) == year
-                if same_title and same_creator and same_year:
+                if url and _norm_url(data.get("url")) == url:
+                    return key
+                if not allow_similar and similar_titles(title, data.get("title")):
                     return key
         return None
 
@@ -666,54 +752,55 @@ def rollback(client: ZoteroClientLike, journal: AtomicJournal) -> bool:
     return True
 
 
-def run_import(
-    candidate: Mapping[str, Any],
-    approval: Mapping[str, Any],
+def import_candidate(
+    candidate: Candidate,
+    target: Mapping[str, Any],
+    client: ZoteroClientLike,
     journal_path: Path,
-    *,
-    api_key: str | None = None,
-    client: ZoteroClientLike | None = None,
-    transport: HttpTransport | None = None,
-    api_url: str = "https://api.zotero.org",
-) -> Mapping[str, Any]:
-    frozen = validate_and_freeze(candidate, approval)
-    journal = AtomicJournal(journal_path, frozen)
-    if client is None:
-        client = ZoteroApiClient(
-            api_key or "",
-            str(frozen.target["library_type"]),
-            str(frozen.target["library_id"]),
-            transport=transport,
-            api_url=api_url,
-        )
+) -> dict[str, Any]:
+    """Import one candidate as its own transaction.
+
+    We skip a candidate the library already holds. When a stage fails after
+    the parent item exists, we roll back what this candidate created.
+
+    Returns
+    -------
+    dict
+        The candidate's outcome. A Zotero failure is reported here rather than
+        raised, so the caller can move on to the next candidate.
+    """
+    journal = AtomicJournal(journal_path, candidate, target)
     try:
-        client.verify_access()
-        journal.stage("access_preflight", "complete")
-        duplicate = client.find_duplicate(frozen.metadata)
+        duplicate = client.find_duplicate(candidate.metadata, allow_similar=candidate.allow_similar)
         if duplicate:
-            raise DuplicateCandidate(duplicate)
+            journal.data["zotero"]["existing_item_key"] = duplicate
+            journal.data["stages"]["deduplicate"] = "duplicate"
+            journal.update(state="skipped-duplicate")
+            return {
+                "candidate_id": candidate.candidate_id,
+                "state": "skipped-duplicate",
+                "existing_item_key": duplicate,
+            }
         journal.stage("deduplicate", "complete")
 
-        parent_key = client.create_parent(
-            frozen.metadata, frozen.target.get("collection_key")
-        )
+        parent_key = client.create_parent(candidate.metadata, target.get("collection_key"))
         journal.data["zotero"]["parent_item_key"] = parent_key
         journal.data["rollback"]["parent_delete"] = "pending"
         journal.data["stages"]["parent_create"] = "complete"
         journal.update(state="parent-created")
 
-        attachment_key = client.create_attachment(parent_key, frozen.filename)
+        attachment_key = client.create_attachment(parent_key, candidate.filename)
         journal.data["zotero"]["attachment_key"] = attachment_key
         journal.data["rollback"]["attachment_delete"] = "pending"
         journal.data["stages"]["attachment_create"] = "complete"
         journal.update(state="attachment-created")
 
-        content = read_frozen_pdf(frozen)
-        client.upload_pdf(attachment_key, frozen.filename, content, journal.stage)
+        content = read_pdf(candidate)
+        client.upload_pdf(attachment_key, candidate.filename, content, journal.stage)
         journal.update(state="storage-uploaded")
 
         client.verify_fetchback(
-            parent_key, attachment_key, frozen.metadata, frozen.filename, frozen.pdf_md5
+            parent_key, attachment_key, candidate.metadata, candidate.filename, candidate.pdf_md5
         )
         journal.data["stages"]["fetchback_verify"] = "complete"
         journal.data["rollback"] = {
@@ -722,7 +809,7 @@ def run_import(
         }
         journal.update(state="imported-unindexed")
         return {
-            "candidate_id": frozen.candidate_id,
+            "candidate_id": candidate.candidate_id,
             "state": "imported-unindexed",
             "parent_item_key": parent_key,
             "attachment_key": attachment_key,
@@ -732,7 +819,6 @@ def run_import(
             "internal", f"unexpected {type(exc).__name__}"
         )
         failed_stage = {
-            "access-preflight": "access_preflight",
             "deduplicate": "deduplicate",
             "parent-create": "parent_create",
             "attachment-create": "attachment_create",
@@ -752,7 +838,96 @@ def run_import(
         journal.update(state="failed")
         if journal.data["zotero"].get("parent_item_key"):
             rollback(client, journal)
-        raise failure
+        return {
+            "candidate_id": candidate.candidate_id,
+            "state": journal.data["state"],
+            "operation": failure.operation,
+            "message": failure.safe_message,
+            "parent_item_key": journal.data["zotero"].get("parent_item_key"),
+            "attachment_key": journal.data["zotero"].get("attachment_key"),
+        }
+
+
+def _client_for(
+    target: Mapping[str, Any],
+    client: ZoteroClientLike | None,
+    api_key: str | None,
+    transport: HttpTransport | None,
+    api_url: str,
+) -> ZoteroClientLike:
+    if client is not None:
+        return client
+    return ZoteroApiClient(
+        api_key or "",
+        str(target["library_type"]),
+        str(target["library_id"]),
+        transport=transport,
+        api_url=api_url,
+    )
+
+
+def check_batch(
+    batch: Mapping[str, Any],
+    *,
+    api_key: str | None = None,
+    client: ZoteroClientLike | None = None,
+    transport: HttpTransport | None = None,
+    api_url: str = "https://api.zotero.org",
+) -> list[dict[str, Any]]:
+    """Report, without changing the library, which candidates it already holds."""
+    target, records = load_batch(batch)
+    client = _client_for(target, client, api_key, transport, api_url)
+    results = []
+    for record in records:
+        metadata = record.get("metadata") or {}
+        existing = client.find_duplicate(metadata, allow_similar=record.get("allow_similar") is True)
+        results.append({
+            "candidate_id": record["candidate_id"],
+            "state": "duplicate" if existing else "new",
+            "existing_item_key": existing,
+        })
+    return results
+
+
+def run_batch(
+    batch: Mapping[str, Any],
+    approved: str,
+    journal_dir: Path,
+    *,
+    api_key: str | None = None,
+    client: ZoteroClientLike | None = None,
+    transport: HttpTransport | None = None,
+    api_url: str = "https://api.zotero.org",
+) -> list[dict[str, Any]]:
+    """Import the approved candidates.
+
+    We validate every approved candidate before writing anything, so a bad
+    record stops the batch with the library untouched. When a rollback cannot
+    be confirmed we stop, because the library is in an unknown state, and
+    report the remaining candidates as not attempted.
+
+    Returns
+    -------
+    list of dict
+        One outcome per approved candidate.
+    """
+    target, records = load_batch(batch)
+    selected = [validate_candidate(record) for record in select_candidates(records, approved)]
+    client = _client_for(target, client, api_key, transport, api_url)
+    client.verify_access()
+    results: list[dict[str, Any]] = []
+    for index, candidate in enumerate(selected):
+        outcome = import_candidate(
+            candidate, target, client, journal_dir / f"{candidate.candidate_id}.json"
+        )
+        results.append(outcome)
+        if outcome["state"] == "rollback-incomplete":
+            results.extend(
+                {"candidate_id": rest.candidate_id, "state": "not-attempted"}
+                for rest in selected[index + 1:]
+            )
+            break
+    return results
 
 
 def load_api_key(
@@ -794,11 +969,11 @@ def _load_json(path: Path) -> Mapping[str, Any]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--candidate", type=Path, required=True)
-    parser.add_argument("--approval", type=Path)
-    parser.add_argument("--journal", type=Path)
-    parser.add_argument("--dry-validate", action="store_true")
-    parser.add_argument("--compute-record-hash", action="store_true")
+    parser.add_argument("--batch", type=Path, required=True)
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--check", action="store_true", help="report candidates the library already holds")
+    mode.add_argument("--approve", help="'all' or comma-separated candidate IDs the author approved")
+    parser.add_argument("--journal-dir", type=Path)
     parser.add_argument("--keyring-service")
     parser.add_argument("--keyring-username")
     parser.add_argument(
@@ -808,33 +983,22 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--api-url", default="https://api.zotero.org")
     args = parser.parse_args(argv)
     try:
-        candidate = _load_json(args.candidate)
-        if args.compute_record_hash:
-            print(compute_record_sha256(candidate))
-            return 0
-        if args.approval is None:
-            raise ImportFailure("arguments", "--approval is required unless computing a record hash")
-        approval = _load_json(args.approval)
-        frozen = validate_and_freeze(candidate, approval)
-        if args.dry_validate:
-            print(json.dumps({"candidate_id": frozen.candidate_id, "state": "approved-for-import"}))
-            return 0
-        if args.journal is None:
-            raise ImportFailure("arguments", "--journal is required for import")
+        batch = _load_json(args.batch)
+        if args.approve is not None and args.journal_dir is None:
+            raise ImportFailure("arguments", "--journal-dir is required for import")
         api_key = load_api_key(
             keyring_service=args.keyring_service,
             keyring_username=args.keyring_username,
             env_name=args.api_key_env,
         )
-        result = run_import(
-            candidate,
-            approval,
-            args.journal,
-            api_key=api_key,
-            api_url=args.api_url,
-        )
-        print(json.dumps(result, sort_keys=True))
-        return 0
+        if args.check:
+            results = check_batch(batch, api_key=api_key, api_url=args.api_url)
+            print(json.dumps(results, indent=2, sort_keys=True))
+            return 0
+        results = run_batch(batch, args.approve, args.journal_dir, api_key=api_key, api_url=args.api_url)
+        print(json.dumps(results, indent=2, sort_keys=True))
+        settled = {"imported-unindexed", "skipped-duplicate"}
+        return 0 if all(result["state"] in settled for result in results) else 1
     except ImportFailure as exc:
         print(
             json.dumps(

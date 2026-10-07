@@ -2,136 +2,51 @@
 
 ## Role
 
-Audit academic prose without editing it. Verify the complete chain:
-
-`plan point → matching evidence.md entry → mapped sentence → citation/provenance → prose`
-
-Review every sentence and every plan point in scope. Sampling "critical" claims is prohibited. Produce actionable findings with locations and stable IDs.
-
-## Inputs
-
-Require:
-
-1. The exact directory-level `plan.md` used by the writer, as content and structure authority.
-2. Its exact sibling `evidence.md`, as grounding and provenance authority.
-3. The reviewed `.tex` files.
-4. Each corresponding `<target-stem>.claim-map.md`.
-5. Parent `plan.md` files and their sibling evidence ledgers needed to assess narrative compliance.
-6. `../writer/references/prose-style.md`.
+Audit a chapter or the whole thesis before submission, without editing it. Review every sentence, every citation, and every plan point in scope; sampling is not a review. Report findings with locations and the correction each needs.
 
 <!-- vendor:contract-location -->
 
-If the ledger, a matching ledger entry, a claim map, or an evidence receipt is missing, report the affected scope as unverifiable. Do not infer a mapping, type, provenance, or intended meaning after the fact and call it verified.
+## Inputs
 
-## Review process
+1. The `.tex` files in scope.
+2. Their chapter `plan.md` files and the thesis `plan.md`.
+3. `references.bib`.
+4. `../prose-sweep/references/report-guidelines.md` and `../prose-sweep/references/prose-style.md`.
 
-### 1. Authority and plan compliance
+## Review
 
-Enumerate every plan point and mark it:
+### 1. Technical accuracy
 
-- covered exactly;
-- covered with scope drift;
-- omitted;
-- not prose-eligible (below `write-ready`);
-- improperly promoted.
+Check every technical sentence: mechanisms, numbers, units, terminology, equations, and derivations. Check each derivation against its premises and each result against the data or code the author names. Keep results and interpretation distinct. Flag any claim stated more strongly than its evidence allows: a dropped condition, a single study presented as consensus, a correlation presented as a cause, or a property of one system presented as general.
 
-Enumerate every prose sentence and identify unplanned content. Confirm that changes to lower-level narrative, structure, or emphasis appear in the affected parent plans with author approval.
+Name the error and state what is correct, or state what evidence would settle it. Do not invent a correction you cannot support.
 
-Reconcile `plan.md` and `evidence.md` before reviewing prose. Report as blocking failures every sentence point without an ID, missing ledger entry, orphan ledger ID, ledger status below `write-ready`, incomplete type-specific receipt, and semantic mismatch between planned content and the ledger's grounded scope. Reject any content introduced only by `evidence.md`; the ledger cannot expand or replace the plan.
+### 2. Citations
 
-Flag any technical sentence sourced only from plan prose or a `¶` label; only grounded sentence points are prose-eligible.
+Verify every `\cite` against the source it cites. Send each sentence and citation pair to `zotero-research` as a citation-verification request, with the sentence as written and a neutral rephrasing of it, and continue until every pair has a result. Flag:
 
-Use `plan.md` consistently. Never request `chapter_plan.md`.
+- a citation that does not support its sentence, or supports it only under a strained reading;
+- a qualification or contradiction the source contains and the sentence omits;
+- a factual sentence that needs a citation and has none;
+- every `[[...]]` placeholder and informal citation marker still in the text;
+- every cited key absent from `references.bib`, and every `.bib` entry that is never cited (R-3).
 
-### 2. Mapping integrity
+Do not search for or import missing sources. Report a missing source as a gap for the author to decide on.
 
-For 100% of sentences:
+### 3. Structure and coverage
 
-- compare the exact `.tex` sentence with the claim-map sentence;
-- require one or more stable point IDs;
-- map each technical clause in a compound sentence;
-- reject IDs absent from `plan.md`;
-- identify plan points that map to no sentence;
-- identify citations not approved on the mapped `evidence.md` cards.
+- Compare the prose with its plan. Flag plan points the prose omits and prose the plan does not carry, so the author can decide which is current.
+- Check the order of chapters, sections, and paragraphs against the document planner's ordering rules: top-down and outside-in, mechanisms in background and design choices in method, facts introduced where first needed, and reference detail at the end or in an appendix.
+- Flag duplicated content, content placed before what it depends on, and terms used before they are defined.
+- Check the structure rules in the report guidelines: numbered sections, the introduction's roadmap, the conclusion, the references, appendix placement, heading depth, and text under every heading.
 
-Any mismatch makes the sentence unverified until the map or prose is corrected through the proper workflow.
+### 4. Prose
 
-### 3. Provenance and write-ready gate
+Run `../prose-sweep/scripts/lint_prose.py` on every file in scope and judge each finding. Read every sentence against both style references. Report findings; do not apply them. The author can run `prose-sweep` to apply them.
 
-For every mapped point, read its type and receipt from the matching `evidence.md` entry, then enforce the receipt and prose treatment the shared contract assigns that type. A `CLAIM` additionally requires its approved citation adjacent to the sentence.
+### 5. Formatting
 
-A point at ledger status `open` has no prose mapping. Its appearance in prose is a blocking failure.
-
-Confirm no separate `reference_debt.md` has become an authority or a route around the gate. Each corpus gap must remain visible in the plan's `## Unresolved points` index, with its search and resolution record in the matching `evidence.md` entry.
-
-Check that index in both directions. Any entry in `## Unresolved points` lacking either a matching point line in `plan.md` or a matching `evidence.md` entry at status `open` is a blocking failure: the index is generated from the ledger and introduces no content of its own. Report as a blocking failure any open question, inferred target, `TODO`, or `TBD` elsewhere in `plan.md`, and any deferral in a `write-ready` point or in `.tex`. A deferral in an `open` point is normal.
-
-### 4. Zotero verification of every literature claim
-
-Build a complete verification batch for every `CLAIM` sentence and each citation used with it. Spawn `zotero-research` through the delegated Zotero workflow. Never call deep-Zotero directly.
-
-For each sentence/citation pair submit:
-
-1. the exact prose claim;
-2. a neutral rephrase preserving the apparent meaning;
-3. the point ID and evidence-card claim;
-4. the citation key.
-
-Require a verdict, immediate verbatim passage, title, page/locator, context, and scope comparison. Continue with follow-up research workers until 100% of pairs have results.
-
-Interpretation:
-
-- Both original and neutral rephrase supported: citation use is sound at that scope.
-- Original supported but neutral rephrase unsupported: flag forced wording or over-extrapolation.
-- Either version only partly supported: flag the exact missing qualifier.
-- Neither supported: unsupported citation use.
-- Contradicting evidence omitted from the plan or prose: evidence-suppression finding.
-
-Do not ask `zotero-research` to fetch or import a missing source. Mark a corpus gap and route acquisition separately through `zotero-source-acquisition` after author decision.
-
-### 5. Epistemic-scope audit
-
-Compare every sentence with its mapped points and evidence passages across every dimension of the contract's epistemic scope.
-
-Flag consensus language when the card is qualified or contested. Flag a project fact stated as a general property and an inference stated as an established fact.
-
-### 6. Technical and structural review
-
-- Verify equations and derivations against their premises.
-- Verify methods are reproducible from recorded project evidence.
-- Verify results and interpretations remain distinct.
-- Check each section's approved purpose and prerequisite chain.
-- Identify narrative gaps, duplication, misplaced content, and unexplained terminology.
-
-Do not invent a correction. State what receipt, author decision, derivation, or research question is required.
-
-### 7. Prose-style audit
-
-Audit every sentence against `../writer/references/prose-style.md`:
-
-- name the new information carried by the sentence;
-- flag framing, repetition, document narration, and rhythm-only text;
-- scan all banned modifiers and model-generated sentence patterns;
-- inspect every `---`;
-- flag density, terminology, tense, and author-voice mismatches;
-- confirm citation adjacency and claim fidelity.
-
-A section cannot score above 3/5 while any epistemic, mapping, evidence, or prose-style finding remains unresolved.
-
-### 8. Formatting
-
-Check figures, tables, equations, labels, cross-references, units, and project LaTeX conventions. Formatting success cannot offset a grounding failure.
-
-## Confidence scale
-
-| Rating | Meaning |
-|---|---|
-| 5 | Verified and publication-ready; no findings |
-| 4 | Verified; minor mechanical corrections |
-| 3 | Meaning preserved, but prose or formatting revisions remain |
-| 2 | One or more mapping, grounding, or technical failures |
-| 1 | Widespread provenance or scope failures require rewrite |
-| 0 | Unverifiable or structurally incompatible with the approved plan |
+Check figures, tables, equations, labels, cross-references, units, and the project's LaTeX conventions.
 
 ## Output
 
@@ -140,63 +55,37 @@ Write `<chapter_directory>/review_report.md`:
 ```markdown
 # Review Report: [title]
 Date: [YYYY-MM-DD]
-Source: [files]
-Plan: [plan.md]
-Evidence ledger: [evidence.md]
-Claim maps: [files]
+Files: [files]
 
-## Verification receipt
+## Coverage
+- Sentences reviewed: N/N
+- Citation pairs verified in Zotero: N/N
 - Plan points checked: N/N
-- Evidence entries reconciled: N/N
-- Sentences mapped: N/N
-- Technical clauses mapped: N/N
-- Literature claim/citation pairs verified in Zotero: N/N
-- Non-literature provenance receipts checked: N/N
-- Unprocessed items: [none or IDs]
+- Unprocessed: [none, or locations]
 
-## Plan-point compliance
-| Point ID | Type | Status | Sentence IDs | Finding |
-|---|---|---|---|---|
+## Technical accuracy
+- [location]: [error] → [correction or evidence needed]
 
-## Sentence mapping and epistemic scope
-| Sentence ID | Point IDs | Status | Finding |
-|---|---|---|---|
+## Citations
+- [location / key]: [verdict, passage locator, correction]
 
-## Zotero verification
-### Unsupported or partially supported
-- [sentence ID / point ID / key]: [verdict, passage locator, required correction]
+## Outstanding placeholders
+- [location]: [placeholder]
 
-### Omitted qualification or contradiction
+## Structure and coverage
 - [...]
 
-## Project facts, derivations, assertions, and inferences
-- [...]
+## Prose
+- [location]: [rule ID] [text] → [fix]
 
-## Structural and technical findings
+## Formatting
 - [...]
-
-## Prose-style findings
-### Cut
-- [...]
-### Banned patterns
-- [...]
-### Compress or rewrite
-- [...]
-
-## Formatting findings
-- [...]
-
-## Required corrections
-1. [location, stable IDs, and required resolution]
 ```
 
-If any numerator is below its denominator, state that the review is incomplete and do not issue a publication-ready rating.
+If any count is below its total, say the review is incomplete and name what remains.
 
-## Philosophy and integration
+## Integration
 
-Be direct and concise. Report problems, evidence, and required resolutions; do not add reassurance or rewrite the thesis.
-
-- Receives from `formatter` with the original grounded artifacts intact.
-- Uses `zotero-research` for every literature claim/citation verification.
-- Routes corpus gaps to author decision and, if approved, `zotero-source-acquisition`.
-- Produces `review_report.md` and makes no content changes.
+- Uses `zotero-research` for every citation check.
+- Routes missing sources to the author, who may hand them to `zotero-source-acquisition`.
+- Produces `review_report.md` and changes no other file.

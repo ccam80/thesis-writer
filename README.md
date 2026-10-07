@@ -1,13 +1,16 @@
 # Thesis Writer
 
-Thesis Writer is a dual-vendor plugin for plan-driven doctoral thesis authoring with Zotero-grounded citations and IEEE-style LaTeX output. One shared source produces complete Claude Code and Codex plugins; vendor mechanics are kept in small, explicit overlays.
+Thesis Writer is a dual-vendor plugin for co-drafting a doctoral thesis in LaTeX, with Zotero-backed fact checks and citations. One shared source produces complete Claude Code and Codex plugins; vendor mechanics are kept in small, explicit overlays.
 
 ## What it provides
 
 ```text
-document-planner ⇄ zotero-research → writer → figure-generator → formatter → reviewer
-       │                                                              ⇄ zotero-research
-       └─ corpus gap → zotero-source-acquisition → user-approved import ┘
+document-planner ⇄ zotero-research ⇄ zotero-source-acquisition
+       │  (author writes prose; agent proposes bullets, reviews, moves, checks facts)
+       ├─ prose-sweep      weasel words, vagueness, report guidelines
+       ├─ figure-generator
+       ├─ formatter
+       └─ reviewer ⇄ zotero-research   pre-submission audit
 ```
 
 The plugin also includes authorship-session logging and a vendor-specific project initializer. Claude Code initializes `CLAUDE.md`; Codex initializes `AGENTS.md`. Both use the same canonical thesis-instruction template.
@@ -121,13 +124,11 @@ git push --follow-tags
 
 ## Key policies
 
-- All substantive writing is collaborative and follows an approved plan.
-- All citations come from the user's Zotero library through the isolated `zotero-research` worker.
-- External discovery is isolated in `zotero-source-acquisition`; candidate tabs remain open for review and exact candidate IDs require approval before Zotero metadata/PDF import.
-- Every literature claim card carries the supporting, qualifying, and contradicting passages its recorded searches returned.
-- Technical prose maps every sentence to stable grounded point IDs; plan prose and paragraph lines cannot hide factual premises.
-- No placeholder or invented citations are permitted.
-- The generated distributions retain the complete planning, writing, figure, formatting, review, and logging behavior from the original Claude plugin.
+- The author writes the prose. Agents propose bullets and structure, review for accuracy, and apply approved changes in batches to the plans and the `.tex` together.
+- All citations come from the user's Zotero library through the isolated `zotero-research` worker. Citation placeholders are allowed while drafting and are resolved to Better BibTeX keys later; no key is ever invented.
+- External discovery is isolated in `zotero-source-acquisition`, which drops items the library already holds and imports only what the author approves.
+- `prose-sweep` checks prose against the department's technical-report guidelines and the thesis prose style.
+- The reviewer verifies every citation and reports every outstanding placeholder before submission.
 
 ## License
 

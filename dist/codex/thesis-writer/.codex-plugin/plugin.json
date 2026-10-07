@@ -1,7 +1,7 @@
 {
   "name": "thesis-writer",
   "version": "0.10.0",
-  "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
+  "description": "Co-drafting for doctoral theses in LaTeX, with Zotero research and citations.",
   "author": {
     "name": "Chris Cameron"
   },
@@ -18,8 +18,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Thesis Writer",
-    "shortDescription": "Plan-driven doctoral thesis writing with Zotero research and citations.",
-    "longDescription": "A dual-vendor thesis writing plugin with collaborative planning, Zotero-grounded research, LaTeX authoring, figures, formatting, review, and authorship logging.",
+    "shortDescription": "Co-drafting for doctoral theses in LaTeX, with Zotero research and citations.",
+    "longDescription": "A dual-vendor thesis writing plugin: the author writes, and agents propose structure, review for accuracy, check facts against Zotero, sweep prose against the report guidelines, generate figures, format, review, and log authorship.",
     "developerName": "Chris Cameron",
     "category": "Productivity",
     "capabilities": [
@@ -29,9 +29,9 @@
     ],
     "websiteURL": "https://github.com/ccam80/thesis-writer",
     "defaultPrompt": [
-      "Plan a thesis chapter with Zotero evidence.",
-      "Write an approved thesis section in LaTeX.",
-      "Review a chapter against its approved plan."
+      "Help me plan and draft a thesis chapter.",
+      "Sweep a thesis section for weasel words and report-guideline issues.",
+      "Review a chapter before submission."
     ]
   }
 }

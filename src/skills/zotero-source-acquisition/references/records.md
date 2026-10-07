@@ -1,123 +1,75 @@
 # Acquisition records
 
-Use these records as the machine-checkable boundary between discovery, approval, Zotero mutation, and research. Serialize them as YAML or JSON without omitting required fields.
+`scripts/zotero_import.py` reads one batch file and writes one journal per imported candidate. Serialize both as JSON.
 
-## Candidate record
+## Batch file
 
-```yaml
-schema: zotero-source-candidate/v1
-candidate_id: SRC-0001
-state: candidate
-claim_ids: [C-3.2-P1-04]
-gap_receipt:
-  research_run_id: <stable receipt from zotero-research>
-  verdict: corpus-gap
-candidate_basis:
-  authority_class: publisher-primary | standard | official-manual | manufacturer-documentation | official-dataset
-  relevance_note: <bibliographic scope only; no support verdict>
-metadata:
-  itemType: journalArticle
-  title: <canonical title>
-  creators:
-    - creatorType: author
-      firstName: <given names>
-      lastName: <family name>
-  publicationTitle: <journal or issuing body>
-  date: <published date>
-  volume: <optional>
-  issue: <optional>
-  pages: <optional>
-  DOI: <normalized DOI without https://doi.org/>
-  url: <canonical non-secret landing URL>
-  accessDate: <ISO-8601 UTC timestamp>
-pdf:
-  local_path: <absolute staged path>
-  filename: <approved filename.pdf>
-  sha256: <lowercase hex>
-  byte_count: <integer>
-  magic: "%PDF-"
-pdf_identity:
-  verdict: match | weak | mismatch | unreadable
-  signals:
-    doi: match | absent | mismatch
-    title_token_fraction: <0.0 to 1.0>
-    creator_year: match | absent | mismatch
-  detail: <non-secret explanation>
-review_tab:
-  url: <canonical article/document landing URL>
-  left_open: true
-target:
-  library_type: user | group
-  library_id: <non-secret library ID>
-  collection_key: <optional>
-record_sha256: <hash of candidate ID, claim IDs, canonical metadata, target, PDF filename/SHA-256, and PDF identity record>
-created_at: <ISO-8601 UTC timestamp>
+```json
+{
+  "schema": "zotero-source-batch/v2",
+  "target": {
+    "library_type": "user",
+    "library_id": "<non-secret library ID>",
+    "collection_key": "<optional>"
+  },
+  "candidates": [
+    {
+      "candidate_id": "SRC-0001",
+      "need": "<what the author needs this source to show>",
+      "authority_class": "publisher-primary | standard | official-manual | manufacturer-documentation | official-dataset",
+      "relevance_note": "<bibliographic scope only; no support verdict>",
+      "allow_similar": false,
+      "metadata": {
+        "itemType": "journalArticle",
+        "title": "<canonical title>",
+        "creators": [{"creatorType": "author", "firstName": "<given>", "lastName": "<family>"}],
+        "publicationTitle": "<journal or issuing body>",
+        "date": "<published date>",
+        "DOI": "<normalized DOI without https://doi.org/>",
+        "url": "<canonical non-secret landing URL>",
+        "accessDate": "<ISO-8601 UTC timestamp>"
+      },
+      "pdf": {
+        "local_path": "<absolute staged path, forward slashes>",
+        "filename": "<filename.pdf>"
+      },
+      "pdf_identity": {
+        "verdict": "match | weak | mismatch | unreadable",
+        "detail": "<non-secret explanation>"
+      },
+      "review_tab": "<canonical article or document landing URL>"
+    }
+  ]
+}
 ```
 
-Assign candidate IDs monotonically within an acquisition run. Never recycle an ID for a different source. Keep rejected records with `state: rejected` so an old approval cannot select a replacement accidentally.
+Assign candidate IDs in order within a batch and never reuse one for a different source. Optional metadata fields such as `volume`, `issue`, and `pages` follow Zotero's field names.
 
-The `relevance_note` may describe title, abstract, source type, issuer, date, and apparent topic. It must not say that the source supports, contradicts, qualifies, establishes, or proves any claim.
+`relevance_note` may describe title, abstract, source type, issuer, date, and apparent topic. It must not say that the source supports, contradicts, qualifies, establishes, or proves anything.
 
-## Approval record
+Set `allow_similar` to `true` only when the author asks for a version of a work whose title is similar to one the library already holds. A matching DOI or URL is still treated as a duplicate.
 
-```yaml
-schema: zotero-source-approval/v1
-approved_candidate_ids: [SRC-0001]
-approved_record_sha256:
-  SRC-0001: <candidate record_sha256>
-approval_text: "Approve import: SRC-0001"
-approved_at: <ISO-8601 UTC timestamp>
+## Check output
+
+`--check` prints one entry per candidate:
+
+```json
+[{"candidate_id": "SRC-0001", "state": "new", "existing_item_key": null}]
 ```
 
-Record only explicit user text naming exact candidate IDs. Invalidate this record when any corresponding `record_sha256` changes.
+`state` is `new` or `duplicate`; a duplicate names the library item that holds the work.
+
+## Import outcome
+
+Import prints one entry per approved candidate. `state` is one of:
+
+- `imported-unindexed`, with `parent_item_key` and `attachment_key`;
+- `skipped-duplicate`, with `existing_item_key`;
+- `rolled-back`, with the failed `operation` and `message`;
+- `rollback-incomplete`, with the `operation`, `message`, and whatever `parent_item_key` and `attachment_key` were created;
+- `failed`, when the failure came before anything was created;
+- `not-attempted`, for candidates after a `rollback-incomplete`.
 
 ## Import journal
 
-```yaml
-schema: zotero-source-import/v1
-candidate_id: SRC-0001
-approved_record_sha256: <exact approved hash>
-state: approved-for-import | parent-created | attachment-created | storage-uploaded | imported-unindexed | rollback-required | rolled-back | rollback-incomplete
-target:
-  library_type: user | group
-  library_id: <non-secret library ID>
-zotero:
-  parent_item_key: <safe key or null>
-  attachment_key: <safe key or null>
-stages:
-  access_preflight: pending | complete | failed
-  deduplicate: pending | complete | failed
-  parent_create: pending | complete | failed
-  attachment_create: pending | complete | failed
-  upload_authorize: pending | complete | exists | failed
-  storage_upload: pending | complete | skipped-existing | failed
-  upload_register: pending | complete | skipped-existing | failed
-  fetchback_verify: pending | complete | failed
-rollback:
-  attachment_delete: not-required | pending | confirmed | failed
-  parent_delete: not-required | pending | confirmed | failed
-failure:
-  operation: <safe operation name or null>
-  status_code: <integer or null>
-  message: <sanitized message or null>
-updated_at: <ISO-8601 UTC timestamp>
-```
-
-Write the parent key before attachment creation. Write the attachment key before requesting upload authorization. Never store API keys, cookies, authorization headers, upload parameters, upload keys, signed storage URLs, SSO payloads, or response bodies in the journal.
-
-## Indexing handoff
-
-```yaml
-schema: zotero-source-indexing-handoff/v1
-candidate_id: SRC-0001
-claim_ids: [C-3.2-P1-04]
-library_type: user
-library_id: <library ID>
-parent_item_key: <Zotero parent key>
-attachment_key: <Zotero attachment key>
-title: <approved title>
-DOI: <normalized DOI>
-state: imported-unindexed
-```
-
-Accept an indexing result only when it names the same library, parent key, and attachment key. Pass that receipt to `zotero-research`; do not translate it into an evidence verdict.
+The importer writes `<journal-dir>/<candidate_id>.json` atomically at every stage. It records the candidate ID, the PDF's SHA-256, the target library, the created or existing item keys, each stage's state, the rollback state, and a sanitized failure. It never stores API keys, cookies, authorization headers, upload parameters, upload keys, signed storage URLs, SSO payloads, or response bodies.

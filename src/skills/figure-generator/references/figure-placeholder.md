@@ -1,6 +1,6 @@
 # Figure Placeholder Format
 
-Shared interface: `writer` creates placeholders in this format; `figure-generator` finds and replaces them.
+Placeholders in this format mark figures still to be made. The author or a drafting agent writes them; `figure-generator` finds and replaces them.
 
 ```latex
 \begin{figure}[tb]

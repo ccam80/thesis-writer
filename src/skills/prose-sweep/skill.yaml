@@ -1,0 +1,2 @@
+name: "prose-sweep"
+description: "Sweeps the author's LaTeX prose for weasel words, vague quantities, redundancy, and departures from the department's technical-report guidelines and the thesis prose style. Applies meaning-preserving fixes directly and batches the rest for one approval. Use when a section is ready for a style pass or the author asks for a sweep."

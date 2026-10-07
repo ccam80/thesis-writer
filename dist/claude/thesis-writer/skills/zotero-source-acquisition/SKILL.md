@@ -1,6 +1,6 @@
 ---
 name: zotero-source-acquisition
-description: "Acquire authoritative sources for thesis claim IDs that Zotero research could not adequately evidence. Use only as an isolated agent after zotero-research reports a corpus gap: discover candidate sources through a headed, persistent real-Chrome SSO session; stage inspectable metadata and identity-verified PDFs; obtain explicit approval for exact candidate IDs; then create Zotero parent items and upload verified PDFs through the Zotero API before handing the new keys to indexing and zotero-research. Never use this skill to interpret evidence, support claims, write plans, or bypass Zotero-first research."
+description: "Find and import sources the author's Zotero library lacks. Use as an isolated agent when Zotero research finds no source for something the author needs: discover candidates through a headed, persistent real-Chrome SSO session, drop any the library already holds, present the rest once for a single approval, then import the approved items and their identity-checked PDFs through the Zotero API before handing them back to zotero-research. Never interprets evidence or writes plans or prose."
 allowed-tools: [Read, Write, Edit, Bash, Task, AskUserQuestion]
 ---
 
@@ -8,113 +8,51 @@ allowed-tools: [Read, Write, Edit, Bash, Task, AskUserQuestion]
 
 # Zotero Source Acquisition
 
-Operate as a separate, isolated acquisition agent. Fill declared Zotero corpus gaps without becoming a research, synthesis, planning, or writing agent.
+Find sources the author's Zotero library lacks, and import the ones the author approves. Do not research, synthesize, plan, or write.
 
-Read [records.md](references/records.md) before staging candidates or mutating Zotero. Treat its record formats and state transitions as mandatory interfaces.
+Read [records.md](references/records.md) before staging candidates. Use `scripts/zotero_import.py` for every library check and every import, and run it yourself; never hand the author a command to run. Pass paths with forward slashes.
 
-Use `scripts/zotero_import.py` for validation and every approved Zotero import. Do not reimplement the transaction in ad hoc agent code. Run its `--dry-validate` mode before presenting an import as ready; invoke mutation mode only after the approval gate below.
+## Requests
 
-## Accept only bounded requests
+A request describes what the author needs: a fact, a document, or a kind of source, with any constraints on source type or authority. It should also list the items `zotero-research` has already found for the same need. A request needs no identifier.
 
-Require each request to contain:
+Ask the caller to clarify a request too vague to search for. Do not interpret evidence or judge whether a source supports a claim.
 
-- one or more stable claim IDs;
-- the proposed claim or research question associated with each ID;
-- the Zotero search receipt and gap verdict from `zotero-research`;
-- source-type and authority constraints, if any;
-- the target Zotero library and optional collection, without credentials.
+## Discover
 
-Reject requests to invent claims, expand a plan, select prose, verify support, or search externally before Zotero research has recorded a gap. Return malformed or unbounded requests to the caller.
+1. Use one dedicated acquisition profile outside the user's normal Chrome profile. Start a headed installed Google Chrome with `--remote-debugging-address=127.0.0.1`, a fixed localhost debugging port, and `--user-data-dir=<dedicated-profile>`, and connect Playwright to it with `chromium.connect_over_cdp`. Never launch Playwright Chromium for authenticated publisher access.
+2. When a site needs authentication, SSO, 2FA, consent, or a CAPTCHA, bring its tab to the foreground, tell the author which site needs attention, and wait. Never enter, request, capture, or log credentials, one-time codes, or challenge answers. Leave those tabs open.
+3. Search for authoritative primary sources: publisher versions, standards, official manuals, manufacturer documentation, or official datasets. Use aggregators only to find the canonical source.
+4. Skip any item the request says research already found.
+5. Capture metadata from the canonical record. Resolve DOI redirects, and keep both the DOI and the non-secret landing URL.
+6. Download the PDF only where access is lawful. Confirm it is a readable PDF, and check its identity against the metadata: a DOI printed in the PDF, or close title agreement with matching creator or year. Record the verdict as `match`, `weak`, `mismatch`, or `unreadable`. Drop a `mismatch`. The importer refuses anything but `match`, so show a `weak` or `unreadable` candidate to the author only to ask whether to look for a better copy.
+7. Write the batch file.
+8. Run `zotero_import.py --batch <file> --check`, with the same key options as the import below. Remove every candidate it reports as a duplicate, and tell the author which library item already holds each one. A different version or edition of a work the library holds counts as a duplicate unless the author asked for that version; then set `allow_similar` and check again.
 
-## Preserve the epistemic boundary
+Never record or echo a URL that carries an authentication code, SAML payload, session identifier, access token, cookie, or expiring signature. Where the visible PDF tab has a signed URL, record the canonical landing page instead.
 
-- Discover candidate sources; do not state that a candidate supports, contradicts, qualifies, or proves a claim.
-- Report bibliographic relevance only: title/abstract keywords, document type, issuer, date, and apparent scope.
-- Do not quote candidate passages as evidence and do not update any thesis plan, claim card, prose, bibliography, or citation mapping.
-- Do not assign a Better BibTeX key. Only Zotero/indexing may establish the corpus identity used by research.
-- Mark every output `candidate`, `approved-for-import`, `imported-unindexed`, `indexed`, or `failed`; never call a discovered source `evidence`.
-- Hand imported sources back to indexing and then to `zotero-research`. Only that research agent may inspect the indexed text and issue an evidence verdict.
+## Present and approve
 
-## Phase 1: Discover and stage candidates
+Present the remaining candidates once, in a compact table: ID, title, issuer or authors, year, DOI or URL, identity verdict, and what need it answers. Leave each candidate's landing page open in a tab for the author to inspect. Say that nothing has been imported and that no candidate is evidence yet.
 
-Perform this phase without Zotero mutation.
+Import only after the author approves. Approval may name candidate IDs, or cover the whole table ("yes", "import them all"). An approval relayed by the coordinating agent counts when it quotes or restates the author's words. Ask again only when the author's reply is ambiguous about which candidates it covers.
 
-1. Create or reuse one dedicated acquisition profile outside the user's normal Chrome profile.
-2. Start a headed installed Google Chrome process with `--remote-debugging-address=127.0.0.1`, a fixed localhost debugging port, and `--user-data-dir=<dedicated-profile>`.
-3. Connect Playwright to `http://127.0.0.1:<port>` using `chromium.connect_over_cdp`. Never launch Playwright Chromium for authenticated publisher access.
-4. If authentication, SSO, 2FA, consent, or CAPTCHA is required, bring the relevant headed tab to the foreground and pause. Tell the user what site needs attention. Never enter, request, capture, or log credentials, one-time codes, recovery codes, or challenge answers.
-5. Leave pending CAPTCHA and authentication tabs open for the user. Leave every shortlisted candidate's canonical article or document landing page open for review. Do not close user-visible review tabs, popups needed for authentication, or the real Chrome process when disconnecting Playwright.
-6. Search for authoritative primary sources appropriate to the gap: publisher versions, standards bodies, official manuals, manufacturer documentation, or official datasets. Use aggregators only to locate the canonical source.
-7. Capture bibliographic metadata from the canonical record. Resolve DOI redirects to a canonical DOI, but store both DOI and non-secret landing URL where available.
-8. Obtain a PDF only when access is lawful and the session permits it. Validate `%PDF-` magic bytes, MIME where available, nontrivial size, and readable PDF structure.
-9. Verify PDF identity against the staged metadata. Prefer DOI printed in the PDF; otherwise require strong normalized-title agreement and corroborating creator/year metadata. Classify `match`, `weak`, `mismatch`, or `unreadable`. Never stage `mismatch`; stage `weak` or `unreadable` only for explicit human review and prohibit import until the verdict becomes `match`.
-10. Compute a SHA-256 digest of the staged PDF and store it with its local path. Do not store PDF bytes in the record.
-11. Assign a stable candidate ID and write a candidate record using [records.md](references/records.md). Associate every candidate with the claim IDs whose gap triggered discovery.
-12. Present the candidate register to the user. Include the exact candidate IDs, canonical metadata, DOI/URL, PDF identity verdict, safe review-tab URL, and claim IDs. State that no candidate has been imported and no evidence verdict has been made.
+## Import
 
-Use the shortest canonical review URL. Never record or echo URLs containing authentication codes, SAML payloads, session identifiers, access tokens, cookies, or expiring signatures. If the visible PDF tab uses a signed URL, keep the tab open but record the canonical landing-page tab instead.
+Run:
 
-## Approval gate
+```text
+python scripts/zotero_import.py --batch <file> --approve <IDs or all> --journal-dir <dir> --keyring-service <service> --keyring-username <user>
+```
 
-Stop after staging. Import nothing until the user explicitly approves exact candidate IDs, for example: `Approve import: SRC-0002, SRC-0005`.
+Name an environment variable with `--api-key-env` only when the author configured that fallback.
 
-- Treat approval of a topic, claim, search, publisher, or general candidate list as insufficient.
-- Import only the named IDs. Do not infer approval for alternates, revised metadata, or additional PDFs.
-- Freeze the approved record by hashing its canonical metadata plus PDF SHA-256. If metadata, file identity, parent type, target library, or PDF changes after approval, invalidate approval and present the changed candidate for approval again.
-- Require `pdf_identity.verdict: match` and a locally revalidated PDF digest immediately before import.
+The script validates every approved candidate before writing anything. It then checks the API key's write and file access, and imports each candidate as its own transaction: it skips a duplicate, creates the parent item and the attachment, uploads the PDF, and verifies both items by fetching them back. If a stage fails after the parent item exists, it deletes the attachment and then the parent, and confirms both deletions. A rollback it cannot confirm stops the batch. Do not reproduce or bypass any of this in your own HTTP code.
 
-## Phase 2: Import approved candidates
+Never log request headers, response bodies, storage URLs, upload keys, cookies, signed URLs, or API keys.
 
-Run each approved candidate as an independent transaction. Never perform import during discovery.
+## Report and hand off
 
-1. Compute the candidate's canonical record hash before requesting approval:
-   `python scripts/zotero_import.py --candidate candidate.json --compute-record-hash`
-2. Put that hash in both the candidate and exact-ID approval records.
-3. Run the non-mutating gate:
-   `python scripts/zotero_import.py --candidate candidate.json --approval approval.json --dry-validate`
-4. After validation and explicit approval, run the importer with a journal path and keyring coordinates. Name an environment variable with `--api-key-env` only when the user explicitly configured that fallback.
-5. Treat a duplicate result as a stop condition. Ask whether the existing item should be handled in a separately approved operation; do not auto-attach.
-6. Return the parent and attachment keys emitted by the script. Do not infer success if its journal does not end at `imported-unindexed`.
+Report one line per candidate: imported with its parent and attachment keys, skipped as a duplicate of an existing item, rolled back with the reason, or `rollback-incomplete` with the created keys and the manual clean-up needed. List the review tabs still open by canonical URL, and do not close them.
 
-The script owns metadata/PDF hash revalidation, a `/keys/current` preflight for target-library write and file access, conservative pre-mutation deduplication, parent and attachment creation, the Zotero v3 file handshake, fetchback verification, atomic secret-free journaling, and ordered rollback. Do not reproduce or bypass those operations in agent-authored HTTP code.
-
-For the upload-authorization step, treat only a successful `200` response containing `{"exists": 1}` as existing content. A `412` response is a precondition failure, not success.
-
-Never log request headers, response bodies that may contain upload credentials, storage URLs, upload keys, cookies, signed URLs, or API keys. Sanitize exception text to status code, operation name, candidate ID, and safe Zotero item keys.
-
-## Roll back required-stage failures
-
-Let `scripts/zotero_import.py` journal each created key before starting the next stage. If any required stage after parent creation fails, require it to:
-
-1. Mark the journal transaction `rollback-required`.
-2. Delete the created attachment first when an attachment key exists.
-3. Confirm the attachment no longer exists.
-4. Delete the created parent second.
-5. Confirm the parent no longer exists.
-6. Mark `rolled-back` only after both confirmations.
-
-If rollback cannot be confirmed, stop. Return `rollback-incomplete`, the safe parent and attachment keys, the failed deletion stage, and the manual recovery action. Never suppress or replace these keys. Do not roll back pre-existing Zotero items. Do not process the next candidate while the current transaction is rollback-incomplete.
-
-## Handoff
-
-For every successful import, send the indexing service or indexing agent:
-
-- candidate ID and triggering claim IDs;
-- Zotero library identity;
-- parent item key and attachment key;
-- approved title and DOI;
-- state `imported-unindexed`.
-
-Wait for an indexing receipt tied to the parent/attachment keys. Then hand the claim IDs and newly indexed Zotero item identity to `zotero-research` for a fresh bounded search. Do not claim the gap is resolved until `zotero-research` returns claim-centred passages and a support, qualification, contradiction, or remaining-gap verdict.
-
-## Return contract
-
-Return one of these outcomes per candidate:
-
-- `candidate`: staged for user review; no Zotero mutation;
-- `approved-for-import`: approval recorded but import not yet attempted;
-- `imported-unindexed`: parent and verified PDF attachment created; include both keys;
-- `indexed`: include the indexing receipt and research handoff status;
-- `failed`: include the safe stage, reason, rollback status, and created keys if recovery is incomplete.
-
-Always include a compact summary of open review tabs by safe canonical URL. Never close those tabs as part of completion.
+An imported item is not evidence. Once the author's indexing has run, hand the new items and the original need back to `zotero-research` for a quick check. Only that check can say whether a source supports anything.

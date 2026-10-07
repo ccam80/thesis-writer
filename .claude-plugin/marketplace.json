@@ -1,7 +1,7 @@
 {
   "name": "thesis-writer-marketplace",
   "metadata": {
-    "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
+    "description": "Co-drafting for doctoral theses in LaTeX, with Zotero research and citations.",
     "version": "0.10.0"
   },
   "owner": {
@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "thesis-writer",
-      "description": "Plan-driven doctoral thesis writing with Zotero research and citations.",
+      "description": "Co-drafting for doctoral theses in LaTeX, with Zotero research and citations.",
       "source": "./dist/claude/thesis-writer",
       "version": "0.10.0",
       "author": {
