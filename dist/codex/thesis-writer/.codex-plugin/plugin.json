@@ -1,6 +1,6 @@
 {
   "name": "thesis-writer",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Co-drafting for doctoral theses in LaTeX, with Zotero research and citations.",
   "author": {
     "name": "Chris Cameron"

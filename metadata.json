@@ -1,6 +1,6 @@
 {
   "name": "thesis-writer",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Co-drafting for doctoral theses in LaTeX, with Zotero research and citations.",
   "longDescription": "A dual-vendor thesis writing plugin: the author writes, and agents propose structure, review for accuracy, check facts against Zotero, sweep prose against the report guidelines, generate figures, format, review, and log authorship.",
   "author": {
